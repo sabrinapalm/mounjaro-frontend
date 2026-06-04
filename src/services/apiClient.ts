@@ -1,0 +1,76 @@
+import type { ShotEntry, WeightEntry } from '../types';
+import { cognitoAuth } from './cognitoAuth';
+
+const baseUrl = import.meta.env.VITE_API_URL;
+
+const getHeaders = async (initHeaders: HeadersInit = {}) => {
+  const token = await cognitoAuth.getAuthToken();
+  return {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+    ...(initHeaders as Record<string, string>),
+  };
+};
+
+const handleResponse = async (response: Response) => {
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(body || response.statusText || 'API request failed');
+  }
+
+  return response.json();
+};
+
+const request = async (path: string, init: RequestInit = {}) => {
+  if (!baseUrl) {
+    throw new Error('Missing VITE_API_URL environment variable.');
+  }
+
+  const headers = await getHeaders(init.headers ?? {});
+  const response = await fetch(`${baseUrl}${path}`, {
+    ...init,
+    headers,
+  });
+
+  return handleResponse(response);
+};
+
+export const apiClient = {
+  getShots: async (): Promise<ShotEntry[]> => {
+    const data = await request('/shots');
+    return data.shots as ShotEntry[];
+  },
+
+  createShot: async (shot: ShotEntry): Promise<ShotEntry> => {
+    const data = await request('/shots', {
+      method: 'POST',
+      body: JSON.stringify(shot),
+    });
+    return data as ShotEntry;
+  },
+
+  getWeights: async (): Promise<WeightEntry[]> => {
+    const data = await request('/weights');
+    return data.weights as WeightEntry[];
+  },
+
+  createWeight: async (weight: WeightEntry): Promise<WeightEntry> => {
+    const data = await request('/weights', {
+      method: 'POST',
+      body: JSON.stringify(weight),
+    });
+    return data as WeightEntry;
+  },
+
+  deleteShot: async (id: string, date: string): Promise<void> => {
+    await request(`/shots/${id}?date=${date}`, {
+      method: 'DELETE',
+    });
+  },
+
+  deleteWeight: async (id: string, date: string): Promise<void> => {
+    await request(`/weights/${id}?date=${date}`, {
+      method: 'DELETE',
+    });
+  },
+};
