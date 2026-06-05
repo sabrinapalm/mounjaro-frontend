@@ -28,3 +28,17 @@ export interface WeeklyData {
   totalShots: number;
   weightLoss?: number;
 }
+
+export type UserProfile = {
+  displayName: string;
+  goalWeight?: number;
+  startWeight?: number;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type ProfileFormValues = {
+  displayName: string;
+  goalWeight: number | null;
+  startWeight: number | null;
+};

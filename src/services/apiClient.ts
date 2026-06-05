@@ -1,10 +1,11 @@
-import type { ShotEntry, WeightEntry } from '../types';
+import type { ProfileFormValues, ShotEntry, UserProfile, WeightEntry } from '../types';
 import { cognitoAuth } from './cognitoAuth';
 
 const baseUrl = import.meta.env.VITE_API_URL;
 
 const getHeaders = async (initHeaders: HeadersInit = {}) => {
   const token = await cognitoAuth.getAuthToken();
+
   return {
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json',
@@ -36,6 +37,22 @@ const request = async (path: string, init: RequestInit = {}) => {
 };
 
 export const apiClient = {
+  getProfile: async (): Promise<UserProfile | null> => {
+    const data = await request('/profile');
+    return data.profile as UserProfile | null;
+  },
+
+  updateProfile: async (
+    profile: ProfileFormValues
+  ): Promise<UserProfile> => {
+    const data = await request('/profile', {
+      method: 'PUT',
+      body: JSON.stringify(profile),
+    });
+
+    return data.profile as UserProfile;
+  },
+
   getShots: async (): Promise<ShotEntry[]> => {
     const data = await request('/shots');
     return data.shots as ShotEntry[];
@@ -46,6 +63,7 @@ export const apiClient = {
       method: 'POST',
       body: JSON.stringify(shot),
     });
+
     return data as ShotEntry;
   },
 
@@ -59,6 +77,7 @@ export const apiClient = {
       method: 'POST',
       body: JSON.stringify(weight),
     });
+
     return data as WeightEntry;
   },
 

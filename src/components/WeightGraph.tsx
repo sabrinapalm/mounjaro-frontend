@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -22,30 +22,62 @@ interface WeightGraphProps {
   weights: WeightEntry[];
 }
 
-export const WeightGraph = ({ weights }: WeightGraphProps) => {
-  const [chartData, setChartData] = useState<ChartData[]>([]);
+const getYAxisDomain = (data: ChartData[]) => {
+  const weightValues = data
+    .map((entry) => entry.weight)
+    .filter((weight): weight is number => typeof weight === 'number');
 
-  useEffect(() => {
+  if (weightValues.length === 0) {
+    return ['auto', 'auto'] as const;
+  }
+
+  const minWeight = Math.min(...weightValues);
+  const maxWeight = Math.max(...weightValues);
+
+  const padding = Math.max((maxWeight - minWeight) * 0.25, 1);
+
+  return [
+    Math.floor(minWeight - padding),
+    Math.ceil(maxWeight + padding),
+  ] as const;
+};
+
+export const WeightGraph = ({ weights }: WeightGraphProps) => {
+  const chartData = useMemo(() => {
     const weekMap = new Map<string, ChartData>();
 
     weights.forEach((weight) => {
       const key = `${weight.year}-W${weight.week}`;
-      if (!weekMap.has(key)) {
+      const existingEntry = weekMap.get(key);
+
+      if (!existingEntry) {
         weekMap.set(key, {
           week: `W${weight.week}`,
           date: weight.date,
+          weight: weight.weight,
+        });
+
+        return;
+      }
+
+      const existingDate = new Date(existingEntry.date).getTime();
+      const currentDate = new Date(weight.date).getTime();
+
+      if (currentDate >= existingDate) {
+        weekMap.set(key, {
+          week: `W${weight.week}`,
+          date: weight.date,
+          weight: weight.weight,
         });
       }
-      const entry = weekMap.get(key)!;
-      entry.weight = weight.weight;
     });
 
-    const sorted = Array.from(weekMap.values()).sort(
+    return Array.from(weekMap.values()).sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
-
-    setChartData(sorted);
   }, [weights]);
+
+  const yAxisDomain = useMemo(() => getYAxisDomain(chartData), [chartData]);
 
   if (chartData.length === 0) {
     return (
@@ -63,33 +95,67 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
 
       <div className="chart-container">
         <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={chartData}>
+          <LineChart
+            data={chartData}
+            margin={{
+              top: 20,
+              right: 30,
+              left: 20,
+              bottom: 20,
+            }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
+
             <XAxis
               dataKey="week"
               angle={-45}
               textAnchor="end"
               height={80}
             />
-            <YAxis label={{ value: 'Weight (kg)', angle: -90, position: 'insideLeft' }} />
+
+            <YAxis
+              domain={yAxisDomain}
+              allowDecimals={false}
+              label={{
+                value: 'Weight (kg)',
+                angle: -90,
+                position: 'insideLeft',
+              }}
+            />
+
             <Tooltip
-              contentStyle={{ backgroundColor: '#f5f5f5', border: '1px solid #ccc' }}
+              contentStyle={{
+                backgroundColor: '#ffffff',
+                border: '1px solid #e8e2f7',
+                borderRadius: 12,
+              }}
               formatter={(value) => {
                 if (typeof value === 'number') {
-                  return value.toFixed(1);
+                  return [`${value.toFixed(1)} kg`, 'Weight'];
                 }
+
                 return value;
               }}
             />
+
             <Legend />
+
             <Line
               type="monotone"
               dataKey="weight"
-              stroke="#aa3bff"
-              dot={{ fill: '#aa3bff', r: 5 }}
-              activeDot={{ r: 7 }}
-              name="Weight (kg)"
-              isAnimationActive={true}
+              stroke="#6f4df6"
+              strokeWidth={4}
+              dot={{
+                fill: '#24c7a5',
+                stroke: '#ffffff',
+                strokeWidth: 2,
+                r: 5,
+              }}
+              activeDot={{
+                r: 8,
+              }}
+              name="Weight"
+              isAnimationActive
             />
           </LineChart>
         </ResponsiveContainer>

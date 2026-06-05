@@ -1,6 +1,9 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useMemo, useState, type FormEvent } from 'react';
 import type { ShotEntry } from '../types';
+import { ConfirmDialog } from './ConfirmDialog';
 import './ShotTracker.css';
+import { AiOutlineDelete } from "react-icons/ai";
+
 
 interface ShotTrackerProps {
   shots: ShotEntry[];
@@ -8,31 +11,34 @@ interface ShotTrackerProps {
   onDeleteShot: (id: string, date: string) => Promise<void>;
 }
 
-export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerProps) => {
+export const ShotTracker = ({
+  shots,
+  onShotAdded,
+  onDeleteShot,
+}: ShotTrackerProps) => {
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [dosage, setDosage] = useState<string>('2.5');
-  const [recentShots, setRecentShots] = useState<ShotEntry[]>([]);
-  const [totalShots, setTotalShots] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [shotToDelete, setShotToDelete] = useState<ShotEntry | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  const loadRecentShots = () => {
-    const sorted = [...shots].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-    setRecentShots(sorted.slice(0, 5));
-    setTotalShots(sorted.length);
-  };
-
-  useEffect(() => {
-    loadRecentShots();
+  const recentShots = useMemo(() => {
+    return [...shots]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5);
   }, [shots]);
+
+  const totalShots = shots.length;
 
   const getWeekNumber = (date: Date): { week: number; year: number } => {
     const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
     const dayNum = d.getUTCDay() || 7;
+
     d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
     const week = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+
     return { week, year: d.getUTCFullYear() };
   };
 
@@ -40,7 +46,9 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
     event.preventDefault();
     setError(null);
 
-    if (!date || !dosage) return;
+    if (!date || !dosage) {
+      return;
+    }
 
     const selectedDate = new Date(date);
     const { week, year } = getWeekNumber(selectedDate);
@@ -58,7 +66,38 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
       setDate(new Date().toISOString().split('T')[0]);
       setDosage('2.5');
     } catch (err) {
-      setError((err as Error)?.message || 'Unable to add shot');
+      setError(err instanceof Error ? err.message : 'Unable to add shot');
+    }
+  };
+
+  const handleOpenDeleteDialog = (shot: ShotEntry) => {
+    setError(null);
+    setShotToDelete(shot);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    if (isDeleting) {
+      return;
+    }
+
+    setShotToDelete(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!shotToDelete) {
+      return;
+    }
+
+    setError(null);
+    setIsDeleting(true);
+
+    try {
+      await onDeleteShot(shotToDelete.id, shotToDelete.date);
+      setShotToDelete(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to delete shot');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -80,7 +119,7 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
             id="shot-date"
             type="date"
             value={date}
-            onChange={(e) => setDate(e.target.value)}
+            onChange={(event) => setDate(event.target.value)}
             required
           />
         </div>
@@ -90,7 +129,7 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
           <select
             id="shot-dosage"
             value={dosage}
-            onChange={(e) => setDosage(e.target.value)}
+            onChange={(event) => setDosage(event.target.value)}
             required
           >
             <option value="2.5">2.5 mg</option>
@@ -103,6 +142,7 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
         </div>
 
         {error && <p className="tracker-error">{error}</p>}
+
         <button type="submit" className="btn-add">
           Add Shot
         </button>
@@ -110,6 +150,7 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
 
       <div className="recent-shots">
         <h3>Recent Shots</h3>
+
         {recentShots.length === 0 ? (
           <p className="empty-state">No shots recorded yet</p>
         ) : (
@@ -123,16 +164,35 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
                   <span className="shot-dosage">{shot.dosage} mg</span>
                 </div>
                 <button
-                  onClick={() => onDeleteShot(shot.id, shot.date)}
+                  type="button"
+                  onClick={() => handleOpenDeleteDialog(shot)}
                   className="btn-delete"
                 >
-                  Delete
+                  <AiOutlineDelete size={20} />
                 </button>
               </li>
             ))}
           </ul>
         )}
       </div>
+
+      <ConfirmDialog
+        open={Boolean(shotToDelete)}
+        title="Delete shot?"
+        message={
+          shotToDelete
+            ? `This will delete your ${shotToDelete.dosage} mg shot from ${new Date(
+                shotToDelete.date
+              ).toLocaleDateString()}.`
+            : ''
+        }
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        variant="danger"
+        isLoading={isDeleting}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCloseDeleteDialog}
+      />
     </div>
   );
 };
