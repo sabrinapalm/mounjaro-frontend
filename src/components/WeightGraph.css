@@ -1,85 +1,173 @@
-.weight-graph {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: var(--shadow-soft);
-  margin-bottom: 24px;
-  border: 1px solid var(--color-border);
-  transition: all 0.3s ease;
-}
-
-.weight-graph:hover {
-  transform: translateY(-1px);
-  border-color: var(--color-primary-soft);
-  box-shadow: 0 16px 40px rgba(111, 77, 246, 0.08);
-}
-
-.weight-graph h2 {
-  margin: 0 0 20px 0;
-  color: var(--color-text);
-  font-size: 1.5rem;
-}
-
-.chart-controls {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
-}
-
-.chart-btn {
-  padding: 10px 18px;
-  background: var(--color-surface-soft);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-.chart-btn:hover {
-  background: #f0edff;
-  border-color: var(--color-primary-soft);
-}
-
-.chart-btn.active {
-  background: var(--color-primary-soft);
-  color: var(--color-primary-dark);
-  border-color: var(--color-primary);
-}
-
-.chart-container {
+.weight-graph-card {
+  display: grid;
+  gap: 22px;
   width: 100%;
-  min-height: 400px;
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-surface-soft) 20%, var(--color-surface) 80%),
+    var(--color-surface)
+  );
+}
+
+.weight-graph-card__header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--color-primary-soft) 0%, var(--color-accent-soft) 100%);
-  border-radius: var(--radius-md);
-  padding: 20px;
-  box-sizing: border-box;
-  border: 1px solid var(--color-border);
+  justify-content: space-between;
+  gap: 18px;
+  min-width: 0;
 }
 
-.chart-container .empty-state {
+.weight-graph-card__title {
+  min-width: 0;
+  color: var(--color-text);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.weight-graph-card__period {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.weight-graph-card__period-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.weight-graph-card__select {
+  min-height: 46px;
+  min-width: 150px;
+  padding: 0 44px 0 18px;
+  border: 1px solid color-mix(in srgb, var(--color-border) 82%, transparent);
+  border-radius: 14px;
+  appearance: none;
+  background:
+    linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%),
+    linear-gradient(135deg, var(--color-text-muted) 50%, transparent 50%),
+    color-mix(in srgb, var(--color-surface-soft) 54%, var(--color-surface));
+  background-position:
+    calc(100% - 22px) 50%,
+    calc(100% - 15px) 50%,
+    0 0;
+  background-size:
+    7px 7px,
+    7px 7px,
+    100% 100%;
+  background-repeat: no-repeat;
   color: var(--color-text);
   font-size: 0.95rem;
-  text-align: center;
-  width: 100%;
+  font-weight: 800;
+  outline: none;
+  box-shadow: var(--button-shadow-neutral);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-@media (max-width: 768px) {
-  .weight-graph {
+.weight-graph-card__select:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 36%, var(--color-border));
+  background:
+    linear-gradient(45deg, transparent 50%, var(--color-primary) 50%),
+    linear-gradient(135deg, var(--color-primary) 50%, transparent 50%), var(--color-primary-soft);
+  background-position:
+    calc(100% - 22px) 50%,
+    calc(100% - 15px) 50%,
+    0 0;
+  background-size:
+    7px 7px,
+    7px 7px,
+    100% 100%;
+  background-repeat: no-repeat;
+}
+
+.weight-graph-card__select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 16%, transparent);
+}
+
+.weight-graph-card__chart {
+  width: 100%;
+  min-width: 0;
+  height: 360px;
+}
+
+.weight-graph-card__tooltip {
+  display: grid;
+  gap: 4px;
+  min-width: 130px;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 32%, var(--color-border));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.weight-graph-card__tooltip-label {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.weight-graph-card__tooltip-value {
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.weight-graph-card__empty-state {
+  display: grid;
+  place-items: center;
+  min-height: 300px;
+  padding: 28px;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-surface-soft) 35%, transparent);
+  text-align: center;
+}
+
+.weight-graph-card__empty-state p {
+  max-width: 320px;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .weight-graph-card {
+    padding: 20px;
+  }
+
+  .weight-graph-card__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .weight-graph-card__select {
+    width: 100%;
+  }
+
+  .weight-graph-card__chart {
+    height: 320px;
+  }
+}
+
+@media (max-width: 460px) {
+  .weight-graph-card {
     padding: 16px;
   }
 
-  .chart-container {
-    min-height: 300px;
-    padding: 16px;
-  }
-
-  .weight-graph h2 {
-    font-size: 1.25rem;
+  .weight-graph-card__chart {
+    height: 280px;
   }
 }

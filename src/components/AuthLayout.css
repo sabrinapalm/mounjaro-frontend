@@ -34,7 +34,7 @@
   font-size: clamp(3rem, 7vw, 5.8rem);
   line-height: 0.95;
   letter-spacing: -0.065em;
-  font-weight: 900;
+  font-weight: 800;
 }
 
 .auth-hero p {
@@ -83,6 +83,7 @@ html[data-theme="dark"] .auth-hero-pills li {
   .auth-layout {
     grid-template-columns: 1fr;
     padding: 40px 0;
+    gap: 24px;
   }
 
   .auth-hero {

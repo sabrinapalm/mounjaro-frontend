@@ -1,8 +1,10 @@
-import { type FormEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { FiActivity } from 'react-icons/fi';
 import type { WeightEntry } from '../types';
+import { AddWeightModal } from './AddWeightModal';
 import { ConfirmDialog } from './ConfirmDialog';
 import './WeightTracker.css';
-import { AiOutlineDelete } from 'react-icons/ai';
 
 interface WeightTrackerProps {
   weights: WeightEntry[];
@@ -11,9 +13,9 @@ interface WeightTrackerProps {
 }
 
 export const WeightTracker = ({ weights, onWeightAdded, onDeleteWeight }: WeightTrackerProps) => {
-  const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
-  const [weight, setWeight] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const [isAddWeightModalOpen, setIsAddWeightModalOpen] = useState(false);
+  const [isAddingWeight, setIsAddingWeight] = useState(false);
   const [weightToDelete, setWeightToDelete] = useState<WeightEntry | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -38,43 +40,31 @@ export const WeightTracker = ({ weights, onWeightAdded, onDeleteWeight }: Weight
     return firstWeight - latestWeight;
   }, [weights]);
 
-  const getWeekNumber = (date: Date): { week: number; year: number } => {
-    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = d.getUTCDay() || 7;
-
-    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    const week = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
-
-    return { week, year: d.getUTCFullYear() };
+  const handleOpenAddWeightModal = () => {
+    setError(null);
+    setIsAddWeightModalOpen(true);
   };
 
-  const handleAddWeight = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setError(null);
-
-    if (!date || !weight) {
+  const handleCloseAddWeightModal = () => {
+    if (isAddingWeight) {
       return;
     }
 
-    const selectedDate = new Date(date);
-    const { week, year } = getWeekNumber(selectedDate);
+    setIsAddWeightModalOpen(false);
+  };
 
-    const newWeight: WeightEntry = {
-      id: `weight_${Date.now()}`,
-      date,
-      weight: parseFloat(weight),
-      week,
-      year,
-    };
+  const handleAddWeight = async (newWeight: WeightEntry) => {
+    setError(null);
+    setIsAddingWeight(true);
 
     try {
       await onWeightAdded(newWeight);
-      setDate(new Date().toISOString().split('T')[0]);
-      setWeight('');
+      setIsAddWeightModalOpen(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to add weight');
+      throw err;
+    } finally {
+      setIsAddingWeight(false);
     }
   };
 
@@ -110,95 +100,106 @@ export const WeightTracker = ({ weights, onWeightAdded, onDeleteWeight }: Weight
   };
 
   return (
-    <div className='weight-tracker'>
-      <h2>Weight Tracker</h2>
+    <section className='weight-tracker-card'>
+      <header className='weight-tracker-card__header'>
+        <div>
+          <h2 className='weight-tracker-card__title'>Recent Weights</h2>
 
-      <div className='tracker-summary'>
-        {weightLoss !== null && (
-          <div className='summary-item'>
-            <span className='label'>Total Weight Loss</span>
-            <span className={`value ${weightLoss > 0 ? 'positive' : 'negative'}`}>
-              {weightLoss > 0 ? '-' : '+'}
-              {Math.abs(weightLoss).toFixed(1)} kg
-            </span>
-          </div>
-        )}
-      </div>
-
-      <form onSubmit={handleAddWeight} className='weight-form'>
-        <div className='form-group'>
-          <label htmlFor='weight-date'>Date</label>
-          <input
-            id='weight-date'
-            type='date'
-            value={date}
-            onChange={(event) => setDate(event.target.value)}
-            required
-          />
+          {weightLoss !== null && (
+            <p className='weight-tracker-card__summary'>
+              Total weight loss:{' '}
+              <span className={weightLoss > 0 ? 'positive' : 'negative'}>
+                {weightLoss > 0 ? '-' : '+'}
+                {Math.abs(weightLoss).toFixed(1)} kg
+              </span>
+            </p>
+          )}
         </div>
 
-        <div className='form-group'>
-          <label htmlFor='weight-input'>Weight (kg)</label>
-          <input
-            id='weight-input'
-            type='number'
-            step='0.1'
-            value={weight}
-            onChange={(event) => setWeight(event.target.value)}
-            placeholder='e.g., 85.5'
-            required
-          />
-        </div>
-
-        {error && <p className='tracker-error'>{error}</p>}
-
-        <button type='submit' className='button button-accent'>
+        <button
+          type='button'
+          className='weight-tracker-card__add-button'
+          onClick={handleOpenAddWeightModal}
+        >
           Add Weight
         </button>
-      </form>
+      </header>
 
-      <div className='recent-weights'>
-        <h3>Recent Weights</h3>
+      {error && !isAddWeightModalOpen && <p className='weight-tracker-card__error'>{error}</p>}
 
-        {recentWeights.length === 0 ? (
-          <p className='empty-state'>No weights recorded yet</p>
-        ) : (
-          <ul className='weights-list'>
-            {recentWeights.map((entry, index) => {
-              const nextEntry = recentWeights[index + 1];
-              const change = nextEntry ? (entry.weight - nextEntry.weight).toFixed(1) : null;
+      {recentWeights.length === 0 ? (
+        <div className='weight-tracker-card__empty-state'>
+          <div className='weight-tracker-card__empty-icon'>
+            <FiActivity size={24} />
+          </div>
 
-              return (
-                <li key={entry.id} className='weight-item'>
-                  <div className='weight-info'>
-                    <span className='weight-date'>{new Date(entry.date).toLocaleDateString()}</span>
+          <p>No weights recorded yet</p>
+        </div>
+      ) : (
+        <ul className='weight-tracker-card__list'>
+          {recentWeights.map((entry, index) => {
+            const nextEntry = recentWeights[index + 1];
+            const change = nextEntry ? entry.weight - nextEntry.weight : null;
+            const isWeightGain = change !== null && change > 0;
+            const isWeightLoss = change !== null && change < 0;
 
-                    <span className='weight-value'>{entry.weight} kg</span>
+            return (
+              <li key={entry.id} className='weight-tracker-card__item'>
+                <div className='weight-tracker-card__icon'>
+                  <FiActivity size={20} />
+                </div>
 
-                    {change && (
-                      <span
-                        className={`weight-change ${
-                          parseFloat(change) > 0 ? 'negative' : 'positive'
-                        }`}
-                      >
-                        {parseFloat(change) > 0 ? '+' : ''}
-                        {change} kg
-                      </span>
-                    )}
-                  </div>
-                  <button
-                    type='button'
-                    onClick={() => handleOpenDeleteDialog(entry)}
-                    className='btn-delete'
+                <span className='weight-tracker-card__date'>
+                  {new Date(entry.date).toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                  })}
+                </span>
+
+                <span className='weight-tracker-card__weight'>{entry.weight.toFixed(1)} kg</span>
+
+                {change !== null ? (
+                  <span
+                    className={[
+                      'weight-tracker-card__change',
+                      isWeightGain ? 'weight-tracker-card__change--negative' : '',
+                      isWeightLoss ? 'weight-tracker-card__change--positive' : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
                   >
-                    <AiOutlineDelete size={20} />
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
+                    {isWeightGain ? '+' : ''}
+                    {change.toFixed(1)} kg
+                    <span aria-hidden='true'>{isWeightLoss ? '↓' : '↑'}</span>
+                  </span>
+                ) : (
+                  <span className='weight-tracker-card__change weight-tracker-card__change--muted'>
+                    —
+                  </span>
+                )}
+
+                <button
+                  type='button'
+                  className='weight-tracker-card__delete-button'
+                  aria-label={`Delete weight from ${new Date(entry.date).toLocaleDateString()}`}
+                  onClick={() => handleOpenDeleteDialog(entry)}
+                >
+                  <AiOutlineDelete size={20} />
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
+      <AddWeightModal
+        open={isAddWeightModalOpen}
+        isSubmitting={isAddingWeight}
+        error={error}
+        onClose={handleCloseAddWeightModal}
+        onWeightAdded={handleAddWeight}
+      />
 
       <ConfirmDialog
         open={Boolean(weightToDelete)}
@@ -217,6 +218,6 @@ export const WeightTracker = ({ weights, onWeightAdded, onDeleteWeight }: Weight
         onConfirm={handleConfirmDelete}
         onCancel={handleCloseDeleteDialog}
       />
-    </div>
+    </section>
   );
 };

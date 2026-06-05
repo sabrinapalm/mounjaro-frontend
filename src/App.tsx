@@ -104,7 +104,7 @@ function App() {
 
   const renderAuthenticatedContent = () => {
     if (!profileLoaded) {
-      return <div className='app-content'>Loading profile...</div>;
+      return null;
     }
 
     if (profileError) {

@@ -1,189 +1,286 @@
-.weight-tracker {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
+.weight-tracker-card {
+  display: grid;
+  gap: 22px;
+  width: 100%;
+  min-width: 0;
   padding: 24px;
-  box-shadow: var(--shadow-soft);
   border: 1px solid var(--color-border);
-  transition: all 0.3s ease;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-surface-soft) 22%, var(--color-surface) 78%),
+    var(--color-surface)
+  );
 }
 
-.weight-tracker:hover {
-  transform: translateY(-1px);
-  border-color: var(--color-primary-soft);
-  box-shadow: 0 16px 40px rgba(111, 77, 246, 0.08);
+.weight-tracker-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  min-width: 0;
 }
 
-.weight-tracker h2 {
-  margin: 0 0 20px 0;
+.weight-tracker-card__title {
   color: var(--color-text);
-  font-size: 1.5rem;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
 }
 
-.tracker-summary {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-}
-
-.tracker-summary .summary-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 16px;
-  background: var(--color-surface-soft);
-  border-radius: var(--radius-md);
-  flex: 1;
-  min-width: 150px;
-  border: 1px solid var(--color-border);
-  transition: all 0.2s ease;
-}
-
-.tracker-summary .summary-item .label {
-  font-size: 0.875rem;
+.weight-tracker-card__summary {
+  margin-top: 4px;
   color: var(--color-text-muted);
-  font-weight: 600;
-}
-
-.tracker-summary .summary-item .value {
-  font-size: 1.75rem;
-  color: var(--color-primary-dark);
+  font-size: 0.85rem;
   font-weight: 700;
 }
 
-.tracker-summary .summary-item .value.positive {
-  color: var(--color-accent-dark);
+.weight-tracker-card__summary .positive {
+  color: var(--color-accent);
 }
 
-.tracker-summary .summary-item .value.neutral {
-  color: var(--color-text);
+.weight-tracker-card__summary .negative {
+  color: var(--color-danger);
 }
 
-.weight-form {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  align-items: flex-end;
+.weight-tracker-card__add-button {
+  min-height: 46px;
+  padding: 0 22px;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 24%, transparent);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface));
+  color: var(--color-primary);
+  font-size: 0.95rem;
+  font-weight: 800;
+  white-space: nowrap;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.weight-form .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex: 1;
-  min-width: 150px;
-}
-
-.weight-form .form-group label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-.weight-form .form-group input {
-  padding: 12px 14px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: 1rem;
-  font-family: inherit;
-  background: var(--color-surface);
-  color: var(--color-text);
-  transition: all 0.2s ease;
-  height: 50px;
-}
-
-.weight-form .form-group input:focus {
-  outline: none;
+.weight-tracker-card__add-button:hover {
+  transform: translateY(-1px);
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 4px rgba(111, 77, 246, 0.14);
-  background: var(--color-surface);
+  background: var(--color-primary-soft);
+  box-shadow: var(--button-shadow-primary);
 }
 
-.recent-weights h3 {
-  margin: 0 0 12px 0;
-  color: var(--color-text);
-  font-size: 1.125rem;
+.weight-tracker-card__error {
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--color-danger) 36%, transparent);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+  color: var(--color-danger);
+  font-size: 0.9rem;
+  font-weight: 800;
 }
 
-.weights-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.weight-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px;
-  background: var(--color-surface-soft);
+.weight-tracker-card__empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 34px 20px;
+  border: 1px dashed var(--color-border);
   border-radius: var(--radius-md);
-  border-left: 4px solid var(--color-accent);
+  color: var(--color-text-muted);
+  text-align: center;
 }
 
-.weight-info {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  flex: 1;
-  flex-wrap: wrap;
-}
-
-.weight-date {
-  font-weight: 600;
-  color: var(--color-text);
-  min-width: 100px;
-}
-
-.weight-value {
-  color: var(--color-text);
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.weight-change {
-  font-size: 0.875rem;
-  padding: 4px 10px;
+.weight-tracker-card__empty-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
   border-radius: var(--radius-pill);
-  font-weight: 600;
+  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  color: var(--color-accent);
 }
 
-.weight-change.positive {
-  background: var(--color-accent-soft);
+.weight-tracker-card__list {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.weight-tracker-card__item {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) minmax(76px, auto) minmax(84px, auto) 38px;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--color-border) 88%, transparent);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--color-surface-soft) 35%, transparent);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.weight-tracker-card__item:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--color-accent) 28%, var(--color-border));
+  background: color-mix(in srgb, var(--color-surface-soft) 58%, transparent);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+
+.weight-tracker-card__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  color: var(--color-accent);
+}
+
+.weight-tracker-card__date,
+.weight-tracker-card__weight,
+.weight-tracker-card__change {
+  min-width: 0;
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.weight-tracker-card__date,
+.weight-tracker-card__weight {
+  overflow: hidden;
+  color: var(--color-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weight-tracker-card__change {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.weight-tracker-card__change--positive {
   color: var(--color-accent-dark);
 }
 
-.weight-change.negative {
-  background: rgba(239, 68, 68, 0.12);
+html[data-theme="dark"] .weight-tracker-card__change--positive {
+  color: var(--color-accent);
+}
+
+.weight-tracker-card__change--negative {
   color: var(--color-danger);
 }
 
-.weight-item .btn-delete {
-  padding: 8px 8px;
-  background: var(--color-surface);
+.weight-tracker-card__change--muted {
   color: var(--color-text-muted);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
 }
 
-.weight-item .btn-delete:hover {
-  background: var(--color-surface-soft);
+.weight-tracker-card__delete-button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-text-muted);
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.weight-tracker-card__item:hover .weight-tracker-card__delete-button,
+.weight-tracker-card__delete-button:focus-visible {
+  opacity: 1;
+}
+
+.weight-tracker-card__delete-button:hover {
+  transform: scale(1.04);
+  border-color: color-mix(in srgb, var(--color-danger) 34%, transparent);
+  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
   color: var(--color-danger);
-  border-color: rgba(239, 68, 68, 0.3);
 }
 
-.empty-state {
-  color: var(--color-text-muted);
-  font-size: 0.95rem;
-  text-align: center;
-  padding: 20px;
-  background: var(--color-surface-soft);
-  border-radius: var(--radius-md);
+@media (max-width: 900px) {
+  .weight-tracker-card__item {
+    grid-template-columns: 42px minmax(0, 1fr) minmax(82px, auto) 38px;
+    grid-template-areas:
+      "icon date change delete"
+      "icon weight change delete";
+    gap: 6px 12px;
+    min-height: auto;
+    padding: 14px;
+  }
+
+  .weight-tracker-card__icon {
+    grid-area: icon;
+  }
+
+  .weight-tracker-card__date {
+    grid-area: date;
+  }
+
+  .weight-tracker-card__weight {
+    grid-area: weight;
+  }
+
+  .weight-tracker-card__change {
+    grid-area: change;
+    justify-self: end;
+  }
+
+  .weight-tracker-card__delete-button {
+    grid-area: delete;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 760px) {
+  .weight-tracker-card {
+    padding: 20px;
+  }
+
+  .weight-tracker-card__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .weight-tracker-card__add-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 460px) {
+  .weight-tracker-card {
+    padding: 16px;
+  }
+
+  .weight-tracker-card__item {
+    grid-template-columns: 38px minmax(0, 1fr) 36px;
+    grid-template-areas:
+      "icon date delete"
+      "icon weight delete"
+      "icon change delete";
+  }
+
+  .weight-tracker-card__icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .weight-tracker-card__change {
+    justify-self: start;
+  }
 }

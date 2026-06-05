@@ -1,8 +1,10 @@
-import { type FormEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { PiSyringeBold } from 'react-icons/pi';
 import type { ShotEntry } from '../types';
+import { AddShotModal } from './AddShotModal';
 import { ConfirmDialog } from './ConfirmDialog';
 import './ShotTracker.css';
-import { AiOutlineDelete } from 'react-icons/ai';
 
 interface ShotTrackerProps {
   shots: ShotEntry[];
@@ -11,9 +13,9 @@ interface ShotTrackerProps {
 }
 
 export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerProps) => {
-  const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
-  const [dosage, setDosage] = useState<string>('2.5');
   const [error, setError] = useState<string | null>(null);
+  const [isAddShotModalOpen, setIsAddShotModalOpen] = useState(false);
+  const [isAddingShot, setIsAddingShot] = useState(false);
   const [shotToDelete, setShotToDelete] = useState<ShotEntry | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -25,43 +27,31 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
 
   const totalShots = shots.length;
 
-  const getWeekNumber = (date: Date): { week: number; year: number } => {
-    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = d.getUTCDay() || 7;
-
-    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    const week = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
-
-    return { week, year: d.getUTCFullYear() };
+  const handleOpenAddShotModal = () => {
+    setError(null);
+    setIsAddShotModalOpen(true);
   };
 
-  const handleAddShot = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setError(null);
-
-    if (!date || !dosage) {
+  const handleCloseAddShotModal = () => {
+    if (isAddingShot) {
       return;
     }
 
-    const selectedDate = new Date(date);
-    const { week, year } = getWeekNumber(selectedDate);
+    setIsAddShotModalOpen(false);
+  };
 
-    const newShot: ShotEntry = {
-      id: `shot_${Date.now()}`,
-      date,
-      dosage: parseFloat(dosage),
-      week,
-      year,
-    };
+  const handleAddShot = async (newShot: ShotEntry) => {
+    setError(null);
+    setIsAddingShot(true);
 
     try {
       await onShotAdded(newShot);
-      setDate(new Date().toISOString().split('T')[0]);
-      setDosage('2.5');
+      setIsAddShotModalOpen(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to add shot');
+      throw err;
+    } finally {
+      setIsAddingShot(false);
     }
   };
 
@@ -97,77 +87,75 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
   };
 
   return (
-    <div className='shot-tracker'>
-      <h2>Mounjaro Shot Tracker</h2>
+    <section className='shot-tracker-card'>
+      <header className='shot-tracker-card__header'>
+        <div>
+          <h2 className='shot-tracker-card__title'>Recent Shots</h2>
 
-      <div className='tracker-summary'>
-        <div className='summary-item'>
-          <span className='label'>Total Shots</span>
-          <span className='value'>{totalShots}</span>
-        </div>
-      </div>
-
-      <form onSubmit={handleAddShot} className='shot-form'>
-        <div className='form-group'>
-          <label htmlFor='shot-date'>Date</label>
-          <input
-            id='shot-date'
-            type='date'
-            value={date}
-            onChange={(event) => setDate(event.target.value)}
-            required
-          />
+          <p className='shot-tracker-card__summary'>
+            Total shots: <span>{totalShots}</span>
+          </p>
         </div>
 
-        <div className='form-group'>
-          <label htmlFor='shot-dosage'>Dosage (mg)</label>
-          <select
-            id='shot-dosage'
-            value={dosage}
-            onChange={(event) => setDosage(event.target.value)}
-            required
-          >
-            <option value='2.5'>2.5 mg</option>
-            <option value='5'>5 mg</option>
-            <option value='7.5'>7.5 mg</option>
-            <option value='10'>10 mg</option>
-            <option value='12.5'>12.5 mg</option>
-            <option value='15'>15 mg</option>
-          </select>
-        </div>
-
-        {error && <p className='tracker-error'>{error}</p>}
-
-        <button type='submit' className='button button-accent'>
+        <button
+          type='button'
+          className='shot-tracker-card__add-button'
+          onClick={handleOpenAddShotModal}
+        >
           Add Shot
         </button>
-      </form>
+      </header>
 
-      <div className='recent-shots'>
-        <h3>Recent Shots</h3>
+      {error && !isAddShotModalOpen && <p className='shot-tracker-card__error'>{error}</p>}
 
-        {recentShots.length === 0 ? (
-          <p className='empty-state'>No shots recorded yet</p>
-        ) : (
-          <ul className='shots-list'>
-            {recentShots.map((shot) => (
-              <li key={shot.id} className='shot-item'>
-                <div className='shot-info'>
-                  <span className='shot-date'>{new Date(shot.date).toLocaleDateString()}</span>
-                  <span className='shot-dosage'>{shot.dosage} mg</span>
-                </div>
-                <button
-                  type='button'
-                  onClick={() => handleOpenDeleteDialog(shot)}
-                  className='btn-delete'
-                >
-                  <AiOutlineDelete size={20} />
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      {recentShots.length === 0 ? (
+        <div className='shot-tracker-card__empty-state'>
+          <div className='shot-tracker-card__empty-icon'>
+            <PiSyringeBold size={24} />
+          </div>
+
+          <p>No shots recorded yet</p>
+        </div>
+      ) : (
+        <ul className='shot-tracker-card__list'>
+          {recentShots.map((shot) => (
+            <li key={shot.id} className='shot-tracker-card__item'>
+              <div className='shot-tracker-card__icon'>
+                <PiSyringeBold size={22} />
+              </div>
+
+              <span className='shot-tracker-card__date'>
+                {new Date(shot.date).toLocaleDateString('en-GB', {
+                  day: 'numeric',
+                  month: 'short',
+                  year: 'numeric',
+                })}
+              </span>
+
+              <span className='shot-tracker-card__dosage'>{shot.dosage.toFixed(1)} mg</span>
+
+              <span className='shot-tracker-card__site'>{shot.injectionSite || 'Stomach'}</span>
+
+              <button
+                type='button'
+                className='shot-tracker-card__delete-button'
+                aria-label={`Delete shot from ${new Date(shot.date).toLocaleDateString()}`}
+                onClick={() => handleOpenDeleteDialog(shot)}
+              >
+                <AiOutlineDelete size={20} />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <AddShotModal
+        open={isAddShotModalOpen}
+        isSubmitting={isAddingShot}
+        error={error}
+        onClose={handleCloseAddShotModal}
+        onShotAdded={handleAddShot}
+      />
 
       <ConfirmDialog
         open={Boolean(shotToDelete)}
@@ -186,6 +174,6 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
         onConfirm={handleConfirmDelete}
         onCancel={handleCloseDeleteDialog}
       />
-    </div>
+    </section>
   );
 };

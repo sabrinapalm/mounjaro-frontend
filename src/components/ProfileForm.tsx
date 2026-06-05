@@ -1,6 +1,8 @@
 import type { BaseSyntheticEvent } from 'react';
 import { useState } from 'react';
+import { FiTarget, FiUser } from 'react-icons/fi';
 import type { ProfileFormValues, UserProfile } from '../types';
+import './ProfileForm.css';
 
 type ProfileFormProps = {
   initialProfile?: UserProfile | null;
@@ -70,78 +72,124 @@ export function ProfileForm({
   };
 
   return (
-    <section className='profile-form-card'>
-      <h2>{title}</h2>
-      <p className='profile-form-description'>
-        Add a few details so the app can personalize your progress view.
-      </p>
+    <section className='profile-form-page'>
+      <div className='profile-form-card'>
+        <header className='profile-form-card__header'>
+          <div className='profile-form-card__icon' aria-hidden='true'>
+            <FiUser size={30} />
+          </div>
 
-      <form onSubmit={handleSubmit} className='profile-form'>
-        <label>
-          Display name
-          <input
-            value={displayName}
-            onChange={(event) => setDisplayName(event.target.value)}
-            placeholder=''
-            autoComplete='name'
-          />
-        </label>
+          <div className='profile-form-card__heading'>
+            <h2 className='profile-form-card__title'>{title}</h2>
 
-        <label>
-          Goal weight (kg)
-          <input
-            type='number'
-            step='0.1'
-            min='1'
-            value={goalWeight}
-            onChange={(event) => setGoalWeight(event.target.value)}
-            placeholder=''
-          />
-        </label>
+            <p className='profile-form-card__description'>
+              Add a few details so Tracksy can personalize your progress view.
+            </p>
+          </div>
+        </header>
 
-        <label>
-          Start weight (kg)
-          <input
-            type='number'
-            step='0.1'
-            min='1'
-            value={startWeight}
-            onChange={(event) => setStartWeight(event.target.value)}
-            placeholder=''
-          />
-        </label>
+        <form onSubmit={handleSubmit} className='profile-form'>
+          <label className='profile-form__field' htmlFor='profile-display-name'>
+            <span className='profile-form__label'>Display name</span>
 
-        <label>
-          Height (cm)
-          <input
-            type='number'
-            step='0.1'
-            min='1'
-            value={height}
-            onChange={(event) => setHeight(event.target.value)}
-            placeholder=''
-          />
-        </label>
+            <input
+              id='profile-display-name'
+              className='profile-form__input'
+              value={displayName}
+              onChange={(event) => setDisplayName(event.target.value)}
+              placeholder='Sabrina'
+              autoComplete='name'
+              disabled={isSaving}
+            />
+          </label>
 
-        {error ? <p className='error-message'>{error}</p> : null}
+          <div className='profile-form__grid'>
+            <label className='profile-form__field' htmlFor='profile-start-weight'>
+              <span className='profile-form__label'>Start weight</span>
 
-        <div className='profile-form-actions'>
-          {onCancel ? (
+              <div className='profile-form__input-with-unit'>
+                <input
+                  id='profile-start-weight'
+                  className='profile-form__input profile-form__input--with-unit'
+                  type='number'
+                  step='0.1'
+                  min='1'
+                  value={startWeight}
+                  onChange={(event) => setStartWeight(event.target.value)}
+                  placeholder='100'
+                  disabled={isSaving}
+                />
+
+                <span className='profile-form__unit'>kg</span>
+              </div>
+            </label>
+
+            <label className='profile-form__field' htmlFor='profile-goal-weight'>
+              <span className='profile-form__label'>Goal weight</span>
+
+              <div className='profile-form__input-with-unit'>
+                <input
+                  id='profile-goal-weight'
+                  className='profile-form__input profile-form__input--with-unit'
+                  type='number'
+                  step='0.1'
+                  min='1'
+                  value={goalWeight}
+                  onChange={(event) => setGoalWeight(event.target.value)}
+                  placeholder='65'
+                  disabled={isSaving}
+                />
+
+                <span className='profile-form__unit'>kg</span>
+              </div>
+            </label>
+          </div>
+
+          <label className='profile-form__field' htmlFor='profile-height'>
+            <span className='profile-form__label'>Height</span>
+
+            <div className='profile-form__input-with-unit'>
+              <input
+                id='profile-height'
+                className='profile-form__input profile-form__input--with-unit'
+                type='number'
+                step='0.1'
+                min='1'
+                value={height}
+                onChange={(event) => setHeight(event.target.value)}
+                placeholder='165'
+                disabled={isSaving}
+              />
+
+              <span className='profile-form__unit'>cm</span>
+            </div>
+          </label>
+
+          {error ? <p className='profile-form__error'>{error}</p> : null}
+
+          <footer className='profile-form__actions'>
+            {onCancel ? (
+              <button
+                className='profile-form__button profile-form__button--neutral'
+                type='button'
+                onClick={onCancel}
+                disabled={isSaving}
+              >
+                Cancel
+              </button>
+            ) : null}
+
             <button
-              className='button button-neutral'
-              type='button'
-              onClick={onCancel}
+              className='profile-form__button profile-form__button--accent'
+              type='submit'
               disabled={isSaving}
             >
-              Cancel
+              <FiTarget size={20} />
+              {isSaving ? 'Saving...' : submitLabel}
             </button>
-          ) : null}
-
-          <button className='button button-accent' type='submit' disabled={isSaving}>
-            {isSaving ? 'Saving...' : submitLabel}
-          </button>
-        </div>
-      </form>
+          </footer>
+        </form>
+      </div>
     </section>
   );
 }

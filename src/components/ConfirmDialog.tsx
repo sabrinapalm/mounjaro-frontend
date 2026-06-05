@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { AiOutlineWarning } from 'react-icons/ai';
 import './ConfirmDialog.css';
 
 type ConfirmDialogVariant = 'danger' | 'default';
@@ -32,6 +33,8 @@ export const ConfirmDialog = ({
       return;
     }
 
+    const originalOverflow = document.body.style.overflow;
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && !isLoading) {
         onCancel();
@@ -43,7 +46,7 @@ export const ConfirmDialog = ({
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
+      document.body.style.overflow = originalOverflow;
     };
   }, [open, isLoading, onCancel]);
 
@@ -51,23 +54,55 @@ export const ConfirmDialog = ({
     return null;
   }
 
+  const confirmButtonClassName = [
+    'confirm-dialog__confirm',
+    variant === 'danger' ? 'confirm-dialog__confirm--danger' : 'confirm-dialog__confirm--default',
+  ].join(' ');
+
+  const loadingLabel = variant === 'danger' ? 'Deleting...' : 'Working...';
+
   return createPortal(
-    <div className='confirm-dialog-backdrop' role='presentation'>
-      <div
+    <div
+      className='confirm-dialog-backdrop'
+      role='presentation'
+      onMouseDown={() => {
+        if (!isLoading) {
+          onCancel();
+        }
+      }}
+    >
+      <section
         className='confirm-dialog'
         role='dialog'
         aria-modal='true'
         aria-labelledby='confirm-dialog-title'
         aria-describedby='confirm-dialog-message'
+        onMouseDown={(event) => event.stopPropagation()}
       >
-        <h2 id='confirm-dialog-title'>{title}</h2>
+        <div
+          className={[
+            'confirm-dialog__icon',
+            variant === 'danger' ? 'confirm-dialog__icon--danger' : 'confirm-dialog__icon--default',
+          ].join(' ')}
+          aria-hidden='true'
+        >
+          <AiOutlineWarning size={30} />
+        </div>
 
-        <p id='confirm-dialog-message'>{message}</p>
+        <div className='confirm-dialog__content'>
+          <h2 id='confirm-dialog-title' className='confirm-dialog__title'>
+            {title}
+          </h2>
 
-        <div className='confirm-dialog-actions'>
+          <p id='confirm-dialog-message' className='confirm-dialog__message'>
+            {message}
+          </p>
+        </div>
+
+        <div className='confirm-dialog__actions'>
           <button
             type='button'
-            className='confirm-dialog-cancel'
+            className='confirm-dialog__cancel'
             onClick={onCancel}
             disabled={isLoading}
           >
@@ -76,16 +111,14 @@ export const ConfirmDialog = ({
 
           <button
             type='button'
-            className={`confirm-dialog-confirm ${
-              variant === 'danger' ? 'confirm-dialog-confirm-danger' : ''
-            }`}
+            className={confirmButtonClassName}
             onClick={onConfirm}
             disabled={isLoading}
           >
-            {isLoading ? 'Deleting...' : confirmLabel}
+            {isLoading ? loadingLabel : confirmLabel}
           </button>
         </div>
-      </div>
+      </section>
     </div>,
     document.body
   );

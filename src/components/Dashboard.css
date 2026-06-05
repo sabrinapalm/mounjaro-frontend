@@ -55,7 +55,7 @@
   transform: translateY(0);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 860px) {
   .dashboard {
     padding: 12px 12px;
   }
@@ -76,7 +76,7 @@
 }
 
 .dashboard-grid {
-  gap: 12px;
+  gap: 24px;
 }
 
 .dashboard-header {

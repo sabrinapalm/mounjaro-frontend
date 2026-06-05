@@ -4,6 +4,7 @@ export interface ShotEntry {
   dosage: number; // in mg
   week: number;
   year: number;
+  injectionSite?: string; // e.g., "abdomen", "thigh", "arm"
 }
 
 export interface WeightEntry {

@@ -8,6 +8,8 @@ import type { AppData, ShotEntry, UserProfile, WeightEntry } from '../types';
 import { formatDateLabel } from '../utils/dateHelpers';
 import './Dashboard.css';
 import { GoalProgress } from './GoalProgress';
+import { LinearLoader } from './LinearLoader';
+import { Milestones } from './Milestones';
 import { ShotTracker } from './ShotTracker';
 import { WeightGraph } from './WeightGraph';
 import { WeightTracker } from './WeightTracker';
@@ -140,19 +142,18 @@ export const Dashboard = ({ profile }: DashboardProps) => {
         weights: previous.weights.filter((weight) => weight.id !== id),
       }));
     } catch (err) {
-      setError((err as Error)?.message || 'Unable to delete weight');
+      setError((err as Error)?.message || 'Unabl  e to delete weight');
     }
   };
 
   return (
     <div className='dashboard'>
       {error && <p className='dashboard-error'>{error}</p>}
-      {loading && <p className='dashboard-loading'>Loading data...</p>}
-
+      <LinearLoader isLoading={loading} />
       <div className='dashboard-header'>
         <div>
           <h1>Dashboard</h1>
-          <p>Here's your progress summary, {profile?.displayName || ''}!</p>
+          <p>Small steps, real progress. You’re doing great, {profile?.displayName || ''}!</p>
         </div>
         <div className='dashboard-header-date'>Today, {summary.todayLabel}</div>
       </div>
@@ -225,8 +226,15 @@ export const Dashboard = ({ profile }: DashboardProps) => {
         </div>
       </div>
 
-      <div className='chart-section'>
+      <div className='dashboard-grid'>
         <WeightGraph weights={data.weights} />
+        <Milestones
+          weights={data.weights}
+          shots={data.shots}
+          startWeight={profile?.startWeight ?? null}
+          goalWeight={profile?.goalWeight ?? null}
+          maxVisible={5}
+        />
       </div>
     </div>
   );

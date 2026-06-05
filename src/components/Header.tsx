@@ -24,12 +24,13 @@ export const Header = ({ onEditProfile, onSignOut, theme, onToggleTheme }: Heade
           </div>
         </div>
 
-        <nav className='header-nav'>
+        <nav className='header-nav' aria-label='Header navigation'>
           <button
             type='button'
-            className='nav-button'
+            className='nav-button nav-button--theme'
             onClick={onToggleTheme}
             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {isDark ? <LuSun size={20} /> : <LuMoon size={20} />}
           </button>
@@ -37,14 +38,21 @@ export const Header = ({ onEditProfile, onSignOut, theme, onToggleTheme }: Heade
           <button
             type='button'
             onClick={onEditProfile}
-            className='nav-button'
-            aria-label='Edit Profile'
+            className='nav-button nav-button--profile'
+            aria-label='Edit profile'
+            title='Edit profile'
           >
             <LuCircleUserRound size={22} aria-hidden='true' />
           </button>
 
           {onSignOut && (
-            <button type='button' onClick={onSignOut} className='nav-button' aria-label='Sign Out'>
+            <button
+              type='button'
+              onClick={onSignOut}
+              className='nav-button nav-button--signout'
+              aria-label='Sign out'
+              title='Sign out'
+            >
               <GoSignOut size={22} aria-hidden='true' />
             </button>
           )}
