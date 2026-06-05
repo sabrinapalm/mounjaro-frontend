@@ -1,24 +1,19 @@
 import { useMemo } from 'react';
-import type { WeightEntry } from '../types';
+import type { UserProfile, WeightEntry } from '../types';
 import { getLocalDate } from '../utils/dateHelpers';
 import './GoalProgress.css';
 import { LuGoal } from 'react-icons/lu';
+import { calculateBmi } from '../utils/calculateBmi';
+import { formatKg } from '../utils/formatKg';
+import { formatWeightLost } from '../utils/formatWeightLoss';
 
 interface GoalProgressProps {
   weights: WeightEntry[];
-  goalWeight?: number;
+  profile: UserProfile;
 }
 
-const formatKg = (value: number) => `${value.toFixed(1)} kg`;
-
-const formatWeightLost = (value: number): { text: string; className: string } => {
-  if (value >= 0) {
-    return { text: `-${formatKg(value)}`, className: '' };
-  }
-  return { text: `+${formatKg(Math.abs(value))}`, className: 'weight-gain' };
-};
-
-export const GoalProgress = ({ weights, goalWeight = 68 }: GoalProgressProps) => {
+export const GoalProgress = ({ weights, profile }: GoalProgressProps) => {
+  const { goalWeight, height } = profile;
   const goalData = useMemo(() => {
     if (weights.length === 0) {
       return null;
@@ -28,7 +23,7 @@ export const GoalProgress = ({ weights, goalWeight = 68 }: GoalProgressProps) =>
       (a, b) => getLocalDate(a.date).getTime() - getLocalDate(b.date).getTime()
     );
 
-    const startWeight = sortedWeights[0].weight;
+    const startWeight = profile.startWeight ?? sortedWeights[0].weight;
     const currentWeight = sortedWeights[sortedWeights.length - 1].weight;
     const totalToLose = startWeight - goalWeight;
     const weightLost = startWeight - currentWeight;
@@ -45,13 +40,13 @@ export const GoalProgress = ({ weights, goalWeight = 68 }: GoalProgressProps) =>
       weightToGo,
       progress: Math.round(clampedProgress),
     };
-  }, [weights, goalWeight]);
+  }, [weights, profile.startWeight, goalWeight]);
 
   if (!goalData) {
     return null;
   }
 
-  const { progress, startWeight, weightLost, weightToGo } = goalData;
+  const { progress, startWeight, weightLost, weightToGo, currentWeight } = goalData;
 
   return (
     <section className='goal-progress-card'>
@@ -62,13 +57,11 @@ export const GoalProgress = ({ weights, goalWeight = 68 }: GoalProgressProps) =>
         </div>
         <div className='goal-progress-value'>{progress}%</div>
       </div>
-
       <div className='goal-progress-bar-wrapper'>
         <div className='goal-progress-bar'>
           <div className='goal-progress-bar-fill' style={{ width: `${progress}%` }} />
         </div>
       </div>
-
       <div className='goal-progress-stat-grid'>
         <div className='goal-progress-stat'>
           <span className='stat-label'>Start Weight</span>
@@ -87,6 +80,10 @@ export const GoalProgress = ({ weights, goalWeight = 68 }: GoalProgressProps) =>
         <div className='goal-progress-stat'>
           <span className='stat-label'>Weight to Go</span>
           <span className='stat-value'>{formatKg(weightToGo)}</span>
+        </div>
+        <div className='goal-progress-stat'>
+          <span className='stat-label'>BMI</span>
+          <span className='stat-value'>{calculateBmi(currentWeight, height)}</span>
         </div>
       </div>
 

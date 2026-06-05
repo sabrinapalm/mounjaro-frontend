@@ -86,6 +86,10 @@
   height: 50px;
 }
 
+.form-group select {
+  cursor: pointer;
+}
+
 .form-group input:focus,
 .form-group select:focus {
   outline: none;

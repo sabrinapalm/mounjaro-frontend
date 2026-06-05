@@ -205,7 +205,7 @@ export const Dashboard = ({ profile }: DashboardProps) => {
         </div>
       </div>
 
-      <GoalProgress weights={data.weights} goalWeight={profile?.goalWeight} />
+      <GoalProgress weights={data.weights} profile={profile} />
 
       <div className='dashboard-grid'>
         <div className='tracker-section'>

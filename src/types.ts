@@ -31,14 +31,16 @@ export interface WeeklyData {
 
 export type UserProfile = {
   displayName: string;
-  goalWeight?: number;
+  goalWeight: number;
   startWeight?: number;
   createdAt?: string;
   updatedAt?: string;
+  height: number;
 };
 
 export type ProfileFormValues = {
   displayName: string;
   goalWeight: number | null;
   startWeight: number | null;
+  height: number | null;
 };

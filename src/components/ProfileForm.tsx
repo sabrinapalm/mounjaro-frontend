@@ -38,6 +38,7 @@ export function ProfileForm({
   const [startWeight, setStartWeight] = useState(
     initialProfile?.startWeight ? String(initialProfile.startWeight) : ''
   );
+  const [height, setHeight] = useState(initialProfile?.height ? String(initialProfile.height) : '');
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
@@ -59,6 +60,7 @@ export function ProfileForm({
         displayName: trimmedDisplayName,
         goalWeight: parseOptionalNumber(goalWeight),
         startWeight: parseOptionalNumber(startWeight),
+        height: parseOptionalNumber(height),
       });
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Could not save profile.');
@@ -105,6 +107,18 @@ export function ProfileForm({
             min='1'
             value={startWeight}
             onChange={(event) => setStartWeight(event.target.value)}
+            placeholder=''
+          />
+        </label>
+
+        <label>
+          Height(cm)
+          <input
+            type='number'
+            step='0.1'
+            min='1'
+            value={height}
+            onChange={(event) => setHeight(event.target.value)}
             placeholder=''
           />
         </label>
