@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 import {
-  LineChart,
+  CartesianGrid,
+  Legend,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
 } from 'recharts';
 import type { WeightEntry } from '../types';
 import './WeightGraph.css';
@@ -36,10 +36,7 @@ const getYAxisDomain = (data: ChartData[]) => {
 
   const padding = Math.max((maxWeight - minWeight) * 0.25, 1);
 
-  return [
-    Math.floor(minWeight - padding),
-    Math.ceil(maxWeight + padding),
-  ] as const;
+  return [Math.floor(minWeight - padding), Math.ceil(maxWeight + padding)] as const;
 };
 
 export const WeightGraph = ({ weights }: WeightGraphProps) => {
@@ -81,20 +78,20 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
 
   if (chartData.length === 0) {
     return (
-      <div className="weight-graph">
-        <div className="chart-container">
-          <p className="empty-state">No data to display yet. Add weights to see charts.</p>
+      <div className='weight-graph'>
+        <div className='chart-container'>
+          <p className='empty-state'>No data to display yet. Add weights to see charts.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="weight-graph">
+    <div className='weight-graph'>
       <h2>Weight Loss Progress</h2>
 
-      <div className="chart-container">
-        <ResponsiveContainer width="100%" height={400}>
+      <div className='chart-container'>
+        <ResponsiveContainer width='100%' height={400}>
           <LineChart
             data={chartData}
             margin={{
@@ -104,14 +101,9 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
               bottom: 20,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray='3 3' />
 
-            <XAxis
-              dataKey="week"
-              angle={-45}
-              textAnchor="end"
-              height={80}
-            />
+            <XAxis dataKey='week' angle={-45} textAnchor='end' height={80} />
 
             <YAxis
               domain={yAxisDomain}
@@ -141,9 +133,9 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
             <Legend />
 
             <Line
-              type="monotone"
-              dataKey="weight"
-              stroke="#6f4df6"
+              type='monotone'
+              dataKey='weight'
+              stroke='#6f4df6'
               strokeWidth={4}
               dot={{
                 fill: '#24c7a5',
@@ -154,7 +146,7 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
               activeDot={{
                 r: 8,
               }}
-              name="Weight"
+              name='Weight'
               isAnimationActive
             />
           </LineChart>

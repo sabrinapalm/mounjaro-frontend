@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { type FormEvent, useState } from 'react';
 import { cognitoAuth } from '../services/cognitoAuth';
 
 interface SignUpFormProps {
@@ -28,35 +28,35 @@ export const SignUpForm = ({ onSignedUp, onSwitchToLogin }: SignUpFormProps) => 
   };
 
   return (
-    <div className="auth-card">
+    <div className='auth-card'>
       <h2>Create Account</h2>
-      <form onSubmit={handleSubmit} className="auth-form">
-        <label htmlFor="signup-email">Email</label>
+      <form onSubmit={handleSubmit} className='auth-form'>
+        <label htmlFor='signup-email'>Email</label>
         <input
-          id="signup-email"
-          type="email"
+          id='signup-email'
+          type='email'
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
         />
 
-        <label htmlFor="signup-password">Password</label>
+        <label htmlFor='signup-password'>Password</label>
         <input
-          id="signup-password"
-          type="password"
+          id='signup-password'
+          type='password'
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           required
         />
 
-        {error && <p className="auth-error">{error}</p>}
-        <button type="submit" disabled={loading} className="btn-primary">
+        {error && <p className='auth-error'>{error}</p>}
+        <button type='submit' disabled={loading} className='btn-primary'>
           {loading ? 'Creating account…' : 'Sign Up'}
         </button>
       </form>
 
-      <div className="auth-actions">
-        <button type="button" onClick={onSwitchToLogin} className="btn-link">
+      <div className='auth-actions'>
+        <button type='button' onClick={onSwitchToLogin} className='btn-link'>
           Back to sign in
         </button>
       </div>

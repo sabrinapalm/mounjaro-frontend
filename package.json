@@ -1,5 +1,5 @@
 {
-  "name": "mounjaro-companion-frontend",
+  "name": "mounjaro-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check": "biome check src",
+    "check:write": "biome check --write src",
+    "format": "biome format --write src"
   },
   "dependencies": {
     "@fontsource/nunito-sans": "^5.2.7",
@@ -18,6 +21,7 @@
     "recharts": "^3.8.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.16",
     "@eslint/js": "^10.0.1",
     "@types/node": "^24.12.3",
     "@types/react": "^19.2.14",

@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import './App.css';
-import { Header } from './components/Header';
-import { Dashboard } from './components/Dashboard';
-import { LoginForm } from './components/LoginForm';
-import { SignUpForm } from './components/SignUpForm';
 import { ConfirmSignUpForm } from './components/ConfirmSignUpForm';
+import { Dashboard } from './components/Dashboard';
+import { Header } from './components/Header';
+import { LoginForm } from './components/LoginForm';
 import { ProfileForm } from './components/ProfileForm';
+import { SignUpForm } from './components/SignUpForm';
+import { useTheme } from './hooks/useTheme';
 import { apiClient } from './services/apiClient';
 import { cognitoAuth } from './services/cognitoAuth';
 import type { ProfileFormValues, UserProfile } from './types';
-import { useTheme } from './hooks/useTheme';
 
 type AuthView = 'login' | 'signup' | 'confirm';
 
@@ -26,7 +26,7 @@ function App() {
 
   const { theme, toggleTheme } = useTheme();
 
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     setProfileLoaded(false);
     setProfileError('');
 
@@ -34,28 +34,46 @@ function App() {
       const loadedProfile = await apiClient.getProfile();
       setProfile(loadedProfile);
     } catch (error) {
-      setProfileError(
-        error instanceof Error ? error.message : 'Could not load profile.'
-      );
+      setProfileError(error instanceof Error ? error.message : 'Could not load profile.');
     } finally {
       setProfileLoaded(true);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    cognitoAuth
-      .getAuthToken()
-      .then(async () => {
+    let isMounted = true;
+
+    const initializeAuth = async () => {
+      try {
+        await cognitoAuth.getAuthToken();
+
+        if (!isMounted) {
+          return;
+        }
+
         setAuthenticated(true);
         await loadProfile();
-      })
-      .catch(() => {
+      } catch {
+        if (!isMounted) {
+          return;
+        }
+
         setAuthenticated(false);
         setProfile(null);
         setProfileLoaded(true);
-      })
-      .finally(() => setInitialized(true));
-  }, []);
+      } finally {
+        if (isMounted) {
+          setInitialized(true);
+        }
+      }
+    };
+
+    void initializeAuth();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [loadProfile]);
 
   const handleLoginSuccess = async () => {
     setAuthenticated(true);
@@ -83,20 +101,18 @@ function App() {
     setIsEditingProfile(false);
   };
 
-  if (!initialized) {
-    return <div className="app">Loading authentication...</div>;
-  }
-
   const renderAuthenticatedContent = () => {
     if (!profileLoaded) {
-      return <div className="app-content">Loading profile...</div>;
+      return <div className='app-content'>Loading profile...</div>;
     }
 
     if (profileError) {
       return (
-        <div className="app-content">
-          <p className="error-message">{profileError}</p>
-          <button onClick={loadProfile}>Try again</button>
+        <div className='app-content'>
+          <p className='error-message'>{profileError}</p>
+          <button type='button' onClick={loadProfile}>
+            Try again
+          </button>
         </div>
       );
     }
@@ -113,23 +129,26 @@ function App() {
       );
     }
 
-    return (
-        <Dashboard profile={profile} />
-    );
+    return <Dashboard profile={profile} />;
   };
 
+  if (!initialized) {
+    return <div className='app'>Loading authentication...</div>;
+  }
+
   return (
-    <div className="app">
-      <Header onEditProfile={() => setIsEditingProfile(true)} onSignOut={authenticated ? handleSignOut : undefined} theme={theme} onToggleTheme={toggleTheme}
- />
+    <div className='app'>
+      <Header
+        onEditProfile={() => setIsEditingProfile(true)}
+        onSignOut={authenticated ? handleSignOut : undefined}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
 
       {authenticated ? (
         renderAuthenticatedContent()
       ) : authView === 'signup' ? (
-        <SignUpForm
-          onSignedUp={handleSignedUp}
-          onSwitchToLogin={() => setAuthView('login')}
-        />
+        <SignUpForm onSignedUp={handleSignedUp} onSwitchToLogin={() => setAuthView('login')} />
       ) : authView === 'confirm' ? (
         <ConfirmSignUpForm
           email={pendingEmail}
@@ -137,10 +156,7 @@ function App() {
           onSwitchToLogin={() => setAuthView('login')}
         />
       ) : (
-        <LoginForm
-          onLogin={handleLoginSuccess}
-          onSwitchToSignUp={() => setAuthView('signup')}
-        />
+        <LoginForm onLogin={handleLoginSuccess} onSwitchToSignUp={() => setAuthView('signup')} />
       )}
     </div>
   );

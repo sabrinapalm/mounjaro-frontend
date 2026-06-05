@@ -42,9 +42,7 @@ export const apiClient = {
     return data.profile as UserProfile | null;
   },
 
-  updateProfile: async (
-    profile: ProfileFormValues
-  ): Promise<UserProfile> => {
+  updateProfile: async (profile: ProfileFormValues): Promise<UserProfile> => {
     const data = await request('/profile', {
       method: 'PUT',
       body: JSON.stringify(profile),

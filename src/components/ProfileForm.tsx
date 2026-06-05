@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import type { BaseSyntheticEvent } from 'react';
+import { useState } from 'react';
 import type { ProfileFormValues, UserProfile } from '../types';
 
 type ProfileFormProps = {
@@ -41,88 +41,89 @@ export function ProfileForm({
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
-const handleSubmit = async (event: BaseSyntheticEvent) => {
-  event.preventDefault();
+  const handleSubmit = async (event: BaseSyntheticEvent) => {
+    event.preventDefault();
 
-  const trimmedDisplayName = displayName.trim();
+    const trimmedDisplayName = displayName.trim();
 
-  if (!trimmedDisplayName) {
-    setError('Display name is required.');
-    return;
-  }
+    if (!trimmedDisplayName) {
+      setError('Display name is required.');
+      return;
+    }
 
-  setError('');
-  setIsSaving(true);
+    setError('');
+    setIsSaving(true);
 
-  try {
-    await onSubmit({
-      displayName: trimmedDisplayName,
-      goalWeight: parseOptionalNumber(goalWeight),
-      startWeight: parseOptionalNumber(startWeight),
-    });
-  } catch (submitError) {
-    setError(
-      submitError instanceof Error
-        ? submitError.message
-        : 'Could not save profile.'
-    );
-  } finally {
-    setIsSaving(false);
-  }
-};
+    try {
+      await onSubmit({
+        displayName: trimmedDisplayName,
+        goalWeight: parseOptionalNumber(goalWeight),
+        startWeight: parseOptionalNumber(startWeight),
+      });
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : 'Could not save profile.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
-    <section className="profile-form-card">
+    <section className='profile-form-card'>
       <h2>{title}</h2>
-      <p className="profile-form-description">
+      <p className='profile-form-description'>
         Add a few details so the app can personalize your progress view.
       </p>
-      
-      <form onSubmit={handleSubmit} className="profile-form">
+
+      <form onSubmit={handleSubmit} className='profile-form'>
         <label>
           Display name
           <input
             value={displayName}
             onChange={(event) => setDisplayName(event.target.value)}
-            placeholder=""
-            autoComplete="name"
+            placeholder=''
+            autoComplete='name'
           />
         </label>
 
         <label>
           Goal weight
           <input
-            type="number"
-            step="0.1"
-            min="1"
+            type='number'
+            step='0.1'
+            min='1'
             value={goalWeight}
             onChange={(event) => setGoalWeight(event.target.value)}
-            placeholder=""
+            placeholder=''
           />
         </label>
 
         <label>
           Start weight
           <input
-            type="number"
-            step="0.1"
-            min="1"
+            type='number'
+            step='0.1'
+            min='1'
             value={startWeight}
             onChange={(event) => setStartWeight(event.target.value)}
-            placeholder=""
+            placeholder=''
           />
         </label>
 
-        {error ? <p className="error-message">{error}</p> : null}
+        {error ? <p className='error-message'>{error}</p> : null}
 
-        <div className="profile-form-actions">
+        <div className='profile-form-actions'>
           {onCancel ? (
-            <button className="continue-button" type="button" onClick={onCancel} disabled={isSaving}>
+            <button
+              className='continue-button'
+              type='button'
+              onClick={onCancel}
+              disabled={isSaving}
+            >
               Cancel
             </button>
           ) : null}
 
-          <button className="continue-button" type="submit" disabled={isSaving}>
+          <button className='continue-button' type='submit' disabled={isSaving}>
             {isSaving ? 'Saving...' : submitLabel}
           </button>
         </div>

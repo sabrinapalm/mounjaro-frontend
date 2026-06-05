@@ -52,22 +52,22 @@ export const ConfirmDialog = ({
   }
 
   return createPortal(
-    <div className="confirm-dialog-backdrop" role="presentation">
+    <div className='confirm-dialog-backdrop' role='presentation'>
       <div
-        className="confirm-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="confirm-dialog-title"
-        aria-describedby="confirm-dialog-message"
+        className='confirm-dialog'
+        role='dialog'
+        aria-modal='true'
+        aria-labelledby='confirm-dialog-title'
+        aria-describedby='confirm-dialog-message'
       >
-        <h2 id="confirm-dialog-title">{title}</h2>
+        <h2 id='confirm-dialog-title'>{title}</h2>
 
-        <p id="confirm-dialog-message">{message}</p>
+        <p id='confirm-dialog-message'>{message}</p>
 
-        <div className="confirm-dialog-actions">
+        <div className='confirm-dialog-actions'>
           <button
-            type="button"
-            className="confirm-dialog-cancel"
+            type='button'
+            className='confirm-dialog-cancel'
             onClick={onCancel}
             disabled={isLoading}
           >
@@ -75,7 +75,7 @@ export const ConfirmDialog = ({
           </button>
 
           <button
-            type="button"
+            type='button'
             className={`confirm-dialog-confirm ${
               variant === 'danger' ? 'confirm-dialog-confirm-danger' : ''
             }`}

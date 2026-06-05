@@ -1,85 +1,85 @@
 .weight-graph {
-    background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    box-shadow: var(--shadow-soft);
-    margin-bottom: 24px;
-    border: 1px solid var(--color-border);
-    transition: all 0.3s ease;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 24px;
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
 }
 
 .weight-graph:hover {
-    transform: translateY(-1px);
-    border-color: var(--color-primary-soft);
-    box-shadow: 0 16px 40px rgba(111, 77, 246, 0.08);
+  transform: translateY(-1px);
+  border-color: var(--color-primary-soft);
+  box-shadow: 0 16px 40px rgba(111, 77, 246, 0.08);
 }
 
 .weight-graph h2 {
-    margin: 0 0 20px 0;
-    color: var(--color-text);
-    font-size: 1.5rem;
+  margin: 0 0 20px 0;
+  color: var(--color-text);
+  font-size: 1.5rem;
 }
 
 .chart-controls {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 24px;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
 }
 
 .chart-btn {
-    padding: 10px 18px;
-    background: var(--color-surface-soft);
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 600;
-    transition: all 0.2s ease;
+  padding: 10px 18px;
+  background: var(--color-surface-soft);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 .chart-btn:hover {
-    background: #f0edff;
-    border-color: var(--color-primary-soft);
+  background: #f0edff;
+  border-color: var(--color-primary-soft);
 }
 
 .chart-btn.active {
-    background: var(--color-primary-soft);
-    color: var(--color-primary-dark);
-    border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+  border-color: var(--color-primary);
 }
 
 .chart-container {
-    width: 100%;
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--color-primary-soft) 0%, var(--color-accent-soft) 100%);
-    border-radius: var(--radius-md);
-    padding: 20px;
-    box-sizing: border-box;
-    border: 1px solid var(--color-border);
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-primary-soft) 0%, var(--color-accent-soft) 100%);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-border);
 }
 
 .chart-container .empty-state {
-    color: var(--color-text);
-    font-size: 0.95rem;
-    text-align: center;
-    width: 100%;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  text-align: center;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
-    .weight-graph {
-        padding: 16px;
-    }
+  .weight-graph {
+    padding: 16px;
+  }
 
-    .chart-container {
-        min-height: 300px;
-        padding: 16px;
-    }
+  .chart-container {
+    min-height: 300px;
+    padding: 16px;
+  }
 
-    .weight-graph h2 {
-        font-size: 1.25rem;
-    }
+  .weight-graph h2 {
+    font-size: 1.25rem;
+  }
 }

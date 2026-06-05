@@ -3,7 +3,7 @@ import {
   CognitoUser,
   CognitoUserAttribute,
   CognitoUserPool,
-  CognitoUserSession,
+  type CognitoUserSession,
 } from 'amazon-cognito-identity-js';
 
 const userPool = new CognitoUserPool({
@@ -11,15 +11,12 @@ const userPool = new CognitoUserPool({
   ClientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
 });
 
-const getCognitoUser = (email: string) =>
-  new CognitoUser({ Username: email, Pool: userPool });
+const getCognitoUser = (email: string) => new CognitoUser({ Username: email, Pool: userPool });
 
 export const cognitoAuth = {
   signUp: (email: string, password: string): Promise<void> =>
     new Promise((resolve, reject) => {
-      const attributeList = [
-        new CognitoUserAttribute({ Name: 'email', Value: email }),
-      ];
+      const attributeList = [new CognitoUserAttribute({ Name: 'email', Value: email })];
 
       userPool.signUp(email, password, attributeList, [], (err) => {
         if (err) {
@@ -87,7 +84,7 @@ export const cognitoAuth = {
           return;
         }
 
-        if (!session || !session.isValid()) {
+        if (!session?.isValid()) {
           reject(new Error('Session is invalid'));
           return;
         }

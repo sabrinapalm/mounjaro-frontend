@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { type FormEvent, useState } from 'react';
 import { cognitoAuth } from '../services/cognitoAuth';
 
 interface LoginFormProps {
@@ -6,10 +6,7 @@ interface LoginFormProps {
   onSwitchToSignUp: () => void;
 }
 
-export const LoginForm = ({
-  onLogin,
-  onSwitchToSignUp,
-}: LoginFormProps) => {
+export const LoginForm = ({ onLogin, onSwitchToSignUp }: LoginFormProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -31,35 +28,35 @@ export const LoginForm = ({
   };
 
   return (
-    <div className="auth-card">
+    <div className='auth-card'>
       <h2>Sign In</h2>
-      <form onSubmit={handleSubmit} className="auth-form">
-        <label htmlFor="login-email">Email</label>
+      <form onSubmit={handleSubmit} className='auth-form'>
+        <label htmlFor='login-email'>Email</label>
         <input
-          id="login-email"
-          type="email"
+          id='login-email'
+          type='email'
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
         />
 
-        <label htmlFor="login-password">Password</label>
+        <label htmlFor='login-password'>Password</label>
         <input
-          id="login-password"
-          type="password"
+          id='login-password'
+          type='password'
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           required
         />
 
-        {error && <p className="auth-error">{error}</p>}
-        <button type="submit" disabled={loading} className="btn-primary">
+        {error && <p className='auth-error'>{error}</p>}
+        <button type='submit' disabled={loading} className='btn-primary'>
           {loading ? 'Signing in…' : 'Sign In'}
         </button>
       </form>
 
-      <div className="auth-actions">
-        <button type="button" onClick={onSwitchToSignUp} className="btn-link">
+      <div className='auth-actions'>
+        <button type='button' onClick={onSwitchToSignUp} className='btn-link'>
           Create account
         </button>
       </div>
