@@ -22,6 +22,20 @@ export interface DashboardSummary {
   currentDoseMeta: string;
 }
 
+const getDoseWeek = (sortedShots: ShotEntry[], latestShot: ShotEntry | null) => {
+  if (!latestShot || sortedShots.length === 0) {
+    return null;
+  }
+
+  const latestShotIndex = sortedShots.findIndex((shot) => shot.id === latestShot.id);
+
+  if (latestShotIndex === -1) {
+    return sortedShots.length;
+  }
+
+  return latestShotIndex + 1;
+};
+
 export const useDashboardSummary = ({
   shots,
   weights,
@@ -33,12 +47,14 @@ export const useDashboardSummary = ({
     const sortedWeights = [...weights].sort((a, b) => {
       const aTime = getLocalDate(a.date).getTime();
       const bTime = getLocalDate(b.date).getTime();
+
       return aTime - bTime;
     });
 
     const sortedShots = [...shots].sort((a, b) => {
       const aTime = getLocalDate(a.date).getTime();
       const bTime = getLocalDate(b.date).getTime();
+
       return aTime - bTime;
     });
 
@@ -53,16 +69,14 @@ export const useDashboardSummary = ({
     const latestShot = sortedShots.length > 0 ? sortedShots[sortedShots.length - 1] : null;
 
     const nextShotDate = latestShot ? addDays(getLocalDate(latestShot.date), 7) : null;
-
     const nextShotLabel = nextShotDate ? formatDateLabel(nextShotDate) : '—';
-
     const nextShotMeta = nextShotDate ? getDueLabel(nextShotDate, today) : 'No shots yet';
 
     const currentDose = latestShot ? `${latestShot.dosage.toFixed(1)} mg` : '—';
 
-    const currentDoseMeta = latestShot
-      ? `Since ${formatDateLabel(latestShot.date)}`
-      : 'No dose recorded';
+    const doseWeek = getDoseWeek(sortedShots, latestShot);
+
+    const currentDoseMeta = doseWeek ? `Week ${doseWeek}` : 'No dose recorded';
 
     return {
       todayLabel: formatDateLabel(today),

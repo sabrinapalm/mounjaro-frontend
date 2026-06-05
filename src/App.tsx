@@ -4,6 +4,7 @@ import { AuthLayout } from './components/AuthLayout';
 import { ConfirmSignUpForm } from './components/ConfirmSignUpForm';
 import { Dashboard } from './components/Dashboard';
 import { Header } from './components/Header';
+import { LinearLoader } from './components/LinearLoader';
 import { LoginForm } from './components/LoginForm';
 import { ProfileForm } from './components/ProfileForm';
 import { SignUpForm } from './components/SignUpForm';
@@ -162,7 +163,7 @@ function App() {
   };
 
   if (!initialized) {
-    return <div className='app'>Loading authentication...</div>;
+    return <LinearLoader />;
   }
 
   return (

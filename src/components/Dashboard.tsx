@@ -8,7 +8,6 @@ import type { AppData, ShotEntry, UserProfile, WeightEntry } from '../types';
 import { formatDateLabel } from '../utils/dateHelpers';
 import './Dashboard.css';
 import { GoalProgress } from './GoalProgress';
-import { LinearLoader } from './LinearLoader';
 import { Milestones } from './Milestones';
 import { ShotTracker } from './ShotTracker';
 import { WeightGraph } from './WeightGraph';
@@ -77,7 +76,7 @@ export const Dashboard = ({ profile }: DashboardProps) => {
       : 'total-weight-loss';
 
   const currentWeightDateLabel = summary.currentWeightDate
-    ? `Last: ${formatDateLabel(summary.currentWeightDate)}`
+    ? `${formatDateLabel(summary.currentWeightDate)}`
     : 'No weight recorded';
 
   const handleShotAdded = async (shot: ShotEntry) => {
@@ -149,7 +148,7 @@ export const Dashboard = ({ profile }: DashboardProps) => {
   return (
     <div className='dashboard'>
       {error && <p className='dashboard-error'>{error}</p>}
-      <LinearLoader isLoading={loading} />
+      {loading && null}
       <div className='dashboard-header'>
         <div>
           <h1>Dashboard</h1>
