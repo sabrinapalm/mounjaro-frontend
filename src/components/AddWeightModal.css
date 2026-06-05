@@ -260,7 +260,7 @@
 
 @media (max-width: 640px) {
   .add-weight-modal-backdrop {
-    align-items: end;
+    align-items: center;
     padding: 16px;
   }
 

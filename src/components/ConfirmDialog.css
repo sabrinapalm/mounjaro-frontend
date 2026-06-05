@@ -148,7 +148,7 @@
 
 @media (max-width: 520px) {
   .confirm-dialog-backdrop {
-    align-items: end;
+    align-items: center;
     padding: 16px;
   }
 

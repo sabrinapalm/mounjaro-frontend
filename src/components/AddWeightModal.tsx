@@ -2,6 +2,7 @@ import { type FormEvent, useState } from 'react';
 import { FiActivity } from 'react-icons/fi';
 import type { WeightEntry } from '../types';
 import './AddWeightModal.css';
+import { DateField } from './DateField';
 
 interface AddWeightModalProps {
   open: boolean;
@@ -118,7 +119,7 @@ export const AddWeightModal = ({
 
         <form className='add-weight-modal__form' onSubmit={handleSubmit}>
           <div className='add-weight-modal__row'>
-            <label className='add-weight-modal__field' htmlFor='weight-date'>
+            {/* <label className='add-weight-modal__field' htmlFor='weight-date'>
               <span className='add-weight-modal__label'>Date</span>
               <input
                 id='weight-date'
@@ -129,7 +130,14 @@ export const AddWeightModal = ({
                 disabled={isSubmitting}
                 required
               />
-            </label>
+            </label> */}
+            <DateField
+              id='weight-date'
+              label='Date'
+              value={date}
+              onChange={setDate}
+              disabled={isSubmitting}
+            />
 
             <label className='add-weight-modal__field' htmlFor='weight-input'>
               <span className='add-weight-modal__label'>Weight</span>

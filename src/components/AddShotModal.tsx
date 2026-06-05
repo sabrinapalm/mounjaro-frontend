@@ -1,8 +1,9 @@
 import { type FormEvent, useState } from 'react';
-import { FiCalendar, FiCheckCircle } from 'react-icons/fi';
+import { FiCheckCircle } from 'react-icons/fi';
 import { PiSyringeBold } from 'react-icons/pi';
 import type { ShotEntry } from '../types';
 import './AddShotModal.css';
+import { DateField } from './DateField';
 
 interface AddShotModalProps {
   open: boolean;
@@ -126,7 +127,14 @@ export const AddShotModal = ({
 
         <form className='add-shot-modal__form' onSubmit={handleSubmit}>
           <div className='add-shot-modal__row'>
-            <label className='add-shot-modal__field' htmlFor='shot-date'>
+            <DateField
+              id='shot-date'
+              label='Date'
+              value={date}
+              onChange={setDate}
+              disabled={isSubmitting}
+            />
+            {/* <label className='add-shot-modal__field' htmlFor='shot-date'>
               <span className='add-shot-modal__label'>Date</span>
 
               <div className='add-shot-modal__input-icon-wrapper'>
@@ -141,7 +149,7 @@ export const AddShotModal = ({
                   required
                 />
               </div>
-            </label>
+            </label> */}
 
             <label className='add-shot-modal__field' htmlFor='shot-dosage'>
               <span className='add-shot-modal__label'>Dose (mg)</span>
