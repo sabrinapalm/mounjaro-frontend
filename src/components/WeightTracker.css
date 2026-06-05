@@ -90,6 +90,7 @@
   background: var(--color-surface);
   color: var(--color-text);
   transition: all 0.2s ease;
+  height: 50px;
 }
 
 .weight-form .form-group input:focus {
