@@ -88,7 +88,7 @@ export function ProfileForm({
         </label>
 
         <label>
-          Goal weight
+          Goal weight (kg)
           <input
             type='number'
             step='0.1'
@@ -100,7 +100,7 @@ export function ProfileForm({
         </label>
 
         <label>
-          Start weight
+          Start weight (kg)
           <input
             type='number'
             step='0.1'
@@ -112,7 +112,7 @@ export function ProfileForm({
         </label>
 
         <label>
-          Height(cm)
+          Height (cm)
           <input
             type='number'
             step='0.1'
@@ -128,7 +128,7 @@ export function ProfileForm({
         <div className='profile-form-actions'>
           {onCancel ? (
             <button
-              className='continue-button'
+              className='button button-neutral'
               type='button'
               onClick={onCancel}
               disabled={isSaving}
@@ -137,7 +137,7 @@ export function ProfileForm({
             </button>
           ) : null}
 
-          <button className='continue-button' type='submit' disabled={isSaving}>
+          <button className='button button-accent' type='submit' disabled={isSaving}>
             {isSaving ? 'Saving...' : submitLabel}
           </button>
         </div>

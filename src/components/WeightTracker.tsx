@@ -152,7 +152,7 @@ export const WeightTracker = ({ weights, onWeightAdded, onDeleteWeight }: Weight
 
         {error && <p className='tracker-error'>{error}</p>}
 
-        <button type='submit' className='btn-add'>
+        <button type='submit' className='button button-accent'>
           Add Weight
         </button>
       </form>

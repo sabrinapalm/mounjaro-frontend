@@ -138,7 +138,7 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
 
         {error && <p className='tracker-error'>{error}</p>}
 
-        <button type='submit' className='btn-add'>
+        <button type='submit' className='button button-accent'>
           Add Shot
         </button>
       </form>

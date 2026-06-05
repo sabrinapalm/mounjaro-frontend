@@ -15,6 +15,7 @@
 .header-logo-container img {
   width: 100%;
   height: auto;
+  display: flex;
 }
 
 .header-container {

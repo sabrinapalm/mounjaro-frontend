@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import './App.css';
+import { AuthLayout } from './components/AuthLayout';
 import { ConfirmSignUpForm } from './components/ConfirmSignUpForm';
 import { Dashboard } from './components/Dashboard';
 import { Header } from './components/Header';
@@ -132,6 +133,34 @@ function App() {
     return <Dashboard profile={profile} />;
   };
 
+  const renderUnauthenticatedContent = () => {
+    if (authView === 'signup') {
+      return (
+        <AuthLayout>
+          <SignUpForm onSignedUp={handleSignedUp} onSwitchToLogin={() => setAuthView('login')} />
+        </AuthLayout>
+      );
+    }
+
+    if (authView === 'confirm') {
+      return (
+        <AuthLayout>
+          <ConfirmSignUpForm
+            email={pendingEmail}
+            onConfirmed={() => setAuthView('login')}
+            onSwitchToLogin={() => setAuthView('login')}
+          />
+        </AuthLayout>
+      );
+    }
+
+    return (
+      <AuthLayout>
+        <LoginForm onLogin={handleLoginSuccess} onSwitchToSignUp={() => setAuthView('signup')} />
+      </AuthLayout>
+    );
+  };
+
   if (!initialized) {
     return <div className='app'>Loading authentication...</div>;
   }
@@ -145,19 +174,7 @@ function App() {
         onToggleTheme={toggleTheme}
       />
 
-      {authenticated ? (
-        renderAuthenticatedContent()
-      ) : authView === 'signup' ? (
-        <SignUpForm onSignedUp={handleSignedUp} onSwitchToLogin={() => setAuthView('login')} />
-      ) : authView === 'confirm' ? (
-        <ConfirmSignUpForm
-          email={pendingEmail}
-          onConfirmed={() => setAuthView('login')}
-          onSwitchToLogin={() => setAuthView('login')}
-        />
-      ) : (
-        <LoginForm onLogin={handleLoginSuccess} onSwitchToSignUp={() => setAuthView('signup')} />
-      )}
+      {authenticated ? renderAuthenticatedContent() : renderUnauthenticatedContent()}
     </div>
   );
 }

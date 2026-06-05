@@ -1,0 +1,125 @@
+/* src/components/AuthLayout.css */
+
+.auth-layout {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 64px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  align-items: center;
+}
+
+.auth-hero {
+  max-width: 560px;
+}
+
+.auth-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 8px 14px;
+  margin-bottom: 20px;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.auth-hero h1 {
+  margin: 0;
+  max-width: 540px;
+  color: var(--color-text);
+  font-size: clamp(3rem, 7vw, 5.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.065em;
+  font-weight: 900;
+}
+
+.auth-hero p {
+  margin: 24px 0 0;
+  max-width: 520px;
+  color: var(--color-text-muted);
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+
+.auth-hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.auth-hero-pills li {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 24%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  color: var(--color-accent-dark);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.auth-form-panel {
+  width: 100%;
+}
+
+html[data-theme="dark"] .auth-hero-badge {
+  color: #ddd6fe;
+}
+
+html[data-theme="dark"] .auth-hero-pills li {
+  color: #d7fff6;
+}
+
+@media (max-width: 900px) {
+  .auth-layout {
+    grid-template-columns: 1fr;
+    padding: 40px 0;
+  }
+
+  .auth-hero {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .auth-hero-badge {
+    margin-inline: auto;
+  }
+
+  .auth-hero-pills {
+    justify-content: center;
+  }
+
+  .auth-form-panel {
+    max-width: 420px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .auth-layout {
+    width: min(100% - 24px, 1120px);
+  }
+
+  .auth-hero h1 {
+    font-size: 3rem;
+  }
+
+  .auth-hero p {
+    font-size: 1rem;
+  }
+
+  .auth-hero-pills li {
+    min-height: 36px;
+    padding: 0 12px;
+    font-size: 0.85rem;
+  }
+}

@@ -35,6 +35,25 @@
   --heading: var(--font-family-base);
   --mono: ui-monospace, Consolas, monospace;
 
+  --button-shadow-primary: 0 12px 24px color-mix(in srgb, var(--color-primary) 16%, transparent);
+  --button-shadow-accent: 0 12px 24px color-mix(in srgb, var(--color-accent) 18%, transparent);
+  --button-shadow-neutral: 0 8px 24px color-mix(in srgb, var(--color-primary) 10%, transparent);
+
+  --button-neutral-bg: var(--color-surface);
+  --button-neutral-color: var(--color-text);
+  --button-neutral-border: var(--color-border);
+
+  --button-neutral-hover-bg: var(--color-primary-soft);
+  --button-neutral-hover-color: var(--color-primary-dark);
+  --button-neutral-hover-border: var(--color-primary);
+
+  --button-accent-bg: var(--color-accent-soft);
+  --button-accent-color: var(--color-accent-dark);
+  --button-accent-border: var(--color-border-green);
+  --button-accent-hover-bg: var(--color-accent-soft);
+  --button-accent-hover-color: var(--color-accent-dark);
+  --button-accent-hover-border: var(--color-accent);
+
   font: 18px / 1.6 var(--font-family-base);
   letter-spacing: 0.02em;
   color-scheme: light;
@@ -69,6 +88,10 @@ html[data-theme="dark"] {
 
   --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.28);
   --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.34);
+
+  --button-neutral-hover-color: var(--color-primary);
+  --button-accent-color: #d7fff6;
+  --button-accent-hover-color: #d7fff6;
 
   color-scheme: dark;
 }
@@ -194,31 +217,62 @@ code {
   padding-bottom: max(24px, env(safe-area-inset-bottom));
 }
 
-.btn-add {
+.button {
   padding: 10px 18px;
   border-radius: var(--radius-pill);
+  border: 1px solid transparent;
   font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease;
-  border: 1px solid var(--color-border-green);
-  background: var(--color-accent-soft);
-  color: var(--color-accent-dark);
-  font-weight: 700;
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
-.btn-add:hover {
+.button:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(36, 199, 165, 0.15);
 }
 
-.btn-add:active {
+.button:active:not(:disabled) {
   transform: scale(0.98);
 }
 
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  transform: none;
+  box-shadow: none;
+}
+
+.button-neutral {
+  border-color: var(--button-neutral-border);
+  background: var(--button-neutral-bg);
+  color: var(--button-neutral-color);
+}
+
+.button-neutral:hover:not(:disabled) {
+  border-color: var(--button-neutral-hover-border);
+  background: var(--button-neutral-hover-bg);
+  color: var(--button-neutral-hover-color);
+}
+
+.button-accent {
+  border-color: var(--button-accent-border);
+  background: var(--button-accent-bg);
+  color: var(--button-accent-color);
+}
+
+.button-accent:hover:not(:disabled) {
+  border-color: var(--button-accent-hover-border);
+  background: var(--button-accent-hover-bg);
+  color: var(--button-accent-hover-color);
+}
+
 @media (max-width: 768px) {
-  .btn-add {
+  .button {
     width: 100%;
   }
 }
