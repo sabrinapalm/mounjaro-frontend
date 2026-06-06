@@ -13,7 +13,7 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
 
         <h1 id='auth-hero-title'>Keep track.</h1>
 
-        <p>Log your weekly shots, weight, and goal progress in one simple place.</p>
+        <p>Log your weekly Mounjaro shots, weight, and goal progress in one simple place.</p>
 
         <ul className='auth-hero-pills'>
           <li>Shots</li>

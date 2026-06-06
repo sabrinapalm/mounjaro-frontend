@@ -123,4 +123,12 @@ html[data-theme="dark"] .auth-hero-pills li {
     padding: 0 12px;
     font-size: 0.85rem;
   }
+
+  .auth-hero-pills {
+    display: none;
+  }
+
+  .auth-hero-badge {
+    display: none;
+  }
 }
