@@ -9,12 +9,13 @@ import './ShotTracker.css';
 
 type ShotTrackerVariant = 'compact' | 'full';
 
-const COMPACT_SHOT_LIMIT = 5;
+const COMPACT_SHOT_LIMIT = 4;
 
 interface ShotTrackerProps {
   shots: ShotEntry[];
   onShotAdded: (shot: CreateShotInput) => Promise<void>;
   onDeleteShot: (id: string, date: string) => Promise<void>;
+  onViewAll?: () => void;
   title?: string;
   summaryLabel?: string;
   variant?: ShotTrackerVariant;
@@ -24,6 +25,7 @@ export const ShotTracker = ({
   shots,
   onShotAdded,
   onDeleteShot,
+  onViewAll,
   title = 'Recent Shots',
   summaryLabel = 'Total shots',
   variant = 'compact',
@@ -114,6 +116,9 @@ export const ShotTracker = ({
     }
   };
 
+  const shouldShowViewAll =
+    variant === 'compact' && sortedShots.length > COMPACT_SHOT_LIMIT && onViewAll;
+
   return (
     <section className={`shot-tracker-card shot-tracker-card--${variant}`}>
       <header className='shot-tracker-card__header'>
@@ -172,6 +177,17 @@ export const ShotTracker = ({
               </li>
             );
           })}
+          {shouldShowViewAll ? (
+            <footer className='shot-tracker-card__footer'>
+              <button
+                type='button'
+                className='shot-tracker-card__view-all-button'
+                onClick={onViewAll}
+              >
+                View all shots
+              </button>
+            </footer>
+          ) : null}
         </ul>
       )}
 

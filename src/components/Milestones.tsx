@@ -1,4 +1,5 @@
 import { FiCheck, FiLock, FiStar, FiTarget, FiTrendingDown, FiZap } from 'react-icons/fi';
+import { LuPartyPopper } from 'react-icons/lu';
 import { type Milestone, useMilestones } from '../hooks/useMilestones';
 import type { ShotEntry, WeightEntry } from '../types';
 import './Milestones.css';
@@ -23,6 +24,10 @@ const getMilestoneIcon = (icon: Milestone['icon']) => {
 
   if (icon === 'zap') {
     return <FiZap size={22} />;
+  }
+
+  if (icon === 'party') {
+    return <LuPartyPopper size={22} />;
   }
 
   return <FiStar size={22} />;

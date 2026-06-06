@@ -213,6 +213,44 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
   color: var(--color-danger);
 }
 
+.weight-tracker-card__footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+.weight-tracker-card__view-all-button {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid var(--button-neutral-border);
+  border-radius: var(--radius-pill);
+  background: var(--button-neutral-bg);
+  color: var(--button-neutral-color);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--button-shadow-neutral);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.weight-tracker-card__view-all-button:hover {
+  transform: translateY(-1px);
+  border-color: var(--button-neutral-hover-border);
+  background: var(--button-neutral-hover-bg);
+  color: var(--button-neutral-hover-color);
+}
+
+@media (max-width: 520px) {
+  .weight-tracker-card__view-all-button {
+    width: 100%;
+  }
+}
+
 @media (max-width: 900px) {
   .weight-tracker-card__item {
     grid-template-columns: 42px minmax(0, 1fr) minmax(82px, auto) 38px;

@@ -6,7 +6,7 @@ import { formatDateLabel, getDateValueFromDateTime, getTimestamp } from '../util
 
 export type MilestoneStatus = 'completed' | 'inProgress' | 'locked';
 
-export type MilestoneIcon = 'star' | 'target' | 'trend' | 'zap';
+export type MilestoneIcon = 'star' | 'target' | 'trend' | 'zap' | 'party';
 
 export type Milestone = {
   id: string;
@@ -401,7 +401,7 @@ export const useMilestones = ({
               : 'Add your goal weight',
         status: goalWeightStatus,
         progress: goalProgress,
-        icon: 'target',
+        icon: 'party',
         order: 16,
       },
     ];

@@ -50,6 +50,7 @@
   font-size: 0.95rem;
   font-weight: 800;
   white-space: nowrap;
+  cursor: pointer;
   transition:
     transform 0.2s ease,
     border-color 0.2s ease,
@@ -66,10 +67,10 @@
 
 .shot-tracker-card__error {
   padding: 12px 14px;
-  border: 1px solid color-mix(in srgb, var(--color-danger) 36%, transparent);
+  border: 1px solid var(--message-error-border);
   border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
-  color: var(--color-danger);
+  background: var(--message-error-bg);
+  color: var(--message-error-color);
   font-size: 0.9rem;
   font-weight: 800;
 }
@@ -142,14 +143,9 @@
 .shot-tracker-card__dosage,
 .shot-tracker-card__site {
   min-width: 0;
+  overflow: hidden;
   font-size: 0.98rem;
   font-weight: 700;
-}
-
-.shot-tracker-card__date,
-.shot-tracker-card__dosage,
-.shot-tracker-card__site {
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -173,6 +169,7 @@
   background: transparent;
   color: var(--color-text-muted);
   opacity: 0;
+  cursor: pointer;
   transition:
     opacity 0.2s ease,
     color 0.2s ease,
@@ -193,9 +190,36 @@
   color: var(--color-danger);
 }
 
-.shot-tracker-card__chevron {
-  display: none;
-  color: var(--color-text-muted);
+.shot-tracker-card__footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+.shot-tracker-card__view-all-button {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid var(--button-neutral-border);
+  border-radius: var(--radius-pill);
+  background: var(--button-neutral-bg);
+  color: var(--button-neutral-color);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--button-shadow-neutral);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.shot-tracker-card__view-all-button:hover {
+  transform: translateY(-1px);
+  border-color: var(--button-neutral-hover-border);
+  background: var(--button-neutral-hover-bg);
+  color: var(--button-neutral-hover-color);
 }
 
 @media (max-width: 900px) {
@@ -243,6 +267,12 @@
   }
 
   .shot-tracker-card__add-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  .shot-tracker-card__view-all-button {
     width: 100%;
   }
 }

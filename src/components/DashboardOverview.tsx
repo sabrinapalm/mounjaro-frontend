@@ -28,6 +28,8 @@ interface DashboardOverviewProps {
   onDeleteWeight: (id: string, date: string) => Promise<void>;
   onGoalWeightUpdated: (goalWeight: number) => Promise<void>;
   onViewAllMilestones: () => void;
+  onViewAllShots: () => void;
+  onViewAllWeights: () => void;
 }
 
 export const DashboardOverview = ({
@@ -41,6 +43,8 @@ export const DashboardOverview = ({
   onDeleteWeight,
   onGoalWeightUpdated,
   onViewAllMilestones,
+  onViewAllShots,
+  onViewAllWeights,
 }: DashboardOverviewProps) => {
   const { weightUnit, displayWeightFromKg } = useUnitSettings(profile.unitSystem ?? 'metric');
 
@@ -139,12 +143,13 @@ export const DashboardOverview = ({
       <div className='dashboard-grid'>
         <section id='shots' className='tracker-section'>
           <ShotTracker
-            shots={shots}
             title='Recent Shots'
             summaryLabel='Total shots'
             variant='compact'
+            shots={shots}
             onShotAdded={onShotAdded}
             onDeleteShot={onDeleteShot}
+            onViewAll={onViewAllShots}
           />
         </section>
 
@@ -156,6 +161,7 @@ export const DashboardOverview = ({
             variant='compact'
             onWeightAdded={onWeightAdded}
             onDeleteWeight={onDeleteWeight}
+            onViewAll={onViewAllWeights}
           />
         </section>
       </div>

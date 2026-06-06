@@ -11,10 +11,13 @@ import './WeightTracker.css';
 
 type WeightTrackerVariant = 'compact' | 'full';
 
+const COMPACT_WEIGHT_LIMIT = 4;
+
 interface WeightTrackerProps {
   weights: WeightEntry[];
   onWeightAdded: (weight: CreateWeightInput) => Promise<void>;
   onDeleteWeight: (id: string, date: string) => Promise<void>;
+  onViewAll?: () => void;
   title?: string;
   summaryLabel?: string;
   variant?: WeightTrackerVariant;
@@ -41,6 +44,7 @@ export const WeightTracker = ({
   weights,
   onWeightAdded,
   onDeleteWeight,
+  onViewAll,
   title = 'Recent Weights',
   summaryLabel = 'Total weight loss',
   variant = 'compact',
@@ -59,8 +63,11 @@ export const WeightTracker = ({
   }, [weights]);
 
   const visibleWeights = useMemo(() => {
-    return variant === 'compact' ? sortedWeights.slice(0, 5) : sortedWeights;
+    return variant === 'compact' ? sortedWeights.slice(0, COMPACT_WEIGHT_LIMIT) : sortedWeights;
   }, [sortedWeights, variant]);
+
+  const shouldShowViewAll =
+    variant === 'compact' && sortedWeights.length > COMPACT_WEIGHT_LIMIT && Boolean(onViewAll);
 
   const weightLoss = useMemo(() => {
     if (sortedWeights.length < 2) {
@@ -234,6 +241,18 @@ export const WeightTracker = ({
           })}
         </ul>
       )}
+
+      {shouldShowViewAll ? (
+        <footer className='weight-tracker-card__footer'>
+          <button
+            type='button'
+            className='weight-tracker-card__view-all-button'
+            onClick={onViewAll}
+          >
+            View all weights
+          </button>
+        </footer>
+      ) : null}
 
       <AddWeightModal
         open={isAddWeightModalOpen}

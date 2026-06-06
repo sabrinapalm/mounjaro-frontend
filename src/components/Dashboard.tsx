@@ -240,6 +240,8 @@ export const Dashboard = ({
             onDeleteWeight={handleDeleteWeight}
             onGoalWeightUpdated={handleGoalWeightUpdated}
             onViewAllMilestones={() => handleNavigate('milestones')}
+            onViewAllShots={() => handleNavigate('shots')}
+            onViewAllWeights={() => handleNavigate('weight')}
           />
         );
     }
