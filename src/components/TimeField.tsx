@@ -33,7 +33,7 @@ export const TimeField = ({
       </label>
 
       <div className='time-field__control'>
-        <div className='time-field__display' aria-hidden='true'>
+        <div className='time-field__mobile-display' aria-hidden='true'>
           <FiClock className='time-field__icon' size={19} />
           <span>{formatTimeLabel(value)}</span>
         </div>
