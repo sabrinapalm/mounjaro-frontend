@@ -1,15 +1,17 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { LuGoal } from 'react-icons/lu';
 import type { UserProfile, WeightEntry } from '../types';
 import { calculateBmi } from '../utils/calculateBmi';
 import { getLocalDate } from '../utils/dateHelpers';
 import { formatKg } from '../utils/formatKg';
 import { formatWeightLost } from '../utils/formatWeightLoss';
+import { EditGoalWeightModal } from './EditGoalWeightModal';
 import './GoalProgress.css';
 
 interface GoalProgressProps {
   weights: WeightEntry[];
   profile: UserProfile;
+  onGoalWeightUpdated: (goalWeight: number) => Promise<void>;
 }
 
 const getGoalProgressSubtitle = ({
@@ -48,8 +50,12 @@ const getGoalProgressSubtitle = ({
   return 'Goal reached. That’s a huge milestone — amazing work.';
 };
 
-export const GoalProgress = ({ weights, profile }: GoalProgressProps) => {
+export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProgressProps) => {
   const { goalWeight, height } = profile;
+
+  const [isEditGoalOpen, setIsEditGoalOpen] = useState(false);
+  const [isSavingGoal, setIsSavingGoal] = useState(false);
+  const [goalError, setGoalError] = useState<string | null>(null);
 
   const goalData = useMemo(() => {
     if (weights.length === 0) {
@@ -92,6 +98,34 @@ export const GoalProgress = ({ weights, profile }: GoalProgressProps) => {
   });
 
   const formattedWeightLost = formatWeightLost(weightLost);
+
+  const handleOpenEditGoal = () => {
+    setGoalError(null);
+    setIsEditGoalOpen(true);
+  };
+
+  const handleCloseEditGoal = () => {
+    if (isSavingGoal) {
+      return;
+    }
+
+    setIsEditGoalOpen(false);
+  };
+
+  const handleUpdateGoalWeight = async (newGoalWeight: number) => {
+    setGoalError(null);
+    setIsSavingGoal(true);
+
+    try {
+      await onGoalWeightUpdated(newGoalWeight);
+      setIsEditGoalOpen(false);
+    } catch (err) {
+      setGoalError(err instanceof Error ? err.message : 'Unable to update goal weight');
+      throw err;
+    } finally {
+      setIsSavingGoal(false);
+    }
+  };
 
   return (
     <section className='goal-progress-card'>
@@ -149,10 +183,19 @@ export const GoalProgress = ({ weights, profile }: GoalProgressProps) => {
           <span className='target-card-value'>{formatKg(goalWeight)}</span>
         </div>
 
-        <button type='button' className='target-card-button' disabled>
+        <button type='button' className='target-card__add-button' onClick={handleOpenEditGoal}>
           Edit Goal
         </button>
       </div>
+
+      <EditGoalWeightModal
+        open={isEditGoalOpen}
+        currentGoalWeight={goalWeight}
+        isSubmitting={isSavingGoal}
+        error={goalError}
+        onClose={handleCloseEditGoal}
+        onSubmit={handleUpdateGoalWeight}
+      />
     </section>
   );
 };

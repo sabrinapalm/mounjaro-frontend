@@ -51,6 +51,15 @@ export const apiClient = {
     return data.profile as UserProfile;
   },
 
+  updateGoalWeight: async (goalWeight: number): Promise<UserProfile> => {
+    const data = await request('/profile/goal-weight', {
+      method: 'PATCH',
+      body: JSON.stringify({ goalWeight }),
+    });
+
+    return data.profile as UserProfile;
+  },
+
   getShots: async (): Promise<ShotEntry[]> => {
     const data = await request('/shots');
     return data.shots as ShotEntry[];
@@ -90,4 +99,5 @@ export const apiClient = {
       method: 'DELETE',
     });
   },
+  
 };

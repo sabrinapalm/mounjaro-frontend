@@ -131,7 +131,7 @@ function App() {
       );
     }
 
-    return <Dashboard profile={profile} />;
+    return <Dashboard profile={profile} onProfileUpdated={setProfile} />;
   };
 
   const renderUnauthenticatedContent = () => {

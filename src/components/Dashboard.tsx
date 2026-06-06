@@ -15,9 +15,10 @@ import { WeightTracker } from './WeightTracker';
 
 type DashboardProps = {
   profile: UserProfile;
+  onProfileUpdated: (profile: UserProfile) => void;
 };
 
-export const Dashboard = ({ profile }: DashboardProps) => {
+export const Dashboard = ({ profile, onProfileUpdated }: DashboardProps) => {
   const [data, setData] = useState<AppData>({ shots: [], weights: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -145,6 +146,18 @@ export const Dashboard = ({ profile }: DashboardProps) => {
     }
   };
 
+  const handleGoalWeightUpdated = async (goalWeight: number) => {
+    setError(null);
+
+    try {
+      const savedProfile = await apiClient.updateGoalWeight(goalWeight);
+      onProfileUpdated(savedProfile);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to update goal weight');
+      throw err;
+    }
+  };
+
   return (
     <div className='dashboard'>
       {error && <p className='dashboard-error'>{error}</p>}
@@ -205,7 +218,11 @@ export const Dashboard = ({ profile }: DashboardProps) => {
         </div>
       </div>
 
-      <GoalProgress weights={data.weights} profile={profile} />
+      <GoalProgress
+        weights={data.weights}
+        profile={profile}
+        onGoalWeightUpdated={handleGoalWeightUpdated}
+      />
 
       <div className='dashboard-grid'>
         <div className='tracker-section'>
