@@ -116,6 +116,13 @@
     background 0.2s ease;
 }
 
+@media (max-width: 640px) {
+  .dashboard-profile-button {
+    padding: 4px;
+    max-width: unset;
+  }
+}
+
 .dashboard-profile-button:hover {
   transform: translateY(-1px);
   border-color: color-mix(in srgb, var(--color-primary) 36%, transparent);
