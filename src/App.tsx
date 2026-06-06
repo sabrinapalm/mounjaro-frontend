@@ -1,47 +1,37 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import './App.css';
 import { AuthLayout } from './components/AuthLayout';
 import { ConfirmSignUpForm } from './components/ConfirmSignUpForm';
 import { Dashboard } from './components/Dashboard';
+import { DashboardErrorNotice } from './components/DashboardErrorNotice';
 import { Header } from './components/Header';
 import { LinearLoader } from './components/LinearLoader';
 import { LoginForm } from './components/LoginForm';
 import { ProfileForm } from './components/ProfileForm';
 import { SignUpForm } from './components/SignUpForm';
 import { ProfileProvider } from './context/ProfileContext';
+import { useProfile, useUpdateProfile } from './hooks/queries/useProfileQuery';
 import { useTheme } from './hooks/useTheme';
-import { apiClient } from './services/apiClient';
+import { queryKeys } from './query/queryKeys';
 import { cognitoAuth } from './services/cognitoAuth';
 import type { ProfileFormValues, UserProfile } from './types';
+import { getQueryErrorMessage } from './utils/queryErrorMessage';
 
 type AuthView = 'login' | 'signup' | 'confirm';
 
 function App() {
+  const queryClient = useQueryClient();
+
   const [initialized, setInitialized] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [authView, setAuthView] = useState<AuthView>('login');
   const [pendingEmail, setPendingEmail] = useState('');
 
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [profileLoaded, setProfileLoaded] = useState(false);
-  const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [profileError, setProfileError] = useState('');
-
   const { theme, toggleTheme } = useTheme();
 
-  const loadProfile = useCallback(async () => {
-    setProfileLoaded(false);
-    setProfileError('');
-
-    try {
-      const loadedProfile = await apiClient.getProfile();
-      setProfile(loadedProfile);
-    } catch (error) {
-      setProfileError(error instanceof Error ? error.message : 'Could not load profile.');
-    } finally {
-      setProfileLoaded(true);
-    }
-  }, []);
+  const profileQuery = useProfile(authenticated);
+  const updateProfileMutation = useUpdateProfile();
 
   useEffect(() => {
     let isMounted = true;
@@ -55,15 +45,14 @@ function App() {
         }
 
         setAuthenticated(true);
-        await loadProfile();
       } catch {
         if (!isMounted) {
           return;
         }
 
         setAuthenticated(false);
-        setProfile(null);
-        setProfileLoaded(true);
+        queryClient.clear();
+        sessionStorage.removeItem('TRACKSY_QUERY_CACHE');
       } finally {
         if (isMounted) {
           setInitialized(true);
@@ -76,23 +65,26 @@ function App() {
     return () => {
       isMounted = false;
     };
-  }, [loadProfile]);
+  }, [queryClient]);
 
   const handleLoginSuccess = async () => {
     setAuthenticated(true);
     setAuthView('login');
-    await loadProfile();
+
+    await queryClient.invalidateQueries({
+      queryKey: queryKeys.profile,
+    });
   };
 
   const handleSignOut = () => {
     cognitoAuth.signOut();
+
     setAuthenticated(false);
     setAuthView('login');
     setPendingEmail('');
-    setProfile(null);
-    setProfileLoaded(false);
-    setIsEditingProfile(false);
-    setProfileError('');
+
+    queryClient.clear();
+    sessionStorage.removeItem('TRACKSY_QUERY_CACHE');
   };
 
   const handleSignedUp = (email: string) => {
@@ -101,37 +93,51 @@ function App() {
   };
 
   const handleSaveProfile = async (values: ProfileFormValues) => {
-    const savedProfile = await apiClient.updateProfile(values);
-    setProfile(savedProfile);
-    setIsEditingProfile(false);
+    await updateProfileMutation.mutateAsync(values);
+  };
+
+  const handleProfileUpdated = (updatedProfile: UserProfile) => {
+    queryClient.setQueryData(queryKeys.profile, updatedProfile);
   };
 
   const renderAuthenticatedContent = () => {
-    if (!profileLoaded) {
+    if (profileQuery.isLoading) {
       return <LinearLoader />;
     }
 
-    if (profileError) {
+    if (profileQuery.isError) {
       return (
-        <div className='app-content'>
-          <p className='error-message'>{profileError}</p>
-
-          <button type='button' onClick={loadProfile}>
-            Try again
-          </button>
-        </div>
+        <main className='app-content app-content--centered'>
+          <DashboardErrorNotice
+            title='Profile could not be loaded'
+            message={getQueryErrorMessage(
+              profileQuery.error,
+              'Your profile could not be loaded. Please try again.'
+            )}
+            onRetry={() => {
+              void profileQuery.refetch();
+            }}
+          />
+        </main>
       );
     }
 
-    if (!profile || isEditingProfile) {
-      return <ProfileForm initialProfile={profile} onSubmit={handleSaveProfile} />;
+    if (!profileQuery.data) {
+      return (
+        <ProfileForm
+          initialProfile={null}
+          onSubmit={handleSaveProfile}
+          isSubmitting={updateProfileMutation.isPending}
+          submitError={getQueryErrorMessage(updateProfileMutation.error, 'Unable to save profile.')}
+        />
+      );
     }
 
     return (
-      <ProfileProvider initialProfile={profile}>
+      <ProfileProvider initialProfile={profileQuery.data}>
         <Dashboard
-          profile={profile}
-          onProfileUpdated={setProfile}
+          profile={profileQuery.data}
+          onProfileUpdated={handleProfileUpdated}
           onSignOut={handleSignOut}
           theme={theme}
           onToggleTheme={toggleTheme}

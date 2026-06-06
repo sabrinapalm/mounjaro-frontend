@@ -29,11 +29,9 @@ const EditGoalWeightModalContent = ({
   onSubmit,
 }: EditGoalWeightModalContentProps) => {
   const { unitSystem } = useProfile();
-
   const { weightUnit, displayWeightFromKg, normalizeWeightToKg } = useUnitSettings(unitSystem);
 
   const [goalWeight, setGoalWeight] = useState(() => displayWeightFromKg(currentGoalWeight));
-
   const [localError, setLocalError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -41,6 +39,7 @@ const EditGoalWeightModalContent = ({
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && !isSubmitting) {
+        setLocalError(null);
         onClose();
       }
     };
@@ -59,6 +58,7 @@ const EditGoalWeightModalContent = ({
       return;
     }
 
+    setLocalError(null);
     onClose();
   };
 
@@ -85,7 +85,14 @@ const EditGoalWeightModalContent = ({
     }
 
     setLocalError(null);
-    await onSubmit(goalWeightInKg);
+
+    try {
+      await onSubmit(goalWeightInKg);
+    } catch (submitError) {
+      setLocalError(
+        submitError instanceof Error ? submitError.message : 'Could not update goal weight.'
+      );
+    }
   };
 
   return (

@@ -101,7 +101,7 @@
   color: var(--color-primary);
   font: inherit;
   font-size: 0.94rem;
-  font-weight: 900;
+  font-weight: 800;
   cursor: pointer;
   transition:
     transform 0.2s ease,
@@ -153,7 +153,7 @@
 .sidebar__help-title {
   color: var(--color-text);
   font-size: 0.9rem;
-  font-weight: 900;
+  font-weight: 800;
 }
 
 .sidebar__help-text {

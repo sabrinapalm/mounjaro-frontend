@@ -1,11 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { LuLogOut, LuMenu, LuMoon, LuSun } from 'react-icons/lu';
-import { useDashboardNotifications } from '../hooks/useDashboardNotifications';
+import { useUpdateGoalWeight } from '../hooks/queries/useProfileQuery';
+import { useCreateShot, useDeleteShot, useShots } from '../hooks/queries/useShotsQuery';
+import { useCreateWeight, useDeleteWeight, useWeights } from '../hooks/queries/useWeightsQuery';
+import {
+  type DashboardNotificationAction,
+  useDashboardNotifications,
+} from '../hooks/useDashboardNotifications';
 import { useDashboardSummary } from '../hooks/useDashboardSummary';
-import { useMilestones } from '../hooks/useMilestones';
-import { apiClient } from '../services/apiClient';
-import type { AppData, ShotEntry, UserProfile, WeightEntry } from '../types';
+import { useDismissedNotifications } from '../hooks/useDissmisedNotifications';
+import type { ShotEntry, UserProfile, WeightEntry } from '../types';
+import { getQueryErrorMessage } from '../utils/queryErrorMessage';
 import './Dashboard.css';
+import { DashboardErrorNotice } from './DashboardErrorNotice';
 import { DashboardNotifications } from './DashboardNotifications';
 import { DashboardOverview } from './DashboardOverview';
 import { MilestonesPage } from './MilestonesPage';
@@ -29,142 +36,136 @@ export const Dashboard = ({
   theme,
   onToggleTheme,
 }: DashboardProps) => {
-  const [data, setData] = useState<AppData>({ shots: [], weights: [] });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<SidebarSection>('dashboard');
+  const [dashboardError, setDashboardError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let isMounted = true;
+  const shotsQuery = useShots(true);
+  const weightsQuery = useWeights(true);
 
-    const loadInitialData = async () => {
-      try {
-        const [shots, weights] = await Promise.all([apiClient.getShots(), apiClient.getWeights()]);
+  const createShotMutation = useCreateShot();
+  const deleteShotMutation = useDeleteShot();
 
-        if (!isMounted) {
-          return;
-        }
+  const createWeightMutation = useCreateWeight();
+  const deleteWeightMutation = useDeleteWeight();
 
-        setData({ shots, weights });
-      } catch (err) {
-        if (!isMounted) {
-          return;
-        }
+  const updateGoalWeightMutation = useUpdateGoalWeight();
 
-        setError((err as Error)?.message || 'Unable to load data');
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    };
+  const { dismissedNotificationIds, dismissNotification } = useDismissedNotifications();
 
-    void loadInitialData();
+  const shots = shotsQuery.data ?? [];
+  const weights = weightsQuery.data ?? [];
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const isInitialLoading = shotsQuery.isLoading || weightsQuery.isLoading;
 
   const summary = useDashboardSummary({
-    shots: data.shots,
-    weights: data.weights,
-  });
-
-  const { milestones } = useMilestones({
-    weights: data.weights,
-    shots: data.shots,
-    startWeight: profile.startWeight ?? null,
-    goalWeight: profile.goalWeight ?? null,
+    shots,
+    weights,
   });
 
   const notifications = useDashboardNotifications({
     profile,
-    weights: data.weights,
-    milestones,
+    weights,
+    shots,
     summary,
+    dismissedNotificationIds,
   });
+
+  const hasQueryError = shotsQuery.isError || weightsQuery.isError;
+
+  const queryErrorMessage = (() => {
+    if (shotsQuery.isError) {
+      return getQueryErrorMessage(shotsQuery.error, 'Your shots could not be loaded.');
+    }
+
+    if (weightsQuery.isError) {
+      return getQueryErrorMessage(weightsQuery.error, 'Your weight entries could not be loaded.');
+    }
+
+    return null;
+  })();
+
+  const handleRetryQueries = () => {
+    if (shotsQuery.isError) {
+      void shotsQuery.refetch();
+    }
+
+    if (weightsQuery.isError) {
+      void weightsQuery.refetch();
+    }
+  };
 
   const handleNavigate = (section: SidebarSection) => {
     setActiveSection(section);
     setIsMobileSidebarOpen(false);
   };
 
+  const handleNotificationAction = (action: DashboardNotificationAction) => {
+    if (action === 'add-weight' || action === 'view-weight') {
+      handleNavigate('weight');
+      return;
+    }
+
+    if (action === 'view-shots') {
+      handleNavigate('shots');
+      return;
+    }
+
+    if (action === 'view-profile') {
+      handleNavigate('profile');
+    }
+  };
+
   const handleShotAdded = async (shot: ShotEntry) => {
-    setLoading(true);
-    setError(null);
+    setDashboardError(null);
 
     try {
-      const savedShot = await apiClient.createShot(shot);
-
-      setData((previous) => ({
-        ...previous,
-        shots: [...previous.shots, savedShot],
-      }));
+      await createShotMutation.mutateAsync(shot);
     } catch (err) {
-      setError((err as Error)?.message || 'Unable to save shot');
-    } finally {
-      setLoading(false);
+      setDashboardError(err instanceof Error ? err.message : 'Unable to save shot.');
+      throw err;
     }
   };
 
   const handleWeightAdded = async (weight: WeightEntry) => {
-    setLoading(true);
-    setError(null);
+    setDashboardError(null);
 
     try {
-      const savedWeight = await apiClient.createWeight(weight);
-
-      setData((previous) => ({
-        ...previous,
-        weights: [...previous.weights, savedWeight],
-      }));
+      await createWeightMutation.mutateAsync(weight);
     } catch (err) {
-      setError((err as Error)?.message || 'Unable to save weight');
-    } finally {
-      setLoading(false);
+      setDashboardError(err instanceof Error ? err.message : 'Unable to save weight.');
+      throw err;
     }
   };
 
   const handleDeleteShot = async (id: string, date: string) => {
-    setError(null);
+    setDashboardError(null);
 
     try {
-      await apiClient.deleteShot(id, date);
-
-      setData((previous) => ({
-        ...previous,
-        shots: previous.shots.filter((shot) => shot.id !== id),
-      }));
+      await deleteShotMutation.mutateAsync({ id, date });
     } catch (err) {
-      setError((err as Error)?.message || 'Unable to delete shot');
+      setDashboardError(err instanceof Error ? err.message : 'Unable to delete shot.');
     }
   };
 
   const handleDeleteWeight = async (id: string, date: string) => {
-    setError(null);
+    setDashboardError(null);
 
     try {
-      await apiClient.deleteWeight(id, date);
-
-      setData((previous) => ({
-        ...previous,
-        weights: previous.weights.filter((weight) => weight.id !== id),
-      }));
+      await deleteWeightMutation.mutateAsync({ id, date });
     } catch (err) {
-      setError((err as Error)?.message || 'Unable to delete weight');
+      setDashboardError(err instanceof Error ? err.message : 'Unable to delete weight.');
     }
   };
 
   const handleGoalWeightUpdated = async (goalWeight: number) => {
-    setError(null);
+    setDashboardError(null);
 
     try {
-      const savedProfile = await apiClient.updateGoalWeight(goalWeight);
+      const savedProfile = await updateGoalWeightMutation.mutateAsync(goalWeight);
       onProfileUpdated(savedProfile);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to update goal weight');
+      setDashboardError(err instanceof Error ? err.message : 'Unable to update goal weight.');
       throw err;
     }
   };
@@ -173,36 +174,31 @@ export const Dashboard = ({
     switch (activeSection) {
       case 'shots':
         return (
-          <ShotsPage
-            shots={data.shots}
-            onShotAdded={handleShotAdded}
-            onDeleteShot={handleDeleteShot}
-          />
+          <ShotsPage shots={shots} onShotAdded={handleShotAdded} onDeleteShot={handleDeleteShot} />
         );
 
       case 'weight':
         return (
           <WeightPage
-            weights={data.weights}
+            weights={weights}
             onWeightAdded={handleWeightAdded}
             onDeleteWeight={handleDeleteWeight}
           />
         );
 
       case 'milestones':
-        return <MilestonesPage weights={data.weights} shots={data.shots} profile={profile} />;
+        return <MilestonesPage weights={weights} shots={shots} profile={profile} />;
 
       case 'profile':
         return <ProfileSettingsPage profile={profile} onProfileUpdated={onProfileUpdated} />;
 
-      case 'dashboard':
       default:
         return (
           <DashboardOverview
             profile={profile}
             summary={summary}
-            shots={data.shots}
-            weights={data.weights}
+            shots={shots}
+            weights={weights}
             onShotAdded={handleShotAdded}
             onWeightAdded={handleWeightAdded}
             onDeleteShot={handleDeleteShot}
@@ -245,7 +241,11 @@ export const Dashboard = ({
               {theme === 'dark' ? <LuSun size={20} /> : <LuMoon size={20} />}
             </button>
 
-            <DashboardNotifications notifications={notifications} />
+            <DashboardNotifications
+              notifications={notifications}
+              onDismissNotification={dismissNotification}
+              onNotificationAction={handleNotificationAction}
+            />
 
             <button
               type='button'
@@ -275,10 +275,15 @@ export const Dashboard = ({
           </div>
         </div>
 
-        {error ? <p className='dashboard-error'>{error}</p> : null}
-        {loading ? null : null}
+        {dashboardError ? (
+          <DashboardErrorNotice title='Action failed' message={dashboardError} />
+        ) : null}
 
-        {renderActiveSection()}
+        {hasQueryError && queryErrorMessage ? (
+          <DashboardErrorNotice message={queryErrorMessage} onRetry={handleRetryQueries} />
+        ) : null}
+
+        {isInitialLoading ? null : renderActiveSection()}
       </main>
     </div>
   );

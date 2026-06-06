@@ -1,7 +1,7 @@
 import { type FormEvent, useState } from 'react';
 import { FiCheckCircle } from 'react-icons/fi';
 import { PiSyringeBold } from 'react-icons/pi';
-import type { ShotEntry } from '../types';
+import type { CreateShotInput } from '../types';
 import { getIsoWeekInfo, getTodayDateValue } from '../utils/dateHelpers';
 import './AddShotModal.css';
 import { DateField } from './DateField';
@@ -11,7 +11,7 @@ interface AddShotModalProps {
   isSubmitting?: boolean;
   error?: string | null;
   onClose: () => void;
-  onShotAdded: (shot: ShotEntry) => Promise<void>;
+  onShotAdded: (shot: CreateShotInput) => Promise<void>;
 }
 
 const doseOptions = ['2.5', '5', '7.5', '10', '12.5', '15'];
@@ -66,8 +66,7 @@ export const AddShotModal = ({
 
     const { week, year } = getIsoWeekInfo(date);
 
-    const newShot: ShotEntry = {
-      id: `shot_${Date.now()}`,
+    const newShot: CreateShotInput = {
       date,
       dosage: parsedDosage,
       week,

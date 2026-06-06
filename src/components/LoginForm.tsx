@@ -5,7 +5,7 @@ import { cognitoAuth } from '../services/cognitoAuth';
 import './LoginForm.css';
 
 interface LoginFormProps {
-  onLogin: () => void;
+  onLogin: () => Promise<void> | void;
   onSwitchToSignUp: () => void;
 }
 
@@ -35,7 +35,7 @@ export const LoginForm = ({ onLogin, onSwitchToSignUp }: LoginFormProps) => {
 
     try {
       await cognitoAuth.signIn(trimmedEmail, password);
-      onLogin();
+      await onLogin();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to sign in');
     } finally {
@@ -71,7 +71,10 @@ export const LoginForm = ({ onLogin, onSwitchToSignUp }: LoginFormProps) => {
               className='login-form__input login-form__input--with-icon'
               type='email'
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setError(null);
+              }}
               placeholder='you@example.com'
               autoComplete='email'
               disabled={loading}
@@ -91,7 +94,10 @@ export const LoginForm = ({ onLogin, onSwitchToSignUp }: LoginFormProps) => {
               className='login-form__input login-form__input--with-icon'
               type='password'
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setError(null);
+              }}
               placeholder='Enter your password'
               autoComplete='current-password'
               disabled={loading}

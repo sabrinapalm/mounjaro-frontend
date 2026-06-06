@@ -49,3 +49,19 @@ export type ProfileFormValues = {
   height: number | null;
   unitSystem: UnitSystem;
 };
+
+export type CreateShotInput = {
+  date: string;
+  dosage: number;
+  week: number;
+  year: number;
+  injectionSite?: string;
+};
+
+export type CreateWeightInput = {
+  date: string;
+  dateTime: string;
+  weight: number;
+  week: number;
+  year: number;
+};

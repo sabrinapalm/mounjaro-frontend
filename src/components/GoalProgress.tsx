@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { LuGoal } from 'react-icons/lu';
-import { useProfile } from '../context/ProfileContext';
 import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { UserProfile, WeightEntry } from '../types';
 import { calculateBmi } from '../utils/calculateBmi';
@@ -96,10 +95,9 @@ const getFormattedWeightLost = ({
 };
 
 export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProgressProps) => {
-  const { goalWeight, height } = profile;
+  const { goalWeight, height, unitSystem } = profile;
 
-  const { unitSystem } = useProfile();
-  const { weightUnit, displayWeightFromKg } = useUnitSettings(unitSystem);
+  const { weightUnit, displayWeightFromKg } = useUnitSettings(unitSystem ?? 'metric');
 
   const [isEditGoalOpen, setIsEditGoalOpen] = useState(false);
   const [isSavingGoal, setIsSavingGoal] = useState(false);
@@ -115,7 +113,8 @@ export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProg
     }
 
     const sortedWeights = [...weights].sort(
-      (a, b) => getWeightTimestamp(a) - getWeightTimestamp(b)
+      (firstWeight, secondWeight) =>
+        getWeightTimestamp(firstWeight) - getWeightTimestamp(secondWeight)
     );
 
     const startWeight = profile.startWeight ?? sortedWeights[0].weight;
@@ -165,6 +164,7 @@ export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProg
       return;
     }
 
+    setGoalError(null);
     setIsEditGoalOpen(false);
   };
 

@@ -2,8 +2,8 @@ import type { FormEvent } from 'react';
 import { useState } from 'react';
 import { FiSave, FiSettings, FiTarget, FiUser } from 'react-icons/fi';
 import { useProfile } from '../context/ProfileContext';
+import { useUpdateProfile } from '../hooks/queries/useProfileQuery';
 import { useUnitSettings } from '../hooks/useUnitSettings';
-import { apiClient } from '../services/apiClient';
 import type { ProfileFormValues, UnitSystem, UserProfile } from '../types';
 import './ProfileSettingsPage.css';
 
@@ -28,6 +28,7 @@ const parseOptionalNumber = (value: string): number | null => {
 
 export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettingsPageProps) => {
   const { updateProfile } = useProfile();
+  const updateProfileMutation = useUpdateProfile();
 
   const initialUnitSystem = profile.unitSystem ?? 'metric';
   const [unitSystem, setUnitSystem] = useState<UnitSystem>(initialUnitSystem);
@@ -50,7 +51,8 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
 
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
+
+  const isSaving = updateProfileMutation.isPending;
 
   const handleUnitSystemChange = (nextUnitSystem: UnitSystem) => {
     setStartWeight((currentValue) =>
@@ -73,12 +75,6 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
 
     const trimmedDisplayName = displayName.trim();
 
-    if (!trimmedDisplayName) {
-      setError('Display name is required.');
-      setSuccessMessage(null);
-      return;
-    }
-
     const parsedStartWeight = parseOptionalNumber(startWeight);
     const parsedGoalWeight = parseOptionalNumber(goalWeight);
     const parsedHeight = parseOptionalNumber(height);
@@ -93,10 +89,9 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
 
     setError(null);
     setSuccessMessage(null);
-    setIsSaving(true);
 
     try {
-      const updatedProfile = await apiClient.updateProfile(values);
+      const updatedProfile = await updateProfileMutation.mutateAsync(values);
 
       updateProfile(updatedProfile);
       onProfileUpdated(updatedProfile);
@@ -104,8 +99,6 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
       setSuccessMessage('Profile settings saved.');
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Could not save profile.');
-    } finally {
-      setIsSaving(false);
     }
   };
 
@@ -140,10 +133,15 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
                 id='profile-settings-display-name'
                 className='profile-settings-field__input'
                 value={displayName}
-                onChange={(event) => setDisplayName(event.target.value)}
-                placeholder='Sabrina'
+                onChange={(event) => {
+                  setDisplayName(event.target.value);
+                  setError(null);
+                  setSuccessMessage(null);
+                }}
+                placeholder='John Doe'
                 autoComplete='name'
                 disabled={isSaving}
+                required
               />
             </label>
 
@@ -157,7 +155,11 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
                   id='profile-settings-unit-system'
                   className='profile-settings-field__input profile-settings-field__input--with-icon'
                   value={unitSystem}
-                  onChange={(event) => handleUnitSystemChange(event.target.value as UnitSystem)}
+                  onChange={(event) => {
+                    handleUnitSystemChange(event.target.value as UnitSystem);
+                    setError(null);
+                    setSuccessMessage(null);
+                  }}
                   disabled={isSaving}
                 >
                   <option value='metric'>Metric — kg, cm</option>
@@ -177,9 +179,14 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
                   step='1'
                   min='1'
                   value={height}
-                  onChange={(event) => setHeight(event.target.value)}
+                  onChange={(event) => {
+                    setHeight(event.target.value);
+                    setError(null);
+                    setSuccessMessage(null);
+                  }}
                   placeholder={unitSystem === 'metric' ? '165' : '65'}
                   disabled={isSaving}
+                  required
                 />
 
                 <span className='profile-settings-field__unit'>{heightUnit}</span>
@@ -216,9 +223,14 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
                     step='0.1'
                     min='1'
                     value={startWeight}
-                    onChange={(event) => setStartWeight(event.target.value)}
+                    onChange={(event) => {
+                      setStartWeight(event.target.value);
+                      setError(null);
+                      setSuccessMessage(null);
+                    }}
                     placeholder={unitSystem === 'metric' ? '100' : '220'}
                     disabled={isSaving}
+                    required
                   />
 
                   <span className='profile-settings-field__unit'>{weightUnit}</span>
@@ -236,9 +248,14 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
                     step='0.1'
                     min='1'
                     value={goalWeight}
-                    onChange={(event) => setGoalWeight(event.target.value)}
+                    onChange={(event) => {
+                      setGoalWeight(event.target.value);
+                      setError(null);
+                      setSuccessMessage(null);
+                    }}
                     placeholder={unitSystem === 'metric' ? '65' : '143'}
                     disabled={isSaving}
+                    required
                   />
 
                   <span className='profile-settings-field__unit'>{weightUnit}</span>

@@ -2,7 +2,7 @@ import { type FormEvent, useState } from 'react';
 import { FiActivity } from 'react-icons/fi';
 import { useProfile } from '../context/ProfileContext';
 import { useUnitSettings } from '../hooks/useUnitSettings';
-import type { WeightEntry } from '../types';
+import type { CreateWeightInput } from '../types';
 import {
   createDateTimeFromDateAndTimeValue,
   getCurrentTimeValue,
@@ -17,7 +17,7 @@ interface AddWeightModalProps {
   isSubmitting?: boolean;
   error?: string | null;
   onClose: () => void;
-  onWeightAdded: (weight: WeightEntry) => Promise<void>;
+  onWeightAdded: (weight: CreateWeightInput) => Promise<void>;
 }
 
 export const AddWeightModal = ({
@@ -77,8 +77,7 @@ export const AddWeightModal = ({
     const dateTime = createDateTimeFromDateAndTimeValue(date, time);
     const { week, year } = getIsoWeekInfo(dateTime);
 
-    const newWeight: WeightEntry = {
-      id: `weight_${Date.now()}`,
+    const newWeight: CreateWeightInput = {
       date,
       dateTime,
       weight: weightInKg,
@@ -97,6 +96,7 @@ export const AddWeightModal = ({
   }
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: cba
     <div className='add-weight-modal-backdrop' role='presentation' onMouseDown={handleClose}>
       <section
         className='add-weight-modal'

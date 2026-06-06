@@ -43,7 +43,7 @@ export const ConfirmSignUpForm = ({
       await cognitoAuth.confirmSignUp(trimmedEmail, trimmedCode);
       onConfirmed();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to confirm account');
+      setError(err instanceof Error ? err.message : 'Unable to confirm account.');
     } finally {
       setLoading(false);
     }
@@ -61,6 +61,11 @@ export const ConfirmSignUpForm = ({
 
           <p className='confirm-signup-card__description'>
             Enter the confirmation code from your email to activate your Tracksy account.
+          </p>
+
+          <p className='confirm-signup-card__hint'>
+            If you do not see the email within a few minutes, check your spam or junk folder. The
+            code is valid for 24 hours.
           </p>
         </div>
       </header>

@@ -24,8 +24,6 @@ type DashboardOverviewProps = {
   onViewAllMilestones: () => void;
 };
 
-const getRecentEntries = <T,>(entries: T[], limit = 5) => entries.slice(-limit);
-
 export const DashboardOverview = ({
   profile,
   summary,
@@ -60,9 +58,6 @@ export const DashboardOverview = ({
   const currentWeightDateLabel = summary.currentWeightDate
     ? formatDateLabel(summary.currentWeightDate)
     : 'No weight recorded';
-
-  const recentShots = getRecentEntries(shots);
-  const recentWeights = getRecentEntries(weights);
 
   return (
     <>
@@ -138,9 +133,9 @@ export const DashboardOverview = ({
       <div className='dashboard-grid'>
         <section id='shots' className='tracker-section'>
           <ShotTracker
-            shots={recentShots}
+            shots={shots}
             title='Recent Shots'
-            summaryLabel='Showing'
+            summaryLabel='Total shots'
             variant='compact'
             onShotAdded={onShotAdded}
             onDeleteShot={onDeleteShot}
@@ -149,9 +144,9 @@ export const DashboardOverview = ({
 
         <section id='weight' className='tracker-section'>
           <WeightTracker
-            weights={recentWeights}
+            weights={weights}
             title='Recent Weights'
-            summaryLabel='Recent weight loss'
+            summaryLabel='Total weight loss'
             variant='compact'
             onWeightAdded={onWeightAdded}
             onDeleteWeight={onDeleteWeight}

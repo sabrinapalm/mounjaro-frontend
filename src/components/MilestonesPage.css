@@ -15,14 +15,14 @@
   margin-bottom: 8px;
   color: var(--color-primary);
   font-size: 0.82rem;
-  font-weight: 900;
+  font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .milestones-page__header h1 {
   font-size: 1.9rem;
-  font-weight: 900;
+  font-weight: 800;
   letter-spacing: -0.04em;
 }
 

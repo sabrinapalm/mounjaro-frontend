@@ -1,4 +1,11 @@
-import type { ProfileFormValues, ShotEntry, UserProfile, WeightEntry } from '../types';
+import type {
+  CreateShotInput,
+  CreateWeightInput,
+  ProfileFormValues,
+  ShotEntry,
+  UserProfile,
+  WeightEntry,
+} from '../types';
 import { cognitoAuth } from './cognitoAuth';
 
 const baseUrl = import.meta.env.VITE_API_URL;
@@ -65,7 +72,7 @@ export const apiClient = {
     return data.shots as ShotEntry[];
   },
 
-  createShot: async (shot: ShotEntry): Promise<ShotEntry> => {
+  createShot: async (shot: CreateShotInput): Promise<ShotEntry> => {
     const data = await request('/shots', {
       method: 'POST',
       body: JSON.stringify(shot),
@@ -79,7 +86,7 @@ export const apiClient = {
     return data.weights as WeightEntry[];
   },
 
-  createWeight: async (weight: WeightEntry): Promise<WeightEntry> => {
+  createWeight: async (weight: CreateWeightInput): Promise<WeightEntry> => {
     const data = await request('/weights', {
       method: 'POST',
       body: JSON.stringify(weight),
@@ -89,15 +96,14 @@ export const apiClient = {
   },
 
   deleteShot: async (id: string, date: string): Promise<void> => {
-    await request(`/shots/${id}?date=${date}`, {
+    await request(`/shots/${id}?date=${encodeURIComponent(date)}`, {
       method: 'DELETE',
     });
   },
 
   deleteWeight: async (id: string, date: string): Promise<void> => {
-    await request(`/weights/${id}?date=${date}`, {
+    await request(`/weights/${id}?date=${encodeURIComponent(date)}`, {
       method: 'DELETE',
     });
   },
-  
 };

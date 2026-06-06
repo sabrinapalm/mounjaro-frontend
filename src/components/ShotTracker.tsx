@@ -9,6 +9,8 @@ import './ShotTracker.css';
 
 type ShotTrackerVariant = 'compact' | 'full';
 
+const COMPACT_SHOT_LIMIT = 5;
+
 interface ShotTrackerProps {
   shots: ShotEntry[];
   onShotAdded: (shot: ShotEntry) => Promise<void>;
@@ -33,8 +35,24 @@ export const ShotTracker = ({
   const [isDeleting, setIsDeleting] = useState(false);
 
   const sortedShots = useMemo(() => {
-    return [...shots].sort((a, b) => getTimestamp(b.date) - getTimestamp(a.date));
+    return [...shots].sort((firstShot, secondShot) => {
+      const dateDifference = getTimestamp(secondShot.date) - getTimestamp(firstShot.date);
+
+      if (dateDifference !== 0) {
+        return dateDifference;
+      }
+
+      return secondShot.id.localeCompare(firstShot.id);
+    });
   }, [shots]);
+
+  const visibleShots = useMemo(() => {
+    if (variant === 'compact') {
+      return sortedShots.slice(0, COMPACT_SHOT_LIMIT);
+    }
+
+    return sortedShots;
+  }, [sortedShots, variant]);
 
   const totalShots = sortedShots.length;
 
@@ -119,7 +137,7 @@ export const ShotTracker = ({
 
       {error && !isAddShotModalOpen && <p className='shot-tracker-card__error'>{error}</p>}
 
-      {sortedShots.length === 0 ? (
+      {visibleShots.length === 0 ? (
         <div className='shot-tracker-card__empty-state'>
           <div className='shot-tracker-card__empty-icon'>
             <PiSyringeBold size={24} />
@@ -129,7 +147,7 @@ export const ShotTracker = ({
         </div>
       ) : (
         <ul className='shot-tracker-card__list'>
-          {sortedShots.map((shot) => {
+          {visibleShots.map((shot) => {
             const shotDateLabel = formatDateLabel(shot.date);
 
             return (
@@ -141,6 +159,7 @@ export const ShotTracker = ({
                 <span className='shot-tracker-card__date'>{shotDateLabel}</span>
 
                 <span className='shot-tracker-card__dosage'>{shot.dosage.toFixed(1)} mg</span>
+
                 <span className='shot-tracker-card__site'>{shot.injectionSite || '-'}</span>
 
                 <button

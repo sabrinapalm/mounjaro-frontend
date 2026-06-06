@@ -92,7 +92,7 @@
   background: var(--color-primary);
   color: #ffffff;
   font-size: 0.65rem;
-  font-weight: 900;
+  font-weight: 800;
 }
 
 .dashboard-profile-button {
@@ -139,7 +139,7 @@
   background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
   color: #ffffff;
   font-size: 0.95rem;
-  font-weight: 900;
+  font-weight: 800;
 }
 
 .dashboard-profile-name {
@@ -207,8 +207,8 @@
 }
 
 .dashboard-header h1 {
-  font-size: 1.75rem;
-  font-weight: 900;
+  font-size: 1.9rem;
+  font-weight: 800;
   letter-spacing: -0.04em;
 }
 

@@ -5,7 +5,7 @@ import { cognitoAuth } from '../services/cognitoAuth';
 import './SignUpForm.css';
 
 interface SignUpFormProps {
-  onSignedUp: (email: string) => void;
+  onSignedUp: (email: string) => Promise<void> | void;
   onSwitchToLogin: () => void;
 }
 
@@ -35,7 +35,7 @@ export const SignUpForm = ({ onSignedUp, onSwitchToLogin }: SignUpFormProps) => 
 
     try {
       await cognitoAuth.signUp(trimmedEmail, password);
-      onSignedUp(trimmedEmail);
+      await onSignedUp(trimmedEmail);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to sign up');
     } finally {
@@ -71,7 +71,10 @@ export const SignUpForm = ({ onSignedUp, onSwitchToLogin }: SignUpFormProps) => 
               className='signup-form__input signup-form__input--with-icon'
               type='email'
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setError(null);
+              }}
               placeholder='you@example.com'
               autoComplete='email'
               disabled={loading}
@@ -91,7 +94,10 @@ export const SignUpForm = ({ onSignedUp, onSwitchToLogin }: SignUpFormProps) => 
               className='signup-form__input signup-form__input--with-icon'
               type='password'
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setError(null);
+              }}
               placeholder='Choose a secure password'
               autoComplete='new-password'
               disabled={loading}

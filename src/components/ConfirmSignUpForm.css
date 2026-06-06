@@ -196,6 +196,13 @@
   opacity: 0.65;
 }
 
+.confirm-signup-card__hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
 @media (max-width: 640px) {
   .confirm-signup-card {
     padding: 30px 20px 24px;

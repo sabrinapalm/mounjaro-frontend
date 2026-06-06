@@ -62,6 +62,7 @@ export const ConfirmDialog = ({
   const loadingLabel = variant === 'danger' ? 'Deleting...' : 'Working...';
 
   return createPortal(
+    // biome-ignore lint/a11y/noStaticElementInteractions: cba
     <div
       className='confirm-dialog-backdrop'
       role='presentation'

@@ -1,20 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
-import { LuBell, LuCalendarHeart, LuGoal, LuPartyPopper, LuScale } from 'react-icons/lu';
+import { LuBell, LuCalendarHeart, LuCheck, LuGoal, LuScale, LuX } from 'react-icons/lu';
 import type {
   DashboardNotification,
+  DashboardNotificationAction,
   DashboardNotificationType,
 } from '../hooks/useDashboardNotifications';
 import './DashboardNotifications.css';
 
 type DashboardNotificationsProps = {
   notifications: DashboardNotification[];
+  onDismissNotification?: (notificationId: string) => void;
+  onNotificationAction?: (action: DashboardNotificationAction) => void;
 };
 
 const getNotificationIcon = (type: DashboardNotificationType) => {
-  if (type === 'milestone') {
-    return <LuPartyPopper size={18} />;
-  }
-
   if (type === 'weight') {
     return <LuScale size={18} />;
   }
@@ -26,11 +25,17 @@ const getNotificationIcon = (type: DashboardNotificationType) => {
   return <LuGoal size={18} />;
 };
 
-export const DashboardNotifications = ({ notifications }: DashboardNotificationsProps) => {
+export const DashboardNotifications = ({
+  notifications,
+  onDismissNotification,
+  onNotificationAction,
+}: DashboardNotificationsProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
 
   const unreadCount = notifications.length;
+  const unreadLabel = unreadCount === 1 ? '1 new' : `${unreadCount} new`;
 
   useEffect(() => {
     if (!isOpen) {
@@ -40,6 +45,7 @@ export const DashboardNotifications = ({ notifications }: DashboardNotifications
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsOpen(false);
+        triggerRef.current?.focus();
       }
     };
 
@@ -66,9 +72,7 @@ export const DashboardNotifications = ({ notifications }: DashboardNotifications
         return;
       }
 
-      const notificationButton = document.querySelector('[data-notifications-trigger="true"]');
-
-      if (notificationButton?.contains(target)) {
+      if (triggerRef.current?.contains(target)) {
         return;
       }
 
@@ -82,14 +86,24 @@ export const DashboardNotifications = ({ notifications }: DashboardNotifications
     };
   }, [isOpen]);
 
+  const handleNotificationClick = (action?: DashboardNotificationAction) => {
+    if (!action) {
+      return;
+    }
+
+    onNotificationAction?.(action);
+    setIsOpen(false);
+  };
+
   return (
     <div className='dashboard-notifications'>
       <button
+        ref={triggerRef}
         type='button'
         className='dashboard-topbar-button'
-        aria-label='Notifications'
+        aria-label={unreadCount > 0 ? `Notifications, ${unreadLabel}` : 'Notifications'}
         aria-expanded={isOpen}
-        data-notifications-trigger='true'
+        aria-haspopup='dialog'
         onClick={() => setIsOpen((currentValue) => !currentValue)}
       >
         <LuBell size={20} />
@@ -118,28 +132,68 @@ export const DashboardNotifications = ({ notifications }: DashboardNotifications
                 <p>Updates from your journey</p>
               </div>
 
-              <span>{unreadCount} new</span>
+              <span>{unreadLabel}</span>
             </div>
 
             {notifications.length === 0 ? (
               <div className='dashboard-notifications__empty'>
+                <LuCheck size={22} />
                 <p>No notifications right now.</p>
                 <span>You’re all caught up.</span>
               </div>
             ) : (
               <ul className='dashboard-notifications__list'>
-                {notifications.map((notification) => (
-                  <li key={notification.id} className='dashboard-notifications__item'>
-                    <div className='dashboard-notifications__icon'>
-                      {getNotificationIcon(notification.type)}
-                    </div>
+                {notifications.map((notification) => {
+                  const action = notification.action?.target;
 
-                    <div className='dashboard-notifications__content'>
-                      <h3>{notification.title}</h3>
-                      <p>{notification.message}</p>
-                    </div>
-                  </li>
-                ))}
+                  return (
+                    <li key={notification.id} className='dashboard-notifications__list-item'>
+                      <button
+                        type='button'
+                        className={`dashboard-notifications__item dashboard-notifications__item--${
+                          notification.tone ?? 'info'
+                        }`}
+                        disabled={!action}
+                        onClick={() => handleNotificationClick(action)}
+                      >
+                        <span className='dashboard-notifications__icon'>
+                          {getNotificationIcon(notification.type)}
+                        </span>
+
+                        <span className='dashboard-notifications__content'>
+                          <span className='dashboard-notifications__title'>
+                            {notification.title}
+                          </span>
+
+                          <span className='dashboard-notifications__message'>
+                            {notification.message}
+                          </span>
+
+                          {notification.action ? (
+                            <span className='dashboard-notifications__hint'>
+                              {notification.action.label}
+                            </span>
+                          ) : null}
+                        </span>
+                      </button>
+
+                      {notification.isDismissible ? (
+                        <button
+                          type='button'
+                          className='dashboard-notifications__dismiss'
+                          aria-label={`Dismiss ${notification.title}`}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            onDismissNotification?.(notification.id);
+                          }}
+                        >
+                          <LuX size={16} />
+                        </button>
+                      ) : null}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>

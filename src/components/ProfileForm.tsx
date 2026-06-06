@@ -9,6 +9,8 @@ type ProfileFormProps = {
   initialProfile?: UserProfile | null;
   title?: string;
   submitLabel?: string;
+  isSubmitting?: boolean;
+  submitError?: string | null;
   onSubmit: (values: ProfileFormValues) => Promise<void>;
 };
 
@@ -30,6 +32,8 @@ export function ProfileForm({
   initialProfile = null,
   title = 'Welcome to Tracksy',
   submitLabel = 'Continue to dashboard',
+  isSubmitting = false,
+  submitError = null,
   onSubmit,
 }: ProfileFormProps) {
   const initialUnitSystem = initialProfile?.unitSystem ?? 'metric';
@@ -48,15 +52,10 @@ export function ProfileForm({
   } = useUnitSettings(unitSystem);
 
   const [displayName, setDisplayName] = useState(initialProfile?.displayName ?? '');
-
   const [goalWeight, setGoalWeight] = useState(displayWeightFromKg(initialProfile?.goalWeight));
-
   const [startWeight, setStartWeight] = useState(displayWeightFromKg(initialProfile?.startWeight));
-
   const [height, setHeight] = useState(displayHeightFromCm(initialProfile?.height));
-
-  const [error, setError] = useState('');
-  const [isSaving, setIsSaving] = useState(false);
+  const [localError, setLocalError] = useState('');
 
   const handleUnitSystemChange = (nextUnitSystem: UnitSystem) => {
     setStartWeight((currentValue) =>
@@ -80,7 +79,7 @@ export function ProfileForm({
     const trimmedDisplayName = displayName.trim();
 
     if (!trimmedDisplayName) {
-      setError('Display name is required.');
+      setLocalError('Display name is required.');
       return;
     }
 
@@ -88,23 +87,18 @@ export function ProfileForm({
     const parsedGoalWeight = parseOptionalNumber(goalWeight);
     const parsedHeight = parseOptionalNumber(height);
 
-    setError('');
-    setIsSaving(true);
+    setLocalError('');
 
-    try {
-      await onSubmit({
-        displayName: trimmedDisplayName,
-        startWeight: normalizeWeightToKg(parsedStartWeight),
-        goalWeight: normalizeWeightToKg(parsedGoalWeight),
-        height: normalizeHeightToCm(parsedHeight),
-        unitSystem,
-      });
-    } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : 'Could not save profile.');
-    } finally {
-      setIsSaving(false);
-    }
+    await onSubmit({
+      displayName: trimmedDisplayName,
+      startWeight: normalizeWeightToKg(parsedStartWeight),
+      goalWeight: normalizeWeightToKg(parsedGoalWeight),
+      height: normalizeHeightToCm(parsedHeight),
+      unitSystem,
+    });
   };
+
+  const error = localError || submitError;
 
   return (
     <section className='profile-form-page'>
@@ -126,6 +120,7 @@ export function ProfileForm({
           </div>
         </header>
 
+        {/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: cba */}
         <div className='profile-form-card__highlights' aria-label='What Tracksy will personalize'>
           <div className='profile-form-card__highlight'>
             <FiTarget size={18} />
@@ -151,10 +146,13 @@ export function ProfileForm({
               id='profile-display-name'
               className='profile-form__input'
               value={displayName}
-              onChange={(event) => setDisplayName(event.target.value)}
+              onChange={(event) => {
+                setDisplayName(event.target.value);
+                setLocalError('');
+              }}
               placeholder='John Doe'
               autoComplete='name'
-              disabled={isSaving}
+              disabled={isSubmitting}
             />
           </label>
 
@@ -166,7 +164,7 @@ export function ProfileForm({
               className='profile-form__input'
               value={unitSystem}
               onChange={(event) => handleUnitSystemChange(event.target.value as UnitSystem)}
-              disabled={isSaving}
+              disabled={isSubmitting}
             >
               <option value='metric'>Metric — kg, cm</option>
               <option value='imperial'>Imperial — lb, in</option>
@@ -185,9 +183,12 @@ export function ProfileForm({
                   step='0.1'
                   min='1'
                   value={startWeight}
-                  onChange={(event) => setStartWeight(event.target.value)}
+                  onChange={(event) => {
+                    setStartWeight(event.target.value);
+                    setLocalError('');
+                  }}
                   placeholder={unitSystem === 'metric' ? '100' : '220'}
-                  disabled={isSaving}
+                  disabled={isSubmitting}
                 />
 
                 <span className='profile-form__unit'>{weightUnit}</span>
@@ -205,9 +206,12 @@ export function ProfileForm({
                   step='0.1'
                   min='1'
                   value={goalWeight}
-                  onChange={(event) => setGoalWeight(event.target.value)}
+                  onChange={(event) => {
+                    setGoalWeight(event.target.value);
+                    setLocalError('');
+                  }}
                   placeholder={unitSystem === 'metric' ? '65' : '143'}
-                  disabled={isSaving}
+                  disabled={isSubmitting}
                 />
 
                 <span className='profile-form__unit'>{weightUnit}</span>
@@ -226,9 +230,12 @@ export function ProfileForm({
                 step='1'
                 min='1'
                 value={height}
-                onChange={(event) => setHeight(event.target.value)}
+                onChange={(event) => {
+                  setHeight(event.target.value);
+                  setLocalError('');
+                }}
                 placeholder={unitSystem === 'metric' ? '165' : '65'}
-                disabled={isSaving}
+                disabled={isSubmitting}
               />
 
               <span className='profile-form__unit'>{heightUnit}</span>
@@ -245,9 +252,9 @@ export function ProfileForm({
             <button
               className='profile-form__button profile-form__button--accent'
               type='submit'
-              disabled={isSaving}
+              disabled={isSubmitting}
             >
-              {isSaving ? (
+              {isSubmitting ? (
                 'Saving...'
               ) : (
                 <>
