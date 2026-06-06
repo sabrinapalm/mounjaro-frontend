@@ -115,13 +115,6 @@
     background 0.2s ease;
 }
 
-@media (max-width: 640px) {
-  .dashboard-profile-button {
-    padding: 4px;
-    max-width: unset;
-  }
-}
-
 .dashboard-profile-button:hover {
   transform: translateY(-1px);
   border-color: color-mix(in srgb, var(--color-primary) 36%, transparent);
@@ -271,6 +264,17 @@
 
 /* Main grid */
 
+.dashboard-progress-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 24px;
+}
+
+.dashboard-progress-grid__goal,
+.dashboard-progress-grid__graph {
+  min-width: 0;
+}
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -279,6 +283,8 @@
 
 .tracker-section,
 .chart-section,
+.dashboard-progress-grid__goal,
+.dashboard-progress-grid__graph,
 #progress,
 #shots,
 #weight,
@@ -295,6 +301,8 @@
 #milestones {
   scroll-margin-top: 32px;
 }
+
+/* Profile menu */
 
 .dashboard,
 .dashboard-topbar,
@@ -393,7 +401,8 @@
     padding: calc(20px + env(safe-area-inset-top)) 20px 20px;
   }
 
-  .dashboard-grid {
+  .dashboard-grid,
+  .dashboard-progress-grid {
     grid-template-columns: 1fr;
     gap: 16px;
   }
@@ -421,6 +430,11 @@
 
   .dashboard-topbar-actions {
     gap: 8px;
+  }
+
+  .dashboard-profile-button {
+    padding: 4px;
+    max-width: unset;
   }
 
   .dashboard-profile-name {

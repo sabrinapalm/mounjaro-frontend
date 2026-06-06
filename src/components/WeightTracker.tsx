@@ -249,7 +249,7 @@ export const WeightTracker = ({
             className='weight-tracker-card__view-all-button'
             onClick={onViewAll}
           >
-            View all weights
+            View all
           </button>
         </footer>
       ) : null}

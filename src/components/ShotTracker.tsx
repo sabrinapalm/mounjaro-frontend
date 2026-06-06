@@ -184,7 +184,7 @@ export const ShotTracker = ({
                 className='shot-tracker-card__view-all-button'
                 onClick={onViewAll}
               >
-                View all shots
+                View all
               </button>
             </footer>
           ) : null}

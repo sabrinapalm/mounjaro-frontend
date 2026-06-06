@@ -158,6 +158,32 @@ export const useUnitSettings = (unitSystem: UnitSystem) => {
     []
   );
 
+  const parseDisplayNumber = (value: number | string) => {
+    if (typeof value === 'number') {
+      return value;
+    }
+
+    const normalizedValue = value.replace(',', '.');
+    const parsedValue = Number(normalizedValue);
+
+    return Number.isNaN(parsedValue) ? 0 : parsedValue;
+  };
+
+  const formatSignedWeight = (value: number | string, unit: string) => {
+    const numericValue = parseDisplayNumber(value);
+    const absoluteValue = Math.abs(numericValue).toFixed(1);
+
+    if (numericValue > 0) {
+      return `+${absoluteValue} ${unit}`;
+    }
+
+    if (numericValue < 0) {
+      return `-${absoluteValue} ${unit}`;
+    }
+
+    return `0.0 ${unit}`;
+  };
+
   return {
     unitSystem,
     weightUnit,
@@ -170,5 +196,6 @@ export const useUnitSettings = (unitSystem: UnitSystem) => {
     normalizeHeightToCm,
     convertWeightInputBetweenSystems,
     convertHeightInputBetweenSystems,
+    formatSignedWeight,
   };
 };

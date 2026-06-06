@@ -2,6 +2,7 @@
   display: grid;
   gap: 22px;
   width: 100%;
+
   min-width: 0;
   padding: 24px;
   border: 1px solid var(--color-border);
@@ -11,6 +12,7 @@
     color-mix(in srgb, var(--color-surface-soft) 22%, var(--color-surface) 78%),
     var(--color-surface)
   );
+  height: 100%;
 }
 
 .shot-tracker-card__header {

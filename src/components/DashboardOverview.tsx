@@ -132,13 +132,19 @@ export const DashboardOverview = ({
         </div>
       </div>
 
-      <section id='progress'>
-        <GoalProgress
-          weights={weights}
-          profile={profile}
-          onGoalWeightUpdated={onGoalWeightUpdated}
-        />
-      </section>
+      <div className='dashboard-progress-grid'>
+        <section id='progress' className='dashboard-progress-grid__goal'>
+          <GoalProgress
+            weights={weights}
+            profile={profile}
+            onGoalWeightUpdated={onGoalWeightUpdated}
+          />
+        </section>
+
+        <section id='dose-history' className='dashboard-progress-grid__graph'>
+          <WeightGraph weights={weights} />
+        </section>
+      </div>
 
       <div className='dashboard-grid'>
         <section id='shots' className='tracker-section'>
@@ -166,22 +172,16 @@ export const DashboardOverview = ({
         </section>
       </div>
 
-      <div className='dashboard-grid'>
-        <section id='dose-history'>
-          <WeightGraph weights={weights} />
-        </section>
-
-        <section id='milestones'>
-          <Milestones
-            weights={weights}
-            shots={shots}
-            startWeight={profile.startWeight ?? null}
-            goalWeight={profile.goalWeight ?? null}
-            maxVisible={5}
-            onViewAll={onViewAllMilestones}
-          />
-        </section>
-      </div>
+      <section id='milestones'>
+        <Milestones
+          weights={weights}
+          shots={shots}
+          startWeight={profile.startWeight ?? null}
+          goalWeight={profile.goalWeight ?? null}
+          maxVisible={5}
+          onViewAll={onViewAllMilestones}
+        />
+      </section>
     </>
   );
 };
