@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { LuLogOut, LuMenu, LuMoon, LuSun } from 'react-icons/lu';
+import { useEffect, useRef, useState } from 'react';
+import { LuMenu, LuMoon, LuSun } from 'react-icons/lu';
 import { useUpdateGoalWeight } from '../hooks/queries/useProfileQuery';
 import { useCreateShot, useDeleteShot, useShots } from '../hooks/queries/useShotsQuery';
 import { useCreateWeight, useDeleteWeight, useWeights } from '../hooks/queries/useWeightsQuery';
@@ -37,8 +37,11 @@ export const Dashboard = ({
   onToggleTheme,
 }: DashboardProps) => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<SidebarSection>('dashboard');
   const [dashboardError, setDashboardError] = useState<string | null>(null);
+
+  const profileMenuRef = useRef<HTMLDivElement | null>(null);
 
   const shotsQuery = useShots(true);
   const weightsQuery = useWeights(true);
@@ -85,6 +88,32 @@ export const Dashboard = ({
     return null;
   })();
 
+  useEffect(() => {
+    if (!isProfileMenuOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!profileMenuRef.current?.contains(event.target as Node)) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isProfileMenuOpen]);
+
   const handleRetryQueries = () => {
     if (shotsQuery.isError) {
       void shotsQuery.refetch();
@@ -98,6 +127,7 @@ export const Dashboard = ({
   const handleNavigate = (section: SidebarSection) => {
     setActiveSection(section);
     setIsMobileSidebarOpen(false);
+    setIsProfileMenuOpen(false);
   };
 
   const handleNotificationAction = (action: DashboardNotificationAction) => {
@@ -114,6 +144,11 @@ export const Dashboard = ({
     if (action === 'view-profile') {
       handleNavigate('profile');
     }
+  };
+
+  const handleSignOut = () => {
+    setIsProfileMenuOpen(false);
+    onSignOut();
   };
 
   const handleShotAdded = async (shot: CreateShotInput) => {
@@ -247,31 +282,44 @@ export const Dashboard = ({
               onNotificationAction={handleNotificationAction}
             />
 
-            <button
-              type='button'
-              className='dashboard-profile-button'
-              onClick={() => handleNavigate('profile')}
-              aria-label='Open profile settings'
-            >
-              <span className='dashboard-profile-avatar'>
-                {profile.displayName?.charAt(0).toUpperCase() || 'U'}
-              </span>
+            <div className='dashboard-profile-menu-wrapper' ref={profileMenuRef}>
+              <button
+                type='button'
+                className='dashboard-profile-button'
+                onClick={() => setIsProfileMenuOpen((isOpen) => !isOpen)}
+                aria-label='Open account menu'
+                aria-haspopup='menu'
+                aria-expanded={isProfileMenuOpen}
+              >
+                <span className='dashboard-profile-avatar'>
+                  {profile.displayName?.charAt(0).toUpperCase() || 'U'}
+                </span>
 
-              <span className='dashboard-profile-name'>{profile.displayName || 'Profile'}</span>
-            </button>
+                <span className='dashboard-profile-name'>{profile.displayName || 'Profile'}</span>
+              </button>
 
-            <button type='button' className='dashboard-signout-button' onClick={onSignOut}>
-              Sign out
-            </button>
+              {isProfileMenuOpen ? (
+                <div className='dashboard-profile-menu' role='menu'>
+                  <button
+                    type='button'
+                    className='dashboard-profile-menu__item'
+                    role='menuitem'
+                    onClick={() => handleNavigate('profile')}
+                  >
+                    Profile settings
+                  </button>
 
-            <button
-              type='button'
-              className='dashboard-signout-icon-button'
-              onClick={onSignOut}
-              aria-label='Sign out'
-            >
-              <LuLogOut size={20} />
-            </button>
+                  <button
+                    type='button'
+                    className='dashboard-profile-menu__item dashboard-profile-menu__item--danger'
+                    role='menuitem'
+                    onClick={handleSignOut}
+                  >
+                    Sign out
+                  </button>
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
 
