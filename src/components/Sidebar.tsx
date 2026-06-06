@@ -105,7 +105,7 @@ export const Sidebar = ({
       >
         <div className='sidebar__inner'>
           <div className='sidebar__brand'>
-            <img className='sidebar__logo' src={logoSrc} alt='Tracksy' />
+            <img key={logoSrc} className='sidebar__logo' src={logoSrc} alt='Tracksy' />
             <div>
               <p className='sidebar__brand-subtitle'>Your Mounjaro journey</p>
             </div>

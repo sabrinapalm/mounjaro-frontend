@@ -17,7 +17,7 @@ export const Header = ({ theme, onToggleTheme }: HeaderProps) => {
       <div className='header-container'>
         <div className='header-brand'>
           <div className='header-logo-container'>
-            <img src={logoSrc} alt='Tracksy' className='header-logo-image' />
+            <img key={logoSrc} src={logoSrc} alt='Tracksy' className='header-logo-image' />
           </div>
         </div>
 

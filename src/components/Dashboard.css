@@ -10,10 +10,9 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 32px;
+  padding: calc(32px + env(safe-area-inset-top)) 32px 32px;
   overflow-x: hidden;
 }
-
 /* Topbar */
 
 .dashboard-topbar {
@@ -391,7 +390,7 @@
 
 @media (max-width: 860px) {
   .dashboard {
-    padding: 20px;
+    padding: calc(20px + env(safe-area-inset-top)) 20px 20px;
   }
 
   .dashboard-grid {
@@ -417,7 +416,7 @@
 
 @media (max-width: 640px) {
   .dashboard {
-    padding: 18px;
+    padding: calc(18px + env(safe-area-inset-top)) 18px 18px;
   }
 
   .dashboard-topbar-actions {
