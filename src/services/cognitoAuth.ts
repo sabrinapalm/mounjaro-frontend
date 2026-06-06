@@ -68,6 +68,34 @@ export const cognitoAuth = {
     }
   },
 
+  getCurrentUserEmail: () =>
+    new Promise<string | null>((resolve, reject) => {
+      const currentUser = userPool.getCurrentUser();
+
+      if (!currentUser) {
+        resolve(null);
+        return;
+      }
+
+      currentUser.getSession((sessionError: Error | null) => {
+        if (sessionError) {
+          reject(sessionError);
+          return;
+        }
+
+        currentUser.getUserAttributes((attributesError, attributes) => {
+          if (attributesError) {
+            reject(attributesError);
+            return;
+          }
+
+          const emailAttribute = attributes?.find((attribute) => attribute.getName() === 'email');
+
+          resolve(emailAttribute?.getValue() ?? null);
+        });
+      });
+    }),
+
   getCurrentUser: () => userPool.getCurrentUser(),
 
   getAuthToken: (): Promise<string> =>

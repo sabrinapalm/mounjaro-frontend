@@ -1,0 +1,73 @@
+.time-field {
+  display: grid;
+  gap: 10px;
+}
+
+.time-field__label {
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.time-field__control {
+  position: relative;
+  min-height: 58px;
+}
+
+.time-field__display {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 58px;
+  padding: 0 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface-soft);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 800;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.time-field__icon {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+}
+
+.time-field__native-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.time-field__native-input:disabled {
+  cursor: not-allowed;
+}
+
+.time-field__control:hover .time-field__display {
+  border-color: var(--color-accent);
+}
+
+.time-field__native-input:focus-visible + .time-field__display {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 16%, transparent);
+}
+
+.time-field__control:has(.time-field__native-input:focus-visible) .time-field__display {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 16%, transparent);
+}
+
+.time-field__control:has(.time-field__native-input:disabled) .time-field__display {
+  cursor: not-allowed;
+  opacity: 0.7;
+}

@@ -1,9 +1,10 @@
 import type { FormEvent } from 'react';
-import { useState } from 'react';
-import { FiSave, FiSettings, FiTarget, FiUser } from 'react-icons/fi';
+import { useEffect, useState } from 'react';
+import { FiMail, FiSave, FiSettings, FiTarget, FiUser } from 'react-icons/fi';
 import { useProfile } from '../context/ProfileContext';
 import { useUpdateProfile } from '../hooks/queries/useProfileQuery';
 import { useUnitSettings } from '../hooks/useUnitSettings';
+import { cognitoAuth } from '../services/cognitoAuth';
 import type { ProfileFormValues, UnitSystem, UserProfile } from '../types';
 import './ProfileSettingsPage.css';
 
@@ -49,10 +50,41 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
   const [goalWeight, setGoalWeight] = useState(displayWeightFromKg(profile.goalWeight));
   const [height, setHeight] = useState(displayHeightFromCm(profile.height));
 
+  const [accountEmail, setAccountEmail] = useState<string | null>(null);
+  const [isAccountEmailLoading, setIsAccountEmailLoading] = useState(true);
+
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const isSaving = updateProfileMutation.isPending;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadAccountEmail = async () => {
+      try {
+        const email = await cognitoAuth.getCurrentUserEmail();
+
+        if (isMounted) {
+          setAccountEmail(email);
+        }
+      } catch {
+        if (isMounted) {
+          setAccountEmail(null);
+        }
+      } finally {
+        if (isMounted) {
+          setIsAccountEmailLoading(false);
+        }
+      }
+    };
+
+    void loadAccountEmail();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleUnitSystemChange = (nextUnitSystem: UnitSystem) => {
     setStartWeight((currentValue) =>
@@ -108,7 +140,7 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
         <div>
           <p className='profile-settings-page__eyebrow'>Profile</p>
           <h1>Profile Settings</h1>
-          <p>Manage your personal details and progress targets.</p>
+          <p>Manage your personal details, account information and progress targets.</p>
         </div>
       </header>
 
@@ -261,6 +293,36 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
                   <span className='profile-settings-field__unit'>{weightUnit}</span>
                 </div>
               </label>
+            </div>
+          </div>
+        </section>
+
+        <section className='profile-settings-card'>
+          <header className='profile-settings-card__header'>
+            <div
+              className='profile-settings-card__icon profile-settings-card__icon--account'
+              aria-hidden='true'
+            >
+              <FiMail size={22} />
+            </div>
+
+            <div>
+              <h2>Account</h2>
+              <p>Your login details are managed separately from your profile.</p>
+            </div>
+          </header>
+
+          <div className='profile-settings-card__content'>
+            <div className='profile-settings-readonly-field'>
+              <span className='profile-settings-field__label'>Email address</span>
+
+              <div className='profile-settings-readonly-field__value'>
+                {isAccountEmailLoading ? 'Loading email…' : accountEmail || 'Email unavailable'}
+              </div>
+
+              <p className='profile-settings-readonly-field__hint'>
+                Email changes are not available. This address is used for signing in to Tracksy.
+              </p>
             </div>
           </div>
         </section>

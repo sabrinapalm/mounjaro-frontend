@@ -4,6 +4,11 @@ type Theme = 'light' | 'dark';
 
 const themeStorageKey = 'mounjaro-theme';
 
+const themeColors: Record<Theme, string> = {
+  light: '#6f4df6',
+  dark: '#050813',
+};
+
 const getInitialTheme = (): Theme => {
   const savedTheme = localStorage.getItem(themeStorageKey);
 
@@ -16,12 +21,25 @@ const getInitialTheme = (): Theme => {
   return prefersDark ? 'dark' : 'light';
 };
 
+const updateThemeColorMeta = (theme: Theme) => {
+  let metaThemeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+
+  if (!metaThemeColor) {
+    metaThemeColor = document.createElement('meta');
+    metaThemeColor.name = 'theme-color';
+    document.head.appendChild(metaThemeColor);
+  }
+
+  metaThemeColor.content = themeColors[theme];
+};
+
 export const useTheme = () => {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem(themeStorageKey, theme);
+    updateThemeColorMeta(theme);
   }, [theme]);
 
   const toggleTheme = () => {

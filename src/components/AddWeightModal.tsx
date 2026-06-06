@@ -11,6 +11,7 @@ import {
 } from '../utils/dateHelpers';
 import './AddWeightModal.css';
 import { DateField } from './DateField';
+import { TimeField } from './TimeField';
 
 interface AddWeightModalProps {
   open: boolean;
@@ -139,19 +140,13 @@ export const AddWeightModal = ({
               disabled={isSubmitting}
             />
 
-            <label className='add-weight-modal__field' htmlFor='weight-time'>
-              <span className='add-weight-modal__label'>Time</span>
-
-              <input
-                id='weight-time'
-                className='add-weight-modal__input'
-                type='time'
-                value={time}
-                onChange={(event) => setTime(event.target.value)}
-                disabled={isSubmitting}
-                required
-              />
-            </label>
+            <TimeField
+              id='weight-time'
+              label='Time'
+              value={time}
+              onChange={setTime}
+              disabled={isSubmitting}
+            />
           </div>
 
           <label className='add-weight-modal__field' htmlFor='weight-input'>
