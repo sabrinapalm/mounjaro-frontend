@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { PiSyringeBold } from 'react-icons/pi';
 import type { ShotEntry } from '../types';
+import { formatDateLabel, getTimestamp } from '../utils/dateHelpers';
 import { AddShotModal } from './AddShotModal';
 import { ConfirmDialog } from './ConfirmDialog';
 import './ShotTracker.css';
@@ -32,12 +33,7 @@ export const ShotTracker = ({
   const [isDeleting, setIsDeleting] = useState(false);
 
   const sortedShots = useMemo(() => {
-    return [...shots].sort((a, b) => {
-      const aTime = new Date(a.date).getTime();
-      const bTime = new Date(b.date).getTime();
-
-      return bTime - aTime;
-    });
+    return [...shots].sort((a, b) => getTimestamp(b.date) - getTimestamp(a.date));
   }, [shots]);
 
   const totalShots = sortedShots.length;
@@ -133,33 +129,31 @@ export const ShotTracker = ({
         </div>
       ) : (
         <ul className='shot-tracker-card__list'>
-          {sortedShots.map((shot) => (
-            <li key={shot.id} className='shot-tracker-card__item'>
-              <div className='shot-tracker-card__icon'>
-                <PiSyringeBold size={22} />
-              </div>
+          {sortedShots.map((shot) => {
+            const shotDateLabel = formatDateLabel(shot.date);
 
-              <span className='shot-tracker-card__date'>
-                {new Date(shot.date).toLocaleDateString('en-GB', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-                })}
-              </span>
+            return (
+              <li key={shot.id} className='shot-tracker-card__item'>
+                <div className='shot-tracker-card__icon'>
+                  <PiSyringeBold size={22} />
+                </div>
 
-              <span className='shot-tracker-card__dosage'>{shot.dosage.toFixed(1)} mg</span>
-              <span className='shot-tracker-card__site'>{shot.injectionSite || '-'}</span>
+                <span className='shot-tracker-card__date'>{shotDateLabel}</span>
 
-              <button
-                type='button'
-                className='shot-tracker-card__delete-button'
-                aria-label={`Delete shot from ${new Date(shot.date).toLocaleDateString()}`}
-                onClick={() => handleOpenDeleteDialog(shot)}
-              >
-                <AiOutlineDelete size={20} />
-              </button>
-            </li>
-          ))}
+                <span className='shot-tracker-card__dosage'>{shot.dosage.toFixed(1)} mg</span>
+                <span className='shot-tracker-card__site'>{shot.injectionSite || '-'}</span>
+
+                <button
+                  type='button'
+                  className='shot-tracker-card__delete-button'
+                  aria-label={`Delete shot from ${shotDateLabel}`}
+                  onClick={() => handleOpenDeleteDialog(shot)}
+                >
+                  <AiOutlineDelete size={20} />
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
 
@@ -176,9 +170,9 @@ export const ShotTracker = ({
         title='Delete shot?'
         message={
           shotToDelete
-            ? `This will delete your ${shotToDelete.dosage} mg shot from ${new Date(
+            ? `This will delete your ${shotToDelete.dosage} mg shot from ${formatDateLabel(
                 shotToDelete.date
-              ).toLocaleDateString()}.`
+              )}.`
             : ''
         }
         confirmLabel='Delete'

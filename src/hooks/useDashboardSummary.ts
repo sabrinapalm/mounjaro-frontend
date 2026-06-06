@@ -1,6 +1,13 @@
 import { useMemo } from 'react';
 import type { ShotEntry, WeightEntry } from '../types';
-import { addDays, formatDateLabel, getDueLabel, getLocalDate } from '../utils/dateHelpers';
+import {
+  addDays,
+  formatDateLabel,
+  getDueLabel,
+  getLocalDate,
+  getTimestamp,
+  getTodayStartOfDay,
+} from '../utils/dateHelpers';
 
 export interface UseDashboardSummaryParams {
   shots: ShotEntry[];
@@ -22,6 +29,26 @@ export interface DashboardSummary {
   currentDoseMeta: string;
 }
 
+const getWeightDateTime = (entry: WeightEntry) => {
+  return entry.dateTime ?? entry.date;
+};
+
+const getWeightTimestamp = (entry: WeightEntry) => {
+  const timestamp = getTimestamp(getWeightDateTime(entry));
+
+  if (!Number.isNaN(timestamp)) {
+    return timestamp;
+  }
+
+  const timestampFromId = entry.id?.split('_')[1];
+
+  return timestampFromId ? Number(timestampFromId) : 0;
+};
+
+const getShotTimestamp = (entry: ShotEntry) => {
+  return getTimestamp(getLocalDate(entry.date));
+};
+
 const getDoseWeek = (sortedShots: ShotEntry[], latestShot: ShotEntry | null) => {
   if (!latestShot || sortedShots.length === 0) {
     return null;
@@ -41,28 +68,21 @@ export const useDashboardSummary = ({
   weights,
 }: UseDashboardSummaryParams): DashboardSummary => {
   return useMemo(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const today = getTodayStartOfDay();
 
     const sortedWeights = [...weights].sort((a, b) => {
-      const aTime = getLocalDate(a.date).getTime();
-      const bTime = getLocalDate(b.date).getTime();
-
-      return aTime - bTime;
+      return getWeightTimestamp(a) - getWeightTimestamp(b);
     });
 
     const sortedShots = [...shots].sort((a, b) => {
-      const aTime = getLocalDate(a.date).getTime();
-      const bTime = getLocalDate(b.date).getTime();
-
-      return aTime - bTime;
+      return getShotTimestamp(a) - getShotTimestamp(b);
     });
 
     const latestWeight = sortedWeights.length ? sortedWeights[sortedWeights.length - 1] : null;
     const firstWeight = sortedWeights.length ? sortedWeights[0] : null;
 
     const currentWeight = latestWeight?.weight ?? null;
-    const currentWeightDate = latestWeight?.date ?? null;
+    const currentWeightDate = latestWeight ? getWeightDateTime(latestWeight) : null;
     const totalWeightLoss =
       firstWeight && latestWeight ? firstWeight.weight - latestWeight.weight : null;
 

@@ -4,6 +4,7 @@ import { FiActivity } from 'react-icons/fi';
 import { useProfile } from '../context/ProfileContext';
 import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { WeightEntry } from '../types';
+import { formatDateLabel, getTimestamp } from '../utils/dateHelpers';
 import { AddWeightModal } from './AddWeightModal';
 import { ConfirmDialog } from './ConfirmDialog';
 import './WeightTracker.css';
@@ -19,8 +20,13 @@ interface WeightTrackerProps {
   variant?: WeightTrackerVariant;
 }
 
+const getWeightDateTime = (entry: WeightEntry) => {
+  return entry.dateTime ?? entry.date;
+};
+
 const getWeightTimestamp = (entry: WeightEntry) => {
-  const timestamp = new Date(entry.date).getTime();
+  const dateTime = getWeightDateTime(entry);
+  const timestamp = getTimestamp(dateTime);
 
   if (!Number.isNaN(timestamp)) {
     return timestamp;
@@ -172,14 +178,16 @@ export const WeightTracker = ({
       ) : (
         <ul className='weight-tracker-card__list'>
           {visibleWeights.map((entry) => {
-            const nextEntry = sortedWeights.find((candidate) => {
-              return getWeightTimestamp(candidate) < getWeightTimestamp(entry);
-            });
+            const entryIndex = sortedWeights.findIndex(
+              (weightEntry) => weightEntry.id === entry.id
+            );
+            const nextEntry = entryIndex >= 0 ? sortedWeights[entryIndex + 1] : undefined;
 
             const changeInKg = nextEntry ? entry.weight - nextEntry.weight : null;
             const change = changeInKg !== null ? convertWeightFromKg(changeInKg) : null;
             const isWeightGain = changeInKg !== null && changeInKg > 0;
             const isWeightLoss = changeInKg !== null && changeInKg < 0;
+            const displayDate = formatDateLabel(getWeightDateTime(entry));
 
             return (
               <li key={entry.id} className='weight-tracker-card__item'>
@@ -187,13 +195,7 @@ export const WeightTracker = ({
                   <FiActivity size={20} />
                 </div>
 
-                <span className='weight-tracker-card__date'>
-                  {new Date(entry.date).toLocaleDateString('en-GB', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                  })}
-                </span>
+                <span className='weight-tracker-card__date'>{displayDate}</span>
 
                 <span className='weight-tracker-card__weight'>
                   {displayWeightFromKg(entry.weight)} {weightUnit}
@@ -222,7 +224,7 @@ export const WeightTracker = ({
                 <button
                   type='button'
                   className='weight-tracker-card__delete-button'
-                  aria-label={`Delete weight from ${new Date(entry.date).toLocaleDateString()}`}
+                  aria-label={`Delete weight from ${displayDate}`}
                   onClick={() => handleOpenDeleteDialog(entry)}
                 >
                   <AiOutlineDelete size={20} />
@@ -246,9 +248,9 @@ export const WeightTracker = ({
         title='Delete weight entry?'
         message={
           weightToDelete
-            ? `This will delete your ${displayWeightFromKg(weightToDelete.weight)} ${weightUnit} entry from ${new Date(
-                weightToDelete.date
-              ).toLocaleDateString()}.`
+            ? `This will delete your ${displayWeightFromKg(weightToDelete.weight)} ${weightUnit} entry from ${formatDateLabel(
+                getWeightDateTime(weightToDelete)
+              )}.`
             : ''
         }
         confirmLabel='Delete'

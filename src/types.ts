@@ -10,6 +10,7 @@ export interface ShotEntry {
 export interface WeightEntry {
   id: string;
   date: string; // ISO date string (YYYY-MM-DD)
+  dateTime: string; // ISO datetime string
   weight: number; // in kg or lbs, depending on user preference
   week: number;
   year: number;

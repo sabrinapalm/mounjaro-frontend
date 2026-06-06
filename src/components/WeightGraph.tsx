@@ -11,6 +11,7 @@ import {
 import { useProfile } from '../context/ProfileContext';
 import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { WeightEntry } from '../types';
+import { formatShortDateLabel, getStartDateForMonthsAgo, getTimestamp } from '../utils/dateHelpers';
 import './WeightGraph.css';
 
 type Period = '1m' | '3m' | '6m' | 'all';
@@ -18,7 +19,7 @@ type Period = '1m' | '3m' | '6m' | 'all';
 interface ChartData {
   label: string;
   weight?: number;
-  date: string;
+  dateTime: string;
 }
 
 interface WeightGraphProps {
@@ -32,37 +33,22 @@ const periodOptions: { value: Period; label: string }[] = [
   { value: 'all', label: 'All Time' },
 ];
 
-const getDateLabel = (dateValue: string) => {
-  const date = new Date(dateValue);
-
-  return date.toLocaleDateString('en-GB', {
-    month: 'short',
-    day: 'numeric',
-  });
+const getWeightDateTime = (entry: WeightEntry) => {
+  return entry.dateTime ?? entry.date;
 };
 
-const getPeriodStartDate = (period: Period) => {
+const getPeriodStartDateTime = (period: Period) => {
   if (period === 'all') {
     return null;
   }
 
-  const date = new Date();
+  const periodMonths: Record<Exclude<Period, 'all'>, number> = {
+    '1m': 1,
+    '3m': 3,
+    '6m': 6,
+  };
 
-  if (period === '1m') {
-    date.setMonth(date.getMonth() - 1);
-  }
-
-  if (period === '3m') {
-    date.setMonth(date.getMonth() - 3);
-  }
-
-  if (period === '6m') {
-    date.setMonth(date.getMonth() - 6);
-  }
-
-  date.setHours(0, 0, 0, 0);
-
-  return date;
+  return getStartDateForMonthsAgo(periodMonths[period]);
 };
 
 const getYAxisDomain = (data: ChartData[]) => {
@@ -107,22 +93,27 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
   const { weightUnit, convertWeightFromKg } = useUnitSettings(unitSystem);
 
   const chartData = useMemo(() => {
-    const periodStartDate = getPeriodStartDate(period);
+    const periodStartDateTime = getPeriodStartDateTime(period);
+    const periodStartTimestamp = periodStartDateTime ? getTimestamp(periodStartDateTime) : null;
 
     return [...weights]
       .filter((entry) => {
-        if (!periodStartDate) {
+        if (!periodStartTimestamp) {
           return true;
         }
 
-        return new Date(entry.date).getTime() >= periodStartDate.getTime();
+        return getTimestamp(getWeightDateTime(entry)) >= periodStartTimestamp;
       })
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-      .map((entry) => ({
-        label: getDateLabel(entry.date),
-        date: entry.date,
-        weight: convertWeightFromKg(entry.weight),
-      }));
+      .sort((a, b) => getTimestamp(getWeightDateTime(a)) - getTimestamp(getWeightDateTime(b)))
+      .map((entry) => {
+        const dateTime = getWeightDateTime(entry);
+
+        return {
+          label: formatShortDateLabel(dateTime),
+          dateTime,
+          weight: convertWeightFromKg(entry.weight),
+        };
+      });
   }, [convertWeightFromKg, weights, period]);
 
   const yAxisDomain = useMemo(() => getYAxisDomain(chartData), [chartData]);

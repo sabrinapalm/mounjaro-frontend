@@ -3,6 +3,12 @@ import { FiActivity } from 'react-icons/fi';
 import { useProfile } from '../context/ProfileContext';
 import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { WeightEntry } from '../types';
+import {
+  createDateTimeFromDateAndTimeValue,
+  getCurrentTimeValue,
+  getIsoWeekInfo,
+  getTodayDateValue,
+} from '../utils/dateHelpers';
 import './AddWeightModal.css';
 import { DateField } from './DateField';
 
@@ -13,20 +19,6 @@ interface AddWeightModalProps {
   onClose: () => void;
   onWeightAdded: (weight: WeightEntry) => Promise<void>;
 }
-
-const getTodayDateValue = () => new Date().toISOString().split('T')[0];
-
-const getWeekNumber = (date: Date): { week: number; year: number } => {
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  const dayNum = d.getUTCDay() || 7;
-
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  const week = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
-
-  return { week, year: d.getUTCFullYear() };
-};
 
 export const AddWeightModal = ({
   open,
@@ -39,8 +31,16 @@ export const AddWeightModal = ({
   const { weightUnit, normalizeWeightToKg } = useUnitSettings(unitSystem);
 
   const [date, setDate] = useState<string>(getTodayDateValue());
+  const [time, setTime] = useState<string>(getCurrentTimeValue());
   const [weight, setWeight] = useState<string>('');
   const [localError, setLocalError] = useState<string | null>(null);
+
+  const resetForm = () => {
+    setDate(getTodayDateValue());
+    setTime(getCurrentTimeValue());
+    setWeight('');
+    setLocalError(null);
+  };
 
   const handleClose = () => {
     if (isSubmitting) {
@@ -55,8 +55,8 @@ export const AddWeightModal = ({
     event.preventDefault();
     setLocalError(null);
 
-    if (!date || !weight) {
-      setLocalError('Please enter both date and weight.');
+    if (!date || !time || !weight) {
+      setLocalError('Please enter date, time and weight.');
       return;
     }
 
@@ -74,12 +74,13 @@ export const AddWeightModal = ({
       return;
     }
 
-    const selectedDate = new Date(date);
-    const { week, year } = getWeekNumber(selectedDate);
+    const dateTime = createDateTimeFromDateAndTimeValue(date, time);
+    const { week, year } = getIsoWeekInfo(dateTime);
 
     const newWeight: WeightEntry = {
       id: `weight_${Date.now()}`,
       date,
+      dateTime,
       weight: weightInKg,
       week,
       year,
@@ -87,8 +88,7 @@ export const AddWeightModal = ({
 
     await onWeightAdded(newWeight);
 
-    setDate(getTodayDateValue());
-    setWeight('');
+    resetForm();
     onClose();
   };
 
@@ -139,27 +139,41 @@ export const AddWeightModal = ({
               disabled={isSubmitting}
             />
 
-            <label className='add-weight-modal__field' htmlFor='weight-input'>
-              <span className='add-weight-modal__label'>Weight</span>
+            <label className='add-weight-modal__field' htmlFor='weight-time'>
+              <span className='add-weight-modal__label'>Time</span>
 
-              <div className='add-weight-modal__input-with-unit'>
-                <input
-                  id='weight-input'
-                  className='add-weight-modal__input add-weight-modal__input--with-unit'
-                  type='number'
-                  min='0'
-                  step='0.1'
-                  value={weight}
-                  onChange={(event) => setWeight(event.target.value)}
-                  placeholder={unitSystem === 'metric' ? '88.3' : '194.7'}
-                  disabled={isSubmitting}
-                  required
-                />
-
-                <span className='add-weight-modal__unit'>{weightUnit}</span>
-              </div>
+              <input
+                id='weight-time'
+                className='add-weight-modal__input'
+                type='time'
+                value={time}
+                onChange={(event) => setTime(event.target.value)}
+                disabled={isSubmitting}
+                required
+              />
             </label>
           </div>
+
+          <label className='add-weight-modal__field' htmlFor='weight-input'>
+            <span className='add-weight-modal__label'>Weight</span>
+
+            <div className='add-weight-modal__input-with-unit'>
+              <input
+                id='weight-input'
+                className='add-weight-modal__input add-weight-modal__input--with-unit'
+                type='number'
+                min='0'
+                step='0.1'
+                value={weight}
+                onChange={(event) => setWeight(event.target.value)}
+                placeholder={unitSystem === 'metric' ? '88.3' : '194.7'}
+                disabled={isSubmitting}
+                required
+              />
+
+              <span className='add-weight-modal__unit'>{weightUnit}</span>
+            </div>
+          </label>
 
           {(localError || error) && (
             <p className='add-weight-modal__error'>{localError || error}</p>

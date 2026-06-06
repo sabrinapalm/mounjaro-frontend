@@ -4,7 +4,7 @@ import { useProfile } from '../context/ProfileContext';
 import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { UserProfile, WeightEntry } from '../types';
 import { calculateBmi } from '../utils/calculateBmi';
-import { getLocalDate } from '../utils/dateHelpers';
+import { getTimestamp } from '../utils/dateHelpers';
 import { EditGoalWeightModal } from './EditGoalWeightModal';
 import './GoalProgress.css';
 
@@ -13,6 +13,22 @@ interface GoalProgressProps {
   profile: UserProfile;
   onGoalWeightUpdated: (goalWeight: number) => Promise<void>;
 }
+
+const getWeightDateTime = (entry: WeightEntry) => {
+  return entry.dateTime ?? entry.date;
+};
+
+const getWeightTimestamp = (entry: WeightEntry) => {
+  const timestamp = getTimestamp(getWeightDateTime(entry));
+
+  if (!Number.isNaN(timestamp)) {
+    return timestamp;
+  }
+
+  const timestampFromId = entry.id?.split('_')[1];
+
+  return timestampFromId ? Number(timestampFromId) : 0;
+};
 
 const getGoalProgressSubtitle = ({
   progress,
@@ -99,7 +115,7 @@ export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProg
     }
 
     const sortedWeights = [...weights].sort(
-      (a, b) => getLocalDate(a.date).getTime() - getLocalDate(b.date).getTime()
+      (a, b) => getWeightTimestamp(a) - getWeightTimestamp(b)
     );
 
     const startWeight = profile.startWeight ?? sortedWeights[0].weight;

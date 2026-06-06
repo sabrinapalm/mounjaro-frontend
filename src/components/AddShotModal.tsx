@@ -2,6 +2,7 @@ import { type FormEvent, useState } from 'react';
 import { FiCheckCircle } from 'react-icons/fi';
 import { PiSyringeBold } from 'react-icons/pi';
 import type { ShotEntry } from '../types';
+import { getIsoWeekInfo, getTodayDateValue } from '../utils/dateHelpers';
 import './AddShotModal.css';
 import { DateField } from './DateField';
 
@@ -19,20 +20,6 @@ const injectionSiteOptions = ['Stomach', 'Left thigh', 'Right thigh', 'Left arm'
 
 const defaultInjectionSite = 'Stomach';
 
-const getTodayDateValue = () => new Date().toISOString().split('T')[0];
-
-const getWeekNumber = (date: Date): { week: number; year: number } => {
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  const dayNum = d.getUTCDay() || 7;
-
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  const week = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
-
-  return { week, year: d.getUTCFullYear() };
-};
-
 export const AddShotModal = ({
   open,
   isSubmitting = false,
@@ -44,6 +31,13 @@ export const AddShotModal = ({
   const [dosage, setDosage] = useState<string>('2.5');
   const [injectionSite, setInjectionSite] = useState<string>(defaultInjectionSite);
   const [localError, setLocalError] = useState<string | null>(null);
+
+  const resetForm = () => {
+    setDate(getTodayDateValue());
+    setDosage('2.5');
+    setInjectionSite(defaultInjectionSite);
+    setLocalError(null);
+  };
 
   const handleClose = () => {
     if (isSubmitting) {
@@ -70,8 +64,7 @@ export const AddShotModal = ({
       return;
     }
 
-    const selectedDate = new Date(date);
-    const { week, year } = getWeekNumber(selectedDate);
+    const { week, year } = getIsoWeekInfo(date);
 
     const newShot: ShotEntry = {
       id: `shot_${Date.now()}`,
@@ -84,9 +77,7 @@ export const AddShotModal = ({
 
     await onShotAdded(newShot);
 
-    setDate(getTodayDateValue());
-    setDosage('2.5');
-    setInjectionSite(defaultInjectionSite);
+    resetForm();
     onClose();
   };
 

@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { FiCalendar } from 'react-icons/fi';
+import { formatDateLabel } from '../utils/dateHelpers';
 import './DateField.css';
 
 interface DateFieldProps {
@@ -15,18 +16,6 @@ type DateInputElement = HTMLInputElement & {
   showPicker?: () => void;
 };
 
-const formatDisplayDate = (value: string) => {
-  if (!value) {
-    return 'Select date';
-  }
-
-  return new Date(`${value}T00:00:00`).toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  });
-};
-
 export const DateField = ({
   id,
   label,
@@ -36,6 +25,7 @@ export const DateField = ({
   onChange,
 }: DateFieldProps) => {
   const inputRef = useRef<DateInputElement | null>(null);
+  const displayDate = value ? formatDateLabel(value) : 'Select date';
 
   const handleOpenPicker = () => {
     if (disabled) {
@@ -70,10 +60,10 @@ export const DateField = ({
           className='date-field__button'
           onClick={handleOpenPicker}
           disabled={disabled}
-          aria-label={`${label}: ${formatDisplayDate(value)}`}
+          aria-label={`${label}: ${displayDate}`}
         >
           <FiCalendar className='date-field__icon' size={20} aria-hidden='true' />
-          <span>{formatDisplayDate(value)}</span>
+          <span>{displayDate}</span>
         </button>
 
         <input

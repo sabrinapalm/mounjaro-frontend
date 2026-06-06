@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { useProfile } from '../context/ProfileContext';
 import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { ShotEntry, WeightEntry } from '../types';
+import { formatDateLabel, getDateValueFromDateTime, getTimestamp } from '../utils/dateHelpers';
 
 export type MilestoneStatus = 'completed' | 'inProgress' | 'locked';
 
@@ -25,23 +26,31 @@ type UseMilestonesParams = {
   maxVisible?: number;
 };
 
-const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  });
-};
-
 const clampProgress = (value: number) => {
   return Math.min(Math.max(value, 0), 100);
 };
 
-const getEntryTimestamp = (entry: { date: string; id?: string }) => {
-  const dateTime = new Date(entry.date).getTime();
+const getWeightDateTime = (entry: WeightEntry) => {
+  return entry.dateTime ?? entry.date;
+};
 
-  if (!Number.isNaN(dateTime)) {
-    return dateTime;
+const getWeightTimestamp = (entry: WeightEntry) => {
+  const timestamp = getTimestamp(getWeightDateTime(entry));
+
+  if (!Number.isNaN(timestamp)) {
+    return timestamp;
+  }
+
+  const timestampFromId = entry.id?.split('_')[1];
+
+  return timestampFromId ? Number(timestampFromId) : 0;
+};
+
+const getShotTimestamp = (entry: ShotEntry) => {
+  const timestamp = getTimestamp(entry.date);
+
+  if (!Number.isNaN(timestamp)) {
+    return timestamp;
   }
 
   const timestampFromId = entry.id?.split('_')[1];
@@ -50,15 +59,17 @@ const getEntryTimestamp = (entry: { date: string; id?: string }) => {
 };
 
 const getLatestWeight = (weights: WeightEntry[]) => {
-  return [...weights].sort((a, b) => getEntryTimestamp(b) - getEntryTimestamp(a))[0];
+  return [...weights].sort((a, b) => getWeightTimestamp(b) - getWeightTimestamp(a))[0];
 };
 
 const getFirstShotDate = (shots: ShotEntry[]) => {
-  return [...shots].sort((a, b) => getEntryTimestamp(a) - getEntryTimestamp(b))[0]?.date;
+  return [...shots].sort((a, b) => getShotTimestamp(a) - getShotTimestamp(b))[0]?.date;
 };
 
-const getFirstWeightDate = (weights: WeightEntry[]) => {
-  return [...weights].sort((a, b) => getEntryTimestamp(a) - getEntryTimestamp(b))[0]?.date;
+const getFirstWeightDateTime = (weights: WeightEntry[]) => {
+  const firstWeight = [...weights].sort((a, b) => getWeightTimestamp(a) - getWeightTimestamp(b))[0];
+
+  return firstWeight ? getWeightDateTime(firstWeight) : undefined;
 };
 
 const getWeightLossMilestoneStatus = (currentLoss: number, targetLoss: number): MilestoneStatus => {
@@ -150,11 +161,15 @@ const getTrendWinDescription = (trendWins: number, target: number) => {
 };
 
 const getUniqueWeightDays = (weights: WeightEntry[]) => {
-  return new Set(weights.map((weight) => weight.date)).size;
+  return new Set(
+    weights.map((weight) => {
+      return getDateValueFromDateTime(getWeightDateTime(weight));
+    })
+  ).size;
 };
 
 const getTrendWins = (weights: WeightEntry[]) => {
-  const sortedWeights = [...weights].sort((a, b) => getEntryTimestamp(a) - getEntryTimestamp(b));
+  const sortedWeights = [...weights].sort((a, b) => getWeightTimestamp(a) - getWeightTimestamp(b));
 
   return sortedWeights.reduce((wins, weight, index) => {
     const previousWeight = sortedWeights[index - 1];
@@ -221,7 +236,7 @@ export const useMilestones = ({
     const goalProgress = goalLoss > 0 ? clampProgress((safeCurrentLoss / goalLoss) * 100) : 0;
 
     const firstShotDate = getFirstShotDate(shots);
-    const firstWeightDate = getFirstWeightDate(weights);
+    const firstWeightDateTime = getFirstWeightDateTime(weights);
 
     const uniqueWeightDays = getUniqueWeightDays(weights);
     const trendWins = getTrendWins(weights);
@@ -238,7 +253,7 @@ export const useMilestones = ({
         id: 'journey-started',
         title: 'Journey started',
         description: firstShotDate
-          ? `Started on ${formatDate(firstShotDate)}`
+          ? `Started on ${formatDateLabel(firstShotDate)}`
           : 'Log your first injection when your journey begins',
         status: firstShotDate ? 'completed' : 'locked',
         icon: 'zap',
@@ -247,10 +262,10 @@ export const useMilestones = ({
       {
         id: 'first-check-in',
         title: 'First check-in',
-        description: firstWeightDate
-          ? `First weight logged on ${formatDate(firstWeightDate)}`
+        description: firstWeightDateTime
+          ? `First weight logged on ${formatDateLabel(firstWeightDateTime)}`
           : 'Log your first weight',
-        status: firstWeightDate ? 'completed' : 'locked',
+        status: firstWeightDateTime ? 'completed' : 'locked',
         icon: 'star',
         order: 2,
       },
