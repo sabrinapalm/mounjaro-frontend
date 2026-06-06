@@ -219,6 +219,7 @@ export const Dashboard = ({
       <Sidebar
         activeSection={activeSection}
         isMobileOpen={isMobileSidebarOpen}
+        theme={theme}
         onMobileClose={() => setIsMobileSidebarOpen(false)}
         onNavigate={handleNavigate}
       />

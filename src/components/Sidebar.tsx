@@ -8,6 +8,7 @@ import {
   LuSyringe,
   LuUserRound,
 } from 'react-icons/lu';
+import TracksyLogoWhite from '/tracksy_logo.svg';
 import TracksyLogoDark from '/tracksy_logo_dark_mode.svg';
 import './Sidebar.css';
 
@@ -26,6 +27,7 @@ type SidebarProps = {
   isMobileOpen?: boolean;
   onMobileClose?: () => void;
   onNavigate?: (section: SidebarSection) => void;
+  theme?: 'light' | 'dark';
 };
 
 const navItems: Array<{
@@ -80,10 +82,13 @@ export const Sidebar = ({
   isMobileOpen = false,
   onMobileClose,
   onNavigate,
+  theme,
 }: SidebarProps) => {
   const handleNavigate = (section: SidebarSection) => {
     onNavigate?.(section);
   };
+
+  const logoSrc = theme === 'dark' ? TracksyLogoDark : TracksyLogoWhite;
 
   return (
     <>
@@ -100,7 +105,7 @@ export const Sidebar = ({
       >
         <div className='sidebar__inner'>
           <div className='sidebar__brand'>
-            <img className='sidebar__logo' src={TracksyLogoDark} alt='Tracksy' />
+            <img className='sidebar__logo' src={logoSrc} alt='Tracksy' />
             <div>
               <p className='sidebar__brand-subtitle'>Your Mounjaro journey</p>
             </div>
