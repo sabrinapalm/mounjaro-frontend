@@ -1,35 +1,62 @@
 import { useMemo, useState } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { FiActivity } from 'react-icons/fi';
+import { useProfile } from '../context/ProfileContext';
+import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { WeightEntry } from '../types';
 import { AddWeightModal } from './AddWeightModal';
 import { ConfirmDialog } from './ConfirmDialog';
 import './WeightTracker.css';
 
+type WeightTrackerVariant = 'compact' | 'full';
+
 interface WeightTrackerProps {
   weights: WeightEntry[];
   onWeightAdded: (weight: WeightEntry) => Promise<void>;
   onDeleteWeight: (id: string, date: string) => Promise<void>;
+  title?: string;
+  summaryLabel?: string;
+  variant?: WeightTrackerVariant;
 }
 
-export const WeightTracker = ({ weights, onWeightAdded, onDeleteWeight }: WeightTrackerProps) => {
+const getWeightTimestamp = (entry: WeightEntry) => {
+  const timestamp = new Date(entry.date).getTime();
+
+  if (!Number.isNaN(timestamp)) {
+    return timestamp;
+  }
+
+  const timestampFromId = entry.id?.split('_')[1];
+
+  return timestampFromId ? Number(timestampFromId) : 0;
+};
+
+export const WeightTracker = ({
+  weights,
+  onWeightAdded,
+  onDeleteWeight,
+  title = 'Recent Weights',
+  summaryLabel = 'Total weight loss',
+  variant = 'compact',
+}: WeightTrackerProps) => {
+  const { unitSystem } = useProfile();
+  const { weightUnit, displayWeightFromKg, convertWeightFromKg } = useUnitSettings(unitSystem);
+
   const [error, setError] = useState<string | null>(null);
   const [isAddWeightModalOpen, setIsAddWeightModalOpen] = useState(false);
   const [isAddingWeight, setIsAddingWeight] = useState(false);
   const [weightToDelete, setWeightToDelete] = useState<WeightEntry | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const recentWeights = useMemo(() => {
-    return [...weights]
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, 5);
+  const sortedWeights = useMemo(() => {
+    return [...weights].sort((a, b) => getWeightTimestamp(b) - getWeightTimestamp(a));
   }, [weights]);
 
-  const weightLoss = useMemo(() => {
-    const sortedWeights = [...weights].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
+  const visibleWeights = useMemo(() => {
+    return variant === 'compact' ? sortedWeights.slice(0, 5) : sortedWeights;
+  }, [sortedWeights, variant]);
 
+  const weightLoss = useMemo(() => {
     if (sortedWeights.length < 2) {
       return null;
     }
@@ -38,7 +65,15 @@ export const WeightTracker = ({ weights, onWeightAdded, onDeleteWeight }: Weight
     const firstWeight = sortedWeights[sortedWeights.length - 1].weight;
 
     return firstWeight - latestWeight;
-  }, [weights]);
+  }, [sortedWeights]);
+
+  const weightLossLabel = useMemo(() => {
+    if (weightLoss === null) {
+      return null;
+    }
+
+    return `${weightLoss > 0 ? '-' : '+'}${displayWeightFromKg(Math.abs(weightLoss))} ${weightUnit}`;
+  }, [displayWeightFromKg, weightLoss, weightUnit]);
 
   const handleOpenAddWeightModal = () => {
     setError(null);
@@ -100,20 +135,17 @@ export const WeightTracker = ({ weights, onWeightAdded, onDeleteWeight }: Weight
   };
 
   return (
-    <section className='weight-tracker-card'>
+    <section className={`weight-tracker-card weight-tracker-card--${variant}`}>
       <header className='weight-tracker-card__header'>
         <div>
-          <h2 className='weight-tracker-card__title'>Recent Weights</h2>
+          <h2 className='weight-tracker-card__title'>{title}</h2>
 
-          {weightLoss !== null && (
+          {weightLoss !== null && weightLossLabel ? (
             <p className='weight-tracker-card__summary'>
-              Total weight loss:{' '}
-              <span className={weightLoss > 0 ? 'positive' : 'negative'}>
-                {weightLoss > 0 ? '-' : '+'}
-                {Math.abs(weightLoss).toFixed(1)} kg
-              </span>
+              {summaryLabel}:{' '}
+              <span className={weightLoss > 0 ? 'positive' : 'negative'}>{weightLossLabel}</span>
             </p>
-          )}
+          ) : null}
         </div>
 
         <button
@@ -125,9 +157,11 @@ export const WeightTracker = ({ weights, onWeightAdded, onDeleteWeight }: Weight
         </button>
       </header>
 
-      {error && !isAddWeightModalOpen && <p className='weight-tracker-card__error'>{error}</p>}
+      {error && !isAddWeightModalOpen ? (
+        <p className='weight-tracker-card__error'>{error}</p>
+      ) : null}
 
-      {recentWeights.length === 0 ? (
+      {visibleWeights.length === 0 ? (
         <div className='weight-tracker-card__empty-state'>
           <div className='weight-tracker-card__empty-icon'>
             <FiActivity size={24} />
@@ -137,11 +171,15 @@ export const WeightTracker = ({ weights, onWeightAdded, onDeleteWeight }: Weight
         </div>
       ) : (
         <ul className='weight-tracker-card__list'>
-          {recentWeights.map((entry, index) => {
-            const nextEntry = recentWeights[index + 1];
-            const change = nextEntry ? entry.weight - nextEntry.weight : null;
-            const isWeightGain = change !== null && change > 0;
-            const isWeightLoss = change !== null && change < 0;
+          {visibleWeights.map((entry) => {
+            const nextEntry = sortedWeights.find((candidate) => {
+              return getWeightTimestamp(candidate) < getWeightTimestamp(entry);
+            });
+
+            const changeInKg = nextEntry ? entry.weight - nextEntry.weight : null;
+            const change = changeInKg !== null ? convertWeightFromKg(changeInKg) : null;
+            const isWeightGain = changeInKg !== null && changeInKg > 0;
+            const isWeightLoss = changeInKg !== null && changeInKg < 0;
 
             return (
               <li key={entry.id} className='weight-tracker-card__item'>
@@ -157,7 +195,9 @@ export const WeightTracker = ({ weights, onWeightAdded, onDeleteWeight }: Weight
                   })}
                 </span>
 
-                <span className='weight-tracker-card__weight'>{entry.weight.toFixed(1)} kg</span>
+                <span className='weight-tracker-card__weight'>
+                  {displayWeightFromKg(entry.weight)} {weightUnit}
+                </span>
 
                 {change !== null ? (
                   <span
@@ -170,7 +210,7 @@ export const WeightTracker = ({ weights, onWeightAdded, onDeleteWeight }: Weight
                       .join(' ')}
                   >
                     {isWeightGain ? '+' : ''}
-                    {change.toFixed(1)} kg
+                    {change.toFixed(1)} {weightUnit}
                     <span aria-hidden='true'>{isWeightLoss ? '↓' : '↑'}</span>
                   </span>
                 ) : (
@@ -206,7 +246,7 @@ export const WeightTracker = ({ weights, onWeightAdded, onDeleteWeight }: Weight
         title='Delete weight entry?'
         message={
           weightToDelete
-            ? `This will delete your ${weightToDelete.weight} kg entry from ${new Date(
+            ? `This will delete your ${displayWeightFromKg(weightToDelete.weight)} ${weightUnit} entry from ${new Date(
                 weightToDelete.date
               ).toLocaleDateString()}.`
             : ''

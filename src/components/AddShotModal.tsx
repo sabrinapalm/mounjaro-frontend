@@ -17,6 +17,8 @@ const doseOptions = ['2.5', '5', '7.5', '10', '12.5', '15'];
 
 const injectionSiteOptions = ['Stomach', 'Left thigh', 'Right thigh', 'Left arm', 'Right arm'];
 
+const defaultInjectionSite = 'Stomach';
+
 const getTodayDateValue = () => new Date().toISOString().split('T')[0];
 
 const getWeekNumber = (date: Date): { week: number; year: number } => {
@@ -40,7 +42,7 @@ export const AddShotModal = ({
 }: AddShotModalProps) => {
   const [date, setDate] = useState<string>(getTodayDateValue());
   const [dosage, setDosage] = useState<string>('2.5');
-  const [injectionSite, setInjectionSite] = useState<string>('');
+  const [injectionSite, setInjectionSite] = useState<string>(defaultInjectionSite);
   const [localError, setLocalError] = useState<string | null>(null);
 
   const handleClose = () => {
@@ -56,8 +58,8 @@ export const AddShotModal = ({
     event.preventDefault();
     setLocalError(null);
 
-    if (!date || !dosage) {
-      setLocalError('Please select both date and dose.');
+    if (!date || !dosage || !injectionSite) {
+      setLocalError('Please select date, dose and injection site.');
       return;
     }
 
@@ -77,14 +79,14 @@ export const AddShotModal = ({
       dosage: parsedDosage,
       week,
       year,
-      injectionSite: injectionSite || undefined,
+      injectionSite,
     };
 
     await onShotAdded(newShot);
 
     setDate(getTodayDateValue());
     setDosage('2.5');
-    setInjectionSite('');
+    setInjectionSite(defaultInjectionSite);
     onClose();
   };
 
@@ -93,6 +95,7 @@ export const AddShotModal = ({
   }
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: cba
     <div className='add-shot-modal-backdrop' role='presentation' onMouseDown={handleClose}>
       <section
         className='add-shot-modal'
@@ -134,22 +137,6 @@ export const AddShotModal = ({
               onChange={setDate}
               disabled={isSubmitting}
             />
-            {/* <label className='add-shot-modal__field' htmlFor='shot-date'>
-              <span className='add-shot-modal__label'>Date</span>
-
-              <div className='add-shot-modal__input-icon-wrapper'>
-                <FiCalendar className='add-shot-modal__field-icon' size={20} />
-                <input
-                  id='shot-date'
-                  className='add-shot-modal__input add-shot-modal__input--with-icon'
-                  type='date'
-                  value={date}
-                  onChange={(event) => setDate(event.target.value)}
-                  disabled={isSubmitting}
-                  required
-                />
-              </div>
-            </label> */}
 
             <label className='add-shot-modal__field' htmlFor='shot-dosage'>
               <span className='add-shot-modal__label'>Dose (mg)</span>
@@ -176,7 +163,7 @@ export const AddShotModal = ({
           </div>
 
           <label className='add-shot-modal__field' htmlFor='shot-injection-site'>
-            <span className='add-shot-modal__label'>Injection Site (optional)</span>
+            <span className='add-shot-modal__label'>Injection Site</span>
 
             <select
               id='shot-injection-site'
@@ -184,9 +171,8 @@ export const AddShotModal = ({
               value={injectionSite}
               onChange={(event) => setInjectionSite(event.target.value)}
               disabled={isSubmitting}
+              required
             >
-              <option value=''>Select injection site</option>
-
               {injectionSiteOptions.map((site) => (
                 <option key={site} value={site}>
                   {site}

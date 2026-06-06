@@ -1,7 +1,8 @@
-import type { BaseSyntheticEvent } from 'react';
+import type { FormEvent } from 'react';
 import { useState } from 'react';
-import { FiTarget, FiUser } from 'react-icons/fi';
-import type { ProfileFormValues, UserProfile } from '../types';
+import { FiArrowRight, FiTarget, FiTrendingUp, FiUser } from 'react-icons/fi';
+import { useUnitSettings } from '../hooks/useUnitSettings';
+import type { ProfileFormValues, UnitSystem, UserProfile } from '../types';
 import './ProfileForm.css';
 
 type ProfileFormProps = {
@@ -9,7 +10,6 @@ type ProfileFormProps = {
   title?: string;
   submitLabel?: string;
   onSubmit: (values: ProfileFormValues) => Promise<void>;
-  onCancel?: () => void;
 };
 
 const parseOptionalNumber = (value: string): number | null => {
@@ -28,23 +28,53 @@ const parseOptionalNumber = (value: string): number | null => {
 
 export function ProfileForm({
   initialProfile = null,
-  title = 'Set up your profile',
-  submitLabel = 'Save profile',
+  title = 'Welcome to Tracksy',
+  submitLabel = 'Continue to dashboard',
   onSubmit,
-  onCancel,
 }: ProfileFormProps) {
+  const initialUnitSystem = initialProfile?.unitSystem ?? 'metric';
+
+  const [unitSystem, setUnitSystem] = useState<UnitSystem>(initialUnitSystem);
+
+  const {
+    weightUnit,
+    heightUnit,
+    displayWeightFromKg,
+    displayHeightFromCm,
+    normalizeWeightToKg,
+    normalizeHeightToCm,
+    convertWeightInputBetweenSystems,
+    convertHeightInputBetweenSystems,
+  } = useUnitSettings(unitSystem);
+
   const [displayName, setDisplayName] = useState(initialProfile?.displayName ?? '');
-  const [goalWeight, setGoalWeight] = useState(
-    initialProfile?.goalWeight ? String(initialProfile.goalWeight) : ''
-  );
-  const [startWeight, setStartWeight] = useState(
-    initialProfile?.startWeight ? String(initialProfile.startWeight) : ''
-  );
-  const [height, setHeight] = useState(initialProfile?.height ? String(initialProfile.height) : '');
+
+  const [goalWeight, setGoalWeight] = useState(displayWeightFromKg(initialProfile?.goalWeight));
+
+  const [startWeight, setStartWeight] = useState(displayWeightFromKg(initialProfile?.startWeight));
+
+  const [height, setHeight] = useState(displayHeightFromCm(initialProfile?.height));
+
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
-  const handleSubmit = async (event: BaseSyntheticEvent) => {
+  const handleUnitSystemChange = (nextUnitSystem: UnitSystem) => {
+    setStartWeight((currentValue) =>
+      convertWeightInputBetweenSystems(currentValue, unitSystem, nextUnitSystem)
+    );
+
+    setGoalWeight((currentValue) =>
+      convertWeightInputBetweenSystems(currentValue, unitSystem, nextUnitSystem)
+    );
+
+    setHeight((currentValue) =>
+      convertHeightInputBetweenSystems(currentValue, unitSystem, nextUnitSystem)
+    );
+
+    setUnitSystem(nextUnitSystem);
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const trimmedDisplayName = displayName.trim();
@@ -54,15 +84,20 @@ export function ProfileForm({
       return;
     }
 
+    const parsedStartWeight = parseOptionalNumber(startWeight);
+    const parsedGoalWeight = parseOptionalNumber(goalWeight);
+    const parsedHeight = parseOptionalNumber(height);
+
     setError('');
     setIsSaving(true);
 
     try {
       await onSubmit({
         displayName: trimmedDisplayName,
-        goalWeight: parseOptionalNumber(goalWeight),
-        startWeight: parseOptionalNumber(startWeight),
-        height: parseOptionalNumber(height),
+        startWeight: normalizeWeightToKg(parsedStartWeight),
+        goalWeight: normalizeWeightToKg(parsedGoalWeight),
+        height: normalizeHeightToCm(parsedHeight),
+        unitSystem,
       });
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Could not save profile.');
@@ -80,27 +115,62 @@ export function ProfileForm({
           </div>
 
           <div className='profile-form-card__heading'>
+            <p className='profile-form-card__eyebrow'>Getting started</p>
+
             <h2 className='profile-form-card__title'>{title}</h2>
 
             <p className='profile-form-card__description'>
-              Add a few details so Tracksy can personalize your progress view.
+              Let’s set up your starting point so Tracksy can personalize your dashboard, progress
+              and milestones.
             </p>
           </div>
         </header>
 
+        <div className='profile-form-card__highlights' aria-label='What Tracksy will personalize'>
+          <div className='profile-form-card__highlight'>
+            <FiTarget size={18} />
+            <span>Goal progress</span>
+          </div>
+
+          <div className='profile-form-card__highlight'>
+            <FiTrendingUp size={18} />
+            <span>Weight trends</span>
+          </div>
+
+          <div className='profile-form-card__highlight'>
+            <FiUser size={18} />
+            <span>Personal dashboard</span>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className='profile-form'>
           <label className='profile-form__field' htmlFor='profile-display-name'>
-            <span className='profile-form__label'>Display name</span>
+            <span className='profile-form__label'>What should we call you?</span>
 
             <input
               id='profile-display-name'
               className='profile-form__input'
               value={displayName}
               onChange={(event) => setDisplayName(event.target.value)}
-              placeholder='Sabrina'
+              placeholder='John Doe'
               autoComplete='name'
               disabled={isSaving}
             />
+          </label>
+
+          <label className='profile-form__field' htmlFor='profile-unit-system'>
+            <span className='profile-form__label'>Unit system</span>
+
+            <select
+              id='profile-unit-system'
+              className='profile-form__input'
+              value={unitSystem}
+              onChange={(event) => handleUnitSystemChange(event.target.value as UnitSystem)}
+              disabled={isSaving}
+            >
+              <option value='metric'>Metric — kg, cm</option>
+              <option value='imperial'>Imperial — lb, in</option>
+            </select>
           </label>
 
           <div className='profile-form__grid'>
@@ -116,11 +186,11 @@ export function ProfileForm({
                   min='1'
                   value={startWeight}
                   onChange={(event) => setStartWeight(event.target.value)}
-                  placeholder='100'
+                  placeholder={unitSystem === 'metric' ? '100' : '220'}
                   disabled={isSaving}
                 />
 
-                <span className='profile-form__unit'>kg</span>
+                <span className='profile-form__unit'>{weightUnit}</span>
               </div>
             </label>
 
@@ -136,11 +206,11 @@ export function ProfileForm({
                   min='1'
                   value={goalWeight}
                   onChange={(event) => setGoalWeight(event.target.value)}
-                  placeholder='65'
+                  placeholder={unitSystem === 'metric' ? '65' : '143'}
                   disabled={isSaving}
                 />
 
-                <span className='profile-form__unit'>kg</span>
+                <span className='profile-form__unit'>{weightUnit}</span>
               </div>
             </label>
           </div>
@@ -153,39 +223,38 @@ export function ProfileForm({
                 id='profile-height'
                 className='profile-form__input profile-form__input--with-unit'
                 type='number'
-                step='0.1'
+                step='1'
                 min='1'
                 value={height}
                 onChange={(event) => setHeight(event.target.value)}
-                placeholder='165'
+                placeholder={unitSystem === 'metric' ? '165' : '65'}
                 disabled={isSaving}
               />
 
-              <span className='profile-form__unit'>cm</span>
+              <span className='profile-form__unit'>{heightUnit}</span>
             </div>
           </label>
+
+          <p className='profile-form__hint'>
+            You can update these values later from Profile Settings.
+          </p>
 
           {error ? <p className='profile-form__error'>{error}</p> : null}
 
           <footer className='profile-form__actions'>
-            {onCancel ? (
-              <button
-                className='profile-form__button profile-form__button--neutral'
-                type='button'
-                onClick={onCancel}
-                disabled={isSaving}
-              >
-                Cancel
-              </button>
-            ) : null}
-
             <button
               className='profile-form__button profile-form__button--accent'
               type='submit'
               disabled={isSaving}
             >
-              <FiTarget size={20} />
-              {isSaving ? 'Saving...' : submitLabel}
+              {isSaving ? (
+                'Saving...'
+              ) : (
+                <>
+                  {submitLabel}
+                  <FiArrowRight size={20} />
+                </>
+              )}
             </button>
           </footer>
         </form>

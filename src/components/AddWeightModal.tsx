@@ -1,5 +1,7 @@
 import { type FormEvent, useState } from 'react';
 import { FiActivity } from 'react-icons/fi';
+import { useProfile } from '../context/ProfileContext';
+import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { WeightEntry } from '../types';
 import './AddWeightModal.css';
 import { DateField } from './DateField';
@@ -33,6 +35,9 @@ export const AddWeightModal = ({
   onClose,
   onWeightAdded,
 }: AddWeightModalProps) => {
+  const { unitSystem } = useProfile();
+  const { weightUnit, normalizeWeightToKg } = useUnitSettings(unitSystem);
+
   const [date, setDate] = useState<string>(getTodayDateValue());
   const [weight, setWeight] = useState<string>('');
   const [localError, setLocalError] = useState<string | null>(null);
@@ -62,13 +67,20 @@ export const AddWeightModal = ({
       return;
     }
 
+    const weightInKg = normalizeWeightToKg(parsedWeight);
+
+    if (!weightInKg || weightInKg <= 0) {
+      setLocalError('Please enter a valid weight.');
+      return;
+    }
+
     const selectedDate = new Date(date);
     const { week, year } = getWeekNumber(selectedDate);
 
     const newWeight: WeightEntry = {
       id: `weight_${Date.now()}`,
       date,
-      weight: parsedWeight,
+      weight: weightInKg,
       week,
       year,
     };
@@ -119,18 +131,6 @@ export const AddWeightModal = ({
 
         <form className='add-weight-modal__form' onSubmit={handleSubmit}>
           <div className='add-weight-modal__row'>
-            {/* <label className='add-weight-modal__field' htmlFor='weight-date'>
-              <span className='add-weight-modal__label'>Date</span>
-              <input
-                id='weight-date'
-                className='add-weight-modal__input'
-                type='date'
-                value={date}
-                onChange={(event) => setDate(event.target.value)}
-                disabled={isSubmitting}
-                required
-              />
-            </label> */}
             <DateField
               id='weight-date'
               label='Date'
@@ -151,11 +151,12 @@ export const AddWeightModal = ({
                   step='0.1'
                   value={weight}
                   onChange={(event) => setWeight(event.target.value)}
-                  placeholder='88.3'
+                  placeholder={unitSystem === 'metric' ? '88.3' : '194.7'}
                   disabled={isSubmitting}
                   required
                 />
-                <span className='add-weight-modal__unit'>kg</span>
+
+                <span className='add-weight-modal__unit'>{weightUnit}</span>
               </div>
             </label>
           </div>

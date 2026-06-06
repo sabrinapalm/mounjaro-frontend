@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import { LuGoal } from 'react-icons/lu';
+import { useProfile } from '../context/ProfileContext';
+import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { UserProfile, WeightEntry } from '../types';
 import { calculateBmi } from '../utils/calculateBmi';
 import { getLocalDate } from '../utils/dateHelpers';
-import { formatKg } from '../utils/formatKg';
-import { formatWeightLost } from '../utils/formatWeightLoss';
 import { EditGoalWeightModal } from './EditGoalWeightModal';
 import './GoalProgress.css';
 
@@ -18,10 +18,12 @@ const getGoalProgressSubtitle = ({
   progress,
   weightLost,
   weightToGo,
+  formatWeight,
 }: {
   progress: number;
   weightLost: number;
   weightToGo: number;
+  formatWeight: (weightInKg: number) => string;
 }) => {
   if (weightLost < 0) {
     return 'A little bump up is okay. Progress is not always linear — your next check-in is a fresh start.';
@@ -44,21 +46,55 @@ const getGoalProgressSubtitle = ({
   }
 
   if (progress < 100) {
-    return `You’re ${progress}% of the way there. Only ${formatKg(weightToGo)} to go.`;
+    return `You’re ${progress}% of the way there. Only ${formatWeight(weightToGo)} to go.`;
   }
 
   return 'Goal reached. That’s a huge milestone — amazing work.';
 };
 
+const getFormattedWeightLost = ({
+  weightLost,
+  formatWeight,
+}: {
+  weightLost: number;
+  formatWeight: (weightInKg: number) => string;
+}) => {
+  if (weightLost > 0) {
+    return {
+      text: `-${formatWeight(weightLost)}`,
+      className: 'positive',
+    };
+  }
+
+  if (weightLost < 0) {
+    return {
+      text: `+${formatWeight(Math.abs(weightLost))}`,
+      className: 'negative',
+    };
+  }
+
+  return {
+    text: formatWeight(0),
+    className: '',
+  };
+};
+
 export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProgressProps) => {
   const { goalWeight, height } = profile;
+
+  const { unitSystem } = useProfile();
+  const { weightUnit, displayWeightFromKg } = useUnitSettings(unitSystem);
 
   const [isEditGoalOpen, setIsEditGoalOpen] = useState(false);
   const [isSavingGoal, setIsSavingGoal] = useState(false);
   const [goalError, setGoalError] = useState<string | null>(null);
 
+  const formatWeight = (weightInKg: number) => {
+    return `${displayWeightFromKg(weightInKg)} ${weightUnit}`;
+  };
+
   const goalData = useMemo(() => {
-    if (weights.length === 0) {
+    if (weights.length === 0 || typeof goalWeight !== 'number') {
       return null;
     }
 
@@ -85,7 +121,7 @@ export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProg
     };
   }, [weights, profile.startWeight, goalWeight]);
 
-  if (!goalData) {
+  if (!goalData || typeof goalWeight !== 'number') {
     return null;
   }
 
@@ -95,9 +131,13 @@ export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProg
     progress,
     weightLost,
     weightToGo,
+    formatWeight,
   });
 
-  const formattedWeightLost = formatWeightLost(weightLost);
+  const formattedWeightLost = getFormattedWeightLost({
+    weightLost,
+    formatWeight,
+  });
 
   const handleOpenEditGoal = () => {
     setGoalError(null);
@@ -127,6 +167,8 @@ export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProg
     }
   };
 
+  const bmi = typeof height === 'number' ? calculateBmi(currentWeight, height) : '—';
+
   return (
     <section className='goal-progress-card'>
       <div className='goal-progress-summary'>
@@ -147,29 +189,29 @@ export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProg
       <div className='goal-progress-stat-grid'>
         <div className='goal-progress-stat'>
           <span className='stat-label'>Start Weight</span>
-          <span className='stat-value'>{formatKg(startWeight)}</span>
+          <span className='stat-value'>{formatWeight(startWeight)}</span>
         </div>
 
         <div className='goal-progress-stat'>
           <span className='stat-label'>Goal Weight</span>
-          <span className='stat-value'>{formatKg(goalWeight)}</span>
+          <span className='stat-value'>{formatWeight(goalWeight)}</span>
         </div>
 
         <div className='goal-progress-stat'>
           <span className='stat-label'>Weight Lost</span>
-          <span className={`stat-value ${formattedWeightLost.className}`}>
+          <span className={`stat-value ${formattedWeightLost.className}`.trim()}>
             {formattedWeightLost.text}
           </span>
         </div>
 
         <div className='goal-progress-stat'>
           <span className='stat-label'>Weight to Go</span>
-          <span className='stat-value'>{formatKg(weightToGo)}</span>
+          <span className='stat-value'>{formatWeight(weightToGo)}</span>
         </div>
 
         <div className='goal-progress-stat'>
           <span className='stat-label'>BMI</span>
-          <span className='stat-value'>{calculateBmi(currentWeight, height)}</span>
+          <span className='stat-value'>{bmi}</span>
         </div>
       </div>
 
@@ -180,7 +222,7 @@ export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProg
 
         <div className='target-card-text'>
           <span className='target-card-label'>Goal Weight</span>
-          <span className='target-card-value'>{formatKg(goalWeight)}</span>
+          <span className='target-card-value'>{formatWeight(goalWeight)}</span>
         </div>
 
         <button type='button' className='target-card__add-button' onClick={handleOpenEditGoal}>

@@ -1,5 +1,7 @@
 import { type FormEvent, useEffect, useState } from 'react';
 import { LuGoal } from 'react-icons/lu';
+import { useProfile } from '../context/ProfileContext';
+import { useUnitSettings } from '../hooks/useUnitSettings';
 import './EditGoalWeightModal.css';
 
 interface EditGoalWeightModalProps {
@@ -26,7 +28,12 @@ const EditGoalWeightModalContent = ({
   onClose,
   onSubmit,
 }: EditGoalWeightModalContentProps) => {
-  const [goalWeight, setGoalWeight] = useState(() => String(currentGoalWeight));
+  const { unitSystem } = useProfile();
+
+  const { weightUnit, displayWeightFromKg, normalizeWeightToKg } = useUnitSettings(unitSystem);
+
+  const [goalWeight, setGoalWeight] = useState(() => displayWeightFromKg(currentGoalWeight));
+
   const [localError, setLocalError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -58,20 +65,27 @@ const EditGoalWeightModalContent = ({
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const parsedGoalWeight = Number(goalWeight);
-
     if (!goalWeight.trim()) {
       setLocalError('Goal weight is required.');
       return;
     }
+
+    const parsedGoalWeight = Number(goalWeight);
 
     if (Number.isNaN(parsedGoalWeight) || parsedGoalWeight <= 0) {
       setLocalError('Please enter a valid goal weight.');
       return;
     }
 
+    const goalWeightInKg = normalizeWeightToKg(parsedGoalWeight);
+
+    if (!goalWeightInKg || goalWeightInKg <= 0) {
+      setLocalError('Please enter a valid goal weight.');
+      return;
+    }
+
     setLocalError(null);
-    await onSubmit(parsedGoalWeight);
+    await onSubmit(goalWeightInKg);
   };
 
   return (
@@ -130,12 +144,12 @@ const EditGoalWeightModalContent = ({
                   setGoalWeight(event.target.value);
                   setLocalError(null);
                 }}
-                placeholder='65'
+                placeholder={unitSystem === 'metric' ? '65' : '143'}
                 disabled={isSubmitting}
                 required
               />
 
-              <span className='edit-goal-modal__unit'>kg</span>
+              <span className='edit-goal-modal__unit'>{weightUnit}</span>
             </div>
           </label>
 

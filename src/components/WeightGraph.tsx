@@ -8,6 +8,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { useProfile } from '../context/ProfileContext';
+import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { WeightEntry } from '../types';
 import './WeightGraph.css';
 
@@ -101,6 +103,9 @@ const getTicks = (data: ChartData[]) => {
 export const WeightGraph = ({ weights }: WeightGraphProps) => {
   const [period, setPeriod] = useState<Period>('all');
 
+  const { unitSystem } = useProfile();
+  const { weightUnit, convertWeightFromKg } = useUnitSettings(unitSystem);
+
   const chartData = useMemo(() => {
     const periodStartDate = getPeriodStartDate(period);
 
@@ -116,9 +121,9 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
       .map((entry) => ({
         label: getDateLabel(entry.date),
         date: entry.date,
-        weight: entry.weight,
+        weight: convertWeightFromKg(entry.weight),
       }));
-  }, [weights, period]);
+  }, [convertWeightFromKg, weights, period]);
 
   const yAxisDomain = useMemo(() => getYAxisDomain(chartData), [chartData]);
   const xAxisTicks = useMemo(() => getTicks(chartData), [chartData]);
@@ -219,7 +224,7 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
                       <span className='weight-graph-card__tooltip-label'>{label}</span>
 
                       <strong className='weight-graph-card__tooltip-value'>
-                        {typeof value === 'number' ? `${value.toFixed(1)} kg` : value}
+                        {typeof value === 'number' ? `${value.toFixed(1)} ${weightUnit}` : value}
                       </strong>
                     </div>
                   );

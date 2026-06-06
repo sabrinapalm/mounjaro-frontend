@@ -1,0 +1,32 @@
+import type { ShotEntry } from '../types';
+import { ShotTracker } from './ShotTracker';
+import './ShotsPage.css';
+
+type ShotsPageProps = {
+  shots: ShotEntry[];
+  onShotAdded: (shot: ShotEntry) => Promise<void>;
+  onDeleteShot: (id: string, date: string) => Promise<void>;
+};
+
+export const ShotsPage = ({ shots, onShotAdded, onDeleteShot }: ShotsPageProps) => {
+  return (
+    <section className='shots-page'>
+      <header className='shots-page__header'>
+        <div>
+          <p className='shots-page__eyebrow'>Shots</p>
+          <h1>All Shots</h1>
+          <p>View your full injection history and add new shots when needed.</p>
+        </div>
+      </header>
+
+      <ShotTracker
+        shots={shots}
+        title='All Shots'
+        summaryLabel='Total shots'
+        variant='full'
+        onShotAdded={onShotAdded}
+        onDeleteShot={onDeleteShot}
+      />
+    </section>
+  );
+};

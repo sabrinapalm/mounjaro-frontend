@@ -29,14 +29,16 @@ export interface WeeklyData {
   totalShots: number;
   weightLoss?: number;
 }
+export type UnitSystem = 'metric' | 'imperial';
 
 export type UserProfile = {
   displayName: string;
-  goalWeight: number;
-  startWeight?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  height: number;
+  goalWeight: number | null;
+  startWeight: number | null;
+  height: number | null;
+  unitSystem: UnitSystem;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type ProfileFormValues = {
@@ -44,4 +46,5 @@ export type ProfileFormValues = {
   goalWeight: number | null;
   startWeight: number | null;
   height: number | null;
+  unitSystem: UnitSystem;
 };

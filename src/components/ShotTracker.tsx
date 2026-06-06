@@ -6,26 +6,41 @@ import { AddShotModal } from './AddShotModal';
 import { ConfirmDialog } from './ConfirmDialog';
 import './ShotTracker.css';
 
+type ShotTrackerVariant = 'compact' | 'full';
+
 interface ShotTrackerProps {
   shots: ShotEntry[];
   onShotAdded: (shot: ShotEntry) => Promise<void>;
   onDeleteShot: (id: string, date: string) => Promise<void>;
+  title?: string;
+  summaryLabel?: string;
+  variant?: ShotTrackerVariant;
 }
 
-export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerProps) => {
+export const ShotTracker = ({
+  shots,
+  onShotAdded,
+  onDeleteShot,
+  title = 'Recent Shots',
+  summaryLabel = 'Total shots',
+  variant = 'compact',
+}: ShotTrackerProps) => {
   const [error, setError] = useState<string | null>(null);
   const [isAddShotModalOpen, setIsAddShotModalOpen] = useState(false);
   const [isAddingShot, setIsAddingShot] = useState(false);
   const [shotToDelete, setShotToDelete] = useState<ShotEntry | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const recentShots = useMemo(() => {
-    return [...shots]
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, 5);
+  const sortedShots = useMemo(() => {
+    return [...shots].sort((a, b) => {
+      const aTime = new Date(a.date).getTime();
+      const bTime = new Date(b.date).getTime();
+
+      return bTime - aTime;
+    });
   }, [shots]);
 
-  const totalShots = shots.length;
+  const totalShots = sortedShots.length;
 
   const handleOpenAddShotModal = () => {
     setError(null);
@@ -87,13 +102,13 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
   };
 
   return (
-    <section className='shot-tracker-card'>
+    <section className={`shot-tracker-card shot-tracker-card--${variant}`}>
       <header className='shot-tracker-card__header'>
         <div>
-          <h2 className='shot-tracker-card__title'>Recent Shots</h2>
+          <h2 className='shot-tracker-card__title'>{title}</h2>
 
           <p className='shot-tracker-card__summary'>
-            Total shots: <span>{totalShots}</span>
+            {summaryLabel}: <span>{totalShots}</span>
           </p>
         </div>
 
@@ -108,7 +123,7 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
 
       {error && !isAddShotModalOpen && <p className='shot-tracker-card__error'>{error}</p>}
 
-      {recentShots.length === 0 ? (
+      {sortedShots.length === 0 ? (
         <div className='shot-tracker-card__empty-state'>
           <div className='shot-tracker-card__empty-icon'>
             <PiSyringeBold size={24} />
@@ -118,7 +133,7 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
         </div>
       ) : (
         <ul className='shot-tracker-card__list'>
-          {recentShots.map((shot) => (
+          {sortedShots.map((shot) => (
             <li key={shot.id} className='shot-tracker-card__item'>
               <div className='shot-tracker-card__icon'>
                 <PiSyringeBold size={22} />
@@ -133,8 +148,7 @@ export const ShotTracker = ({ shots, onShotAdded, onDeleteShot }: ShotTrackerPro
               </span>
 
               <span className='shot-tracker-card__dosage'>{shot.dosage.toFixed(1)} mg</span>
-
-              <span className='shot-tracker-card__site'>{shot.injectionSite || 'Stomach'}</span>
+              <span className='shot-tracker-card__site'>{shot.injectionSite || '-'}</span>
 
               <button
                 type='button'

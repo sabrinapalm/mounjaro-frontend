@@ -1,27 +1,36 @@
 import { useEffect, useState } from 'react';
-import { IoScaleOutline } from 'react-icons/io5';
-import { LuCalendarHeart, LuSyringe } from 'react-icons/lu';
-import { RiEmotionHappyLine } from 'react-icons/ri';
+import { LuBell, LuLogOut, LuMenu, LuMoon, LuSun } from 'react-icons/lu';
 import { useDashboardSummary } from '../hooks/useDashboardSummary';
 import { apiClient } from '../services/apiClient';
 import type { AppData, ShotEntry, UserProfile, WeightEntry } from '../types';
-import { formatDateLabel } from '../utils/dateHelpers';
 import './Dashboard.css';
-import { GoalProgress } from './GoalProgress';
-import { Milestones } from './Milestones';
-import { ShotTracker } from './ShotTracker';
-import { WeightGraph } from './WeightGraph';
-import { WeightTracker } from './WeightTracker';
+import { DashboardOverview } from './DashboardOverview';
+import { MilestonesPage } from './MilestonesPage';
+import { ProfileSettingsPage } from './ProfileSettingsPage';
+import { ShotsPage } from './ShotsPage';
+import { Sidebar, type SidebarSection } from './Sidebar';
+import { WeightPage } from './WeightPage';
 
 type DashboardProps = {
   profile: UserProfile;
   onProfileUpdated: (profile: UserProfile) => void;
+  onSignOut: () => void;
+  theme: 'light' | 'dark';
+  onToggleTheme: () => void;
 };
 
-export const Dashboard = ({ profile, onProfileUpdated }: DashboardProps) => {
+export const Dashboard = ({
+  profile,
+  onProfileUpdated,
+  onSignOut,
+  theme,
+  onToggleTheme,
+}: DashboardProps) => {
   const [data, setData] = useState<AppData>({ shots: [], weights: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<SidebarSection>('dashboard');
 
   useEffect(() => {
     let isMounted = true;
@@ -60,25 +69,10 @@ export const Dashboard = ({ profile, onProfileUpdated }: DashboardProps) => {
     weights: data.weights,
   });
 
-  const formatKg = (value: number) => `${value.toFixed(1)} kg`;
-
-  const currentWeightLabel = summary.currentWeight !== null ? formatKg(summary.currentWeight) : '—';
-
-  const totalWeightLossLabel =
-    summary.totalWeightLoss !== null
-      ? summary.totalWeightLoss >= 0
-        ? `-${formatKg(summary.totalWeightLoss)}`
-        : `+${formatKg(Math.abs(summary.totalWeightLoss))}`
-      : '—';
-
-  const totalWeightLossClassName =
-    summary.totalWeightLoss !== null && summary.totalWeightLoss < 0
-      ? 'total-weight-loss weight-gain'
-      : 'total-weight-loss';
-
-  const currentWeightDateLabel = summary.currentWeightDate
-    ? `${formatDateLabel(summary.currentWeightDate)}`
-    : 'No weight recorded';
+  const handleNavigate = (section: SidebarSection) => {
+    setActiveSection(section);
+    setIsMobileSidebarOpen(false);
+  };
 
   const handleShotAdded = async (shot: ShotEntry) => {
     setLoading(true);
@@ -142,7 +136,7 @@ export const Dashboard = ({ profile, onProfileUpdated }: DashboardProps) => {
         weights: previous.weights.filter((weight) => weight.id !== id),
       }));
     } catch (err) {
-      setError((err as Error)?.message || 'Unabl  e to delete weight');
+      setError((err as Error)?.message || 'Unable to delete weight');
     }
   };
 
@@ -158,100 +152,119 @@ export const Dashboard = ({ profile, onProfileUpdated }: DashboardProps) => {
     }
   };
 
-  return (
-    <div className='dashboard'>
-      {error && <p className='dashboard-error'>{error}</p>}
-      {loading && null}
-      <div className='dashboard-header'>
-        <div>
-          <h1>Dashboard</h1>
-          <p>Small steps, real progress. You’re doing great, {profile?.displayName || ''}!</p>
-        </div>
-        <div className='dashboard-header-date'>Today, {summary.todayLabel}</div>
-      </div>
-
-      <div className='dashboard-summary-cards'>
-        <div className='dashboard-card'>
-          <div className='dashboard-card-icon dashboard-card-icon-weight'>
-            <RiEmotionHappyLine size={38} color='currentColor' aria-hidden='true' />
-          </div>
-          <div className='dashboard-card-copy'>
-            <span className='dashboard-card-label'>Current Weight</span>
-            <span className='dashboard-card-value'>{currentWeightLabel}</span>
-            <span className='dashboard-card-meta'>{currentWeightDateLabel}</span>
-          </div>
-        </div>
-
-        <div className='dashboard-card'>
-          <div className='dashboard-card-icon dashboard-card-icon-loss'>
-            <IoScaleOutline size={38} color='currentColor' aria-hidden='true' />
-          </div>
-          <div className='dashboard-card-copy'>
-            <span className='dashboard-card-label'>Total Weight Loss</span>
-            <span className={`dashboard-card-value ${totalWeightLossClassName}`}>
-              {totalWeightLossLabel}
-            </span>
-            <span className='dashboard-card-meta'>Since first entry</span>
-          </div>
-        </div>
-
-        <div className='dashboard-card'>
-          <div className='dashboard-card-icon dashboard-card-icon-calendar'>
-            <LuCalendarHeart size={38} color='currentColor' aria-hidden='true' />
-          </div>
-          <div className='dashboard-card-copy'>
-            <span className='dashboard-card-label'>Next Shot</span>
-            <span className='dashboard-card-value'>{summary.nextShotLabel}</span>
-            <span className='dashboard-card-meta'>{summary.nextShotMeta}</span>
-          </div>
-        </div>
-
-        <div className='dashboard-card'>
-          <div className='dashboard-card-icon dashboard-card-icon-dose'>
-            <LuSyringe size={38} color='currentColor' aria-hidden='true' />
-          </div>
-          <div className='dashboard-card-copy'>
-            <span className='dashboard-card-label'>Current Dose</span>
-            <span className='dashboard-card-value'>{summary.currentDose}</span>
-            <span className='dashboard-card-meta'>{summary.currentDoseMeta}</span>
-          </div>
-        </div>
-      </div>
-
-      <GoalProgress
-        weights={data.weights}
-        profile={profile}
-        onGoalWeightUpdated={handleGoalWeightUpdated}
-      />
-
-      <div className='dashboard-grid'>
-        <div className='tracker-section'>
-          <ShotTracker
+  const renderActiveSection = () => {
+    switch (activeSection) {
+      case 'shots':
+        return (
+          <ShotsPage
             shots={data.shots}
             onShotAdded={handleShotAdded}
             onDeleteShot={handleDeleteShot}
           />
-        </div>
+        );
 
-        <div className='tracker-section'>
-          <WeightTracker
+      case 'weight':
+        return (
+          <WeightPage
             weights={data.weights}
             onWeightAdded={handleWeightAdded}
             onDeleteWeight={handleDeleteWeight}
           />
-        </div>
-      </div>
+        );
 
-      <div className='dashboard-grid'>
-        <WeightGraph weights={data.weights} />
-        <Milestones
-          weights={data.weights}
-          shots={data.shots}
-          startWeight={profile?.startWeight ?? null}
-          goalWeight={profile?.goalWeight ?? null}
-          maxVisible={5}
-        />
-      </div>
+      case 'milestones':
+        return <MilestonesPage weights={data.weights} shots={data.shots} profile={profile} />;
+
+      case 'profile':
+        return <ProfileSettingsPage profile={profile} onProfileUpdated={onProfileUpdated} />;
+
+      case 'dashboard':
+      default:
+        return (
+          <DashboardOverview
+            profile={profile}
+            summary={summary}
+            shots={data.shots}
+            weights={data.weights}
+            onShotAdded={handleShotAdded}
+            onWeightAdded={handleWeightAdded}
+            onDeleteShot={handleDeleteShot}
+            onDeleteWeight={handleDeleteWeight}
+            onGoalWeightUpdated={handleGoalWeightUpdated}
+            onViewAllMilestones={() => handleNavigate('milestones')}
+          />
+        );
+    }
+  };
+
+  return (
+    <div className='dashboard-shell'>
+      <Sidebar
+        activeSection={activeSection}
+        isMobileOpen={isMobileSidebarOpen}
+        onMobileClose={() => setIsMobileSidebarOpen(false)}
+        onNavigate={handleNavigate}
+      />
+
+      <main className='dashboard'>
+        <div className='dashboard-topbar'>
+          <button
+            type='button'
+            className='dashboard-mobile-menu-button'
+            onClick={() => setIsMobileSidebarOpen(true)}
+            aria-label='Open navigation menu'
+          >
+            <LuMenu size={22} />
+          </button>
+
+          <div className='dashboard-topbar-actions'>
+            <button
+              type='button'
+              className='dashboard-topbar-button'
+              onClick={onToggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {theme === 'dark' ? <LuSun size={20} /> : <LuMoon size={20} />}
+            </button>
+
+            <button type='button' className='dashboard-topbar-button' aria-label='Notifications'>
+              <LuBell size={20} />
+              <span className='dashboard-topbar-badge'>2</span>
+            </button>
+
+            <button
+              type='button'
+              className='dashboard-profile-button'
+              onClick={() => handleNavigate('profile')}
+              aria-label='Open profile settings'
+            >
+              <span className='dashboard-profile-avatar'>
+                {profile.displayName?.charAt(0).toUpperCase() || 'U'}
+              </span>
+
+              <span className='dashboard-profile-name'>{profile.displayName || 'Profile'}</span>
+            </button>
+
+            <button type='button' className='dashboard-signout-button' onClick={onSignOut}>
+              Sign out
+            </button>
+
+            <button
+              type='button'
+              className='dashboard-signout-icon-button'
+              onClick={onSignOut}
+              aria-label='Sign out'
+            >
+              <LuLogOut size={20} />
+            </button>
+          </div>
+        </div>
+
+        {error && <p className='dashboard-error'>{error}</p>}
+        {loading && null}
+
+        {renderActiveSection()}
+      </main>
     </div>
   );
 };

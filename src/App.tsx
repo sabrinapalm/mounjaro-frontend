@@ -8,6 +8,7 @@ import { LinearLoader } from './components/LinearLoader';
 import { LoginForm } from './components/LoginForm';
 import { ProfileForm } from './components/ProfileForm';
 import { SignUpForm } from './components/SignUpForm';
+import { ProfileProvider } from './context/ProfileContext';
 import { useTheme } from './hooks/useTheme';
 import { apiClient } from './services/apiClient';
 import { cognitoAuth } from './services/cognitoAuth';
@@ -87,9 +88,11 @@ function App() {
     cognitoAuth.signOut();
     setAuthenticated(false);
     setAuthView('login');
+    setPendingEmail('');
     setProfile(null);
     setProfileLoaded(false);
     setIsEditingProfile(false);
+    setProfileError('');
   };
 
   const handleSignedUp = (email: string) => {
@@ -105,13 +108,14 @@ function App() {
 
   const renderAuthenticatedContent = () => {
     if (!profileLoaded) {
-      return null;
+      return <LinearLoader />;
     }
 
     if (profileError) {
       return (
         <div className='app-content'>
           <p className='error-message'>{profileError}</p>
+
           <button type='button' onClick={loadProfile}>
             Try again
           </button>
@@ -120,18 +124,20 @@ function App() {
     }
 
     if (!profile || isEditingProfile) {
-      return (
-        <ProfileForm
-          initialProfile={profile}
-          title={profile ? 'Edit profile' : 'Welcome! Set up your profile'}
-          submitLabel={profile ? 'Save changes' : 'Continue'}
-          onSubmit={handleSaveProfile}
-          onCancel={profile ? () => setIsEditingProfile(false) : undefined}
-        />
-      );
+      return <ProfileForm initialProfile={profile} onSubmit={handleSaveProfile} />;
     }
 
-    return <Dashboard profile={profile} onProfileUpdated={setProfile} />;
+    return (
+      <ProfileProvider initialProfile={profile}>
+        <Dashboard
+          profile={profile}
+          onProfileUpdated={setProfile}
+          onSignOut={handleSignOut}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
+      </ProfileProvider>
+    );
   };
 
   const renderUnauthenticatedContent = () => {
@@ -168,14 +174,14 @@ function App() {
 
   return (
     <div className='app'>
-      <Header
-        onEditProfile={() => setIsEditingProfile(true)}
-        onSignOut={authenticated ? handleSignOut : undefined}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-      />
-
-      {authenticated ? renderAuthenticatedContent() : renderUnauthenticatedContent()}
+      {authenticated ? (
+        renderAuthenticatedContent()
+      ) : (
+        <>
+          <Header theme={theme} onToggleTheme={toggleTheme} />
+          {renderUnauthenticatedContent()}
+        </>
+      )}
     </div>
   );
 }

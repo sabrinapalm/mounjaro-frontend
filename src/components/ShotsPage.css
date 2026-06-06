@@ -1,0 +1,34 @@
+.shots-page {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+}
+
+.shots-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.shots-page__eyebrow {
+  margin-bottom: 8px;
+  color: var(--color-primary);
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.shots-page__header h1 {
+  font-size: 1.9rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.shots-page__header p {
+  margin-top: 8px;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  font-weight: 700;
+}
