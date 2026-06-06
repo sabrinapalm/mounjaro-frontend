@@ -1,12 +1,12 @@
-import type { WeightEntry } from '../types';
+import type { CreateWeightInput, WeightEntry } from '../types';
 import { WeightTracker } from './WeightTracker';
 import './WeightPage.css';
 
-type WeightPageProps = {
+interface WeightPageProps {
   weights: WeightEntry[];
-  onWeightAdded: (weight: WeightEntry) => Promise<void>;
+  onWeightAdded: (weight: CreateWeightInput) => Promise<void>;
   onDeleteWeight: (id: string, date: string) => Promise<void>;
-};
+}
 
 export const WeightPage = ({ weights, onWeightAdded, onDeleteWeight }: WeightPageProps) => {
   return (

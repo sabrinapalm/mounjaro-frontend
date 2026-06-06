@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '../../query/queryKeys';
 import { apiClient } from '../../services/apiClient';
-import type { WeightEntry } from '../../types';
+import type { CreateWeightInput, WeightEntry } from '../../types';
 import { getTimestamp } from '../../utils/dateHelpers';
 
 type DeleteWeightInput = {
@@ -28,7 +28,7 @@ export function useCreateWeight() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (weight: WeightEntry) => apiClient.createWeight(weight),
+    mutationFn: (weight: CreateWeightInput) => apiClient.createWeight(weight),
 
     onSuccess: async (createdWeight) => {
       queryClient.setQueryData<WeightEntry[]>(queryKeys.weights, (currentWeights = []) => {

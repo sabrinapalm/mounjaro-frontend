@@ -1,12 +1,12 @@
-import type { ShotEntry } from '../types';
+import type { CreateShotInput, ShotEntry } from '../types';
 import { ShotTracker } from './ShotTracker';
 import './ShotsPage.css';
 
-type ShotsPageProps = {
+interface ShotsPageProps {
   shots: ShotEntry[];
-  onShotAdded: (shot: ShotEntry) => Promise<void>;
+  onShotAdded: (shot: CreateShotInput) => Promise<void>;
   onDeleteShot: (id: string, date: string) => Promise<void>;
-};
+}
 
 export const ShotsPage = ({ shots, onShotAdded, onDeleteShot }: ShotsPageProps) => {
   return (

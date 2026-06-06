@@ -3,7 +3,7 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import { FiActivity } from 'react-icons/fi';
 import { useProfile } from '../context/ProfileContext';
 import { useUnitSettings } from '../hooks/useUnitSettings';
-import type { WeightEntry } from '../types';
+import type { CreateWeightInput, WeightEntry } from '../types';
 import { formatDateLabel, getTimestamp } from '../utils/dateHelpers';
 import { AddWeightModal } from './AddWeightModal';
 import { ConfirmDialog } from './ConfirmDialog';
@@ -13,7 +13,7 @@ type WeightTrackerVariant = 'compact' | 'full';
 
 interface WeightTrackerProps {
   weights: WeightEntry[];
-  onWeightAdded: (weight: WeightEntry) => Promise<void>;
+  onWeightAdded: (weight: CreateWeightInput) => Promise<void>;
   onDeleteWeight: (id: string, date: string) => Promise<void>;
   title?: string;
   summaryLabel?: string;
@@ -94,7 +94,7 @@ export const WeightTracker = ({
     setIsAddWeightModalOpen(false);
   };
 
-  const handleAddWeight = async (newWeight: WeightEntry) => {
+  const handleAddWeight = async (newWeight: CreateWeightInput) => {
     setError(null);
     setIsAddingWeight(true);
 

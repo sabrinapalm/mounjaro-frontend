@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { PiSyringeBold } from 'react-icons/pi';
-import type { ShotEntry } from '../types';
+import type { CreateShotInput, ShotEntry } from '../types';
 import { formatDateLabel, getTimestamp } from '../utils/dateHelpers';
 import { AddShotModal } from './AddShotModal';
 import { ConfirmDialog } from './ConfirmDialog';
@@ -13,7 +13,7 @@ const COMPACT_SHOT_LIMIT = 5;
 
 interface ShotTrackerProps {
   shots: ShotEntry[];
-  onShotAdded: (shot: ShotEntry) => Promise<void>;
+  onShotAdded: (shot: CreateShotInput) => Promise<void>;
   onDeleteShot: (id: string, date: string) => Promise<void>;
   title?: string;
   summaryLabel?: string;
@@ -69,7 +69,7 @@ export const ShotTracker = ({
     setIsAddShotModalOpen(false);
   };
 
-  const handleAddShot = async (newShot: ShotEntry) => {
+  const handleAddShot = async (newShot: CreateShotInput) => {
     setError(null);
     setIsAddingShot(true);
 
@@ -83,7 +83,6 @@ export const ShotTracker = ({
       setIsAddingShot(false);
     }
   };
-
   const handleOpenDeleteDialog = (shot: ShotEntry) => {
     setError(null);
     setShotToDelete(shot);

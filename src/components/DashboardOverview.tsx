@@ -3,7 +3,13 @@ import { LuCalendarHeart, LuSyringe } from 'react-icons/lu';
 import { RiEmotionHappyLine } from 'react-icons/ri';
 import type { DashboardSummary } from '../hooks/useDashboardSummary';
 import { useUnitSettings } from '../hooks/useUnitSettings';
-import type { ShotEntry, UserProfile, WeightEntry } from '../types';
+import type {
+  CreateShotInput,
+  CreateWeightInput,
+  ShotEntry,
+  UserProfile,
+  WeightEntry,
+} from '../types';
 import { formatDateLabel } from '../utils/dateHelpers';
 import { GoalProgress } from './GoalProgress';
 import { Milestones } from './Milestones';
@@ -11,18 +17,18 @@ import { ShotTracker } from './ShotTracker';
 import { WeightGraph } from './WeightGraph';
 import { WeightTracker } from './WeightTracker';
 
-type DashboardOverviewProps = {
+interface DashboardOverviewProps {
   profile: UserProfile;
   summary: DashboardSummary;
   shots: ShotEntry[];
   weights: WeightEntry[];
-  onShotAdded: (shot: ShotEntry) => Promise<void>;
-  onWeightAdded: (weight: WeightEntry) => Promise<void>;
+  onShotAdded: (shot: CreateShotInput) => Promise<void>;
+  onWeightAdded: (weight: CreateWeightInput) => Promise<void>;
   onDeleteShot: (id: string, date: string) => Promise<void>;
   onDeleteWeight: (id: string, date: string) => Promise<void>;
   onGoalWeightUpdated: (goalWeight: number) => Promise<void>;
   onViewAllMilestones: () => void;
-};
+}
 
 export const DashboardOverview = ({
   profile,

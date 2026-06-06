@@ -9,7 +9,7 @@ import {
 } from '../hooks/useDashboardNotifications';
 import { useDashboardSummary } from '../hooks/useDashboardSummary';
 import { useDismissedNotifications } from '../hooks/useDissmisedNotifications';
-import type { ShotEntry, UserProfile, WeightEntry } from '../types';
+import type { CreateShotInput, CreateWeightInput, UserProfile } from '../types';
 import { getQueryErrorMessage } from '../utils/queryErrorMessage';
 import './Dashboard.css';
 import { DashboardErrorNotice } from './DashboardErrorNotice';
@@ -116,7 +116,7 @@ export const Dashboard = ({
     }
   };
 
-  const handleShotAdded = async (shot: ShotEntry) => {
+  const handleShotAdded = async (shot: CreateShotInput) => {
     setDashboardError(null);
 
     try {
@@ -127,7 +127,7 @@ export const Dashboard = ({
     }
   };
 
-  const handleWeightAdded = async (weight: WeightEntry) => {
+  const handleWeightAdded = async (weight: CreateWeightInput) => {
     setDashboardError(null);
 
     try {
