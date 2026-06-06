@@ -343,6 +343,17 @@
   scroll-margin-top: 32px;
 }
 
+.dashboard,
+.dashboard-topbar,
+.dashboard-topbar-actions {
+  overflow: visible;
+}
+
+.dashboard-topbar {
+  position: relative;
+  z-index: 50;
+}
+
 /* Responsive */
 
 @media (max-width: 1400px) {

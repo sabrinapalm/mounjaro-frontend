@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
-import { LuBell, LuLogOut, LuMenu, LuMoon, LuSun } from 'react-icons/lu';
+import { LuLogOut, LuMenu, LuMoon, LuSun } from 'react-icons/lu';
+import { useDashboardNotifications } from '../hooks/useDashboardNotifications';
 import { useDashboardSummary } from '../hooks/useDashboardSummary';
+import { useMilestones } from '../hooks/useMilestones';
 import { apiClient } from '../services/apiClient';
 import type { AppData, ShotEntry, UserProfile, WeightEntry } from '../types';
 import './Dashboard.css';
+import { DashboardNotifications } from './DashboardNotifications';
 import { DashboardOverview } from './DashboardOverview';
 import { MilestonesPage } from './MilestonesPage';
 import { ProfileSettingsPage } from './ProfileSettingsPage';
@@ -67,6 +70,20 @@ export const Dashboard = ({
   const summary = useDashboardSummary({
     shots: data.shots,
     weights: data.weights,
+  });
+
+  const { milestones } = useMilestones({
+    weights: data.weights,
+    shots: data.shots,
+    startWeight: profile.startWeight ?? null,
+    goalWeight: profile.goalWeight ?? null,
+  });
+
+  const notifications = useDashboardNotifications({
+    profile,
+    weights: data.weights,
+    milestones,
+    summary,
   });
 
   const handleNavigate = (section: SidebarSection) => {
@@ -227,10 +244,7 @@ export const Dashboard = ({
               {theme === 'dark' ? <LuSun size={20} /> : <LuMoon size={20} />}
             </button>
 
-            <button type='button' className='dashboard-topbar-button' aria-label='Notifications'>
-              <LuBell size={20} />
-              <span className='dashboard-topbar-badge'>2</span>
-            </button>
+            <DashboardNotifications notifications={notifications} />
 
             <button
               type='button'
@@ -260,8 +274,8 @@ export const Dashboard = ({
           </div>
         </div>
 
-        {error && <p className='dashboard-error'>{error}</p>}
-        {loading && null}
+        {error ? <p className='dashboard-error'>{error}</p> : null}
+        {loading ? null : null}
 
         {renderActiveSection()}
       </main>
