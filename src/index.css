@@ -372,3 +372,93 @@ code {
     width: 100%;
   }
 }
+
+/* =========================
+   Modal overflow safety
+   ========================= */
+
+.add-shot-modal,
+.add-weight-modal,
+.add-check-in-modal,
+.edit-goal-modal {
+  min-width: 0;
+}
+
+.add-shot-modal__form,
+.add-weight-modal__form,
+.add-check-in-modal__form,
+.edit-goal-modal__form,
+.add-shot-modal__row,
+.add-weight-modal__row,
+.add-check-in-modal__row {
+  min-width: 0;
+}
+
+.add-shot-modal__field,
+.add-weight-modal__field,
+.add-check-in-modal__field,
+.edit-goal-modal__field,
+.add-shot-modal__input-icon-wrapper,
+.add-shot-modal__select-with-unit,
+.add-shot-modal__textarea-wrapper,
+.add-weight-modal__input-with-unit,
+.add-weight-modal__textarea-wrapper,
+.edit-goal-modal__input-with-unit {
+  min-width: 0;
+}
+
+.add-shot-modal__fieldset,
+.add-check-in-modal__fieldset,
+.add-check-in-modal__level-fieldset {
+  min-width: 0;
+}
+
+.add-shot-modal__chips,
+.add-check-in-modal__chips,
+.add-check-in-modal__level-options {
+  min-width: 0;
+}
+
+.add-shot-modal__input,
+.add-shot-modal__select,
+.add-shot-modal__textarea,
+.add-weight-modal__input,
+.add-weight-modal__textarea,
+.add-check-in-modal__textarea,
+.edit-goal-modal__input {
+  min-width: 0;
+}
+
+.dashboard {
+  min-height: 100dvh;
+  padding-top: max(24px, env(safe-area-inset-top));
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+
+.app-safe-area {
+  min-height: 100dvh;
+  padding-top: max(24px, env(safe-area-inset-top));
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top);
+  z-index: 9999;
+  pointer-events: none;
+  background: var(--color-bg);
+}
+
+html[data-theme="dark"] body::before {
+  background:
+    radial-gradient(circle at top left, rgba(139, 92, 246, 0.14), transparent 34%),
+    radial-gradient(circle at top right, rgba(34, 211, 166, 0.08), transparent 30%), var(--color-bg);
+}

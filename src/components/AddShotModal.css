@@ -430,22 +430,43 @@
 
 @media (max-width: 640px) {
   .add-shot-modal-backdrop {
-    align-items: center;
-    padding: 16px;
+    display: block;
+    height: 100dvh;
+    padding: 0;
+    overflow: hidden;
   }
 
   .add-shot-modal {
     width: 100%;
-    max-height: calc(100dvh - 32px);
-    padding: 30px 20px 24px;
-    border-radius: 26px;
+    height: 100dvh;
+    max-height: none;
+    overflow-y: auto;
+
+    padding: calc(24px + env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom));
+
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .add-shot-modal__close {
+    top: calc(16px + env(safe-area-inset-top));
+    right: calc(16px + env(safe-area-inset-right));
+  }
+
+  .add-shot-modal__header {
+    padding: 44px 30px 10px;
   }
 
   .add-shot-modal__row {
     grid-template-columns: 1fr;
   }
 
-  .add-shot-modal__header {
-    padding-inline: 30px;
+  .add-shot-modal__form {
+    gap: 24px;
+    margin-top: 24px;
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
