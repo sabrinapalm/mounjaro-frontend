@@ -171,7 +171,6 @@ export const DashboardOverview = ({
             shots={shots}
             startWeight={profile.startWeight ?? null}
             goalWeight={profile.goalWeight ?? null}
-            maxVisible={5}
             onViewAll={onViewAllMilestones}
           />
         </section>

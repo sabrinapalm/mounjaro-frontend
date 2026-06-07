@@ -103,7 +103,7 @@ export const WeightStatsCards = ({ weights }: WeightStatsCardsProps) => {
       <MetricCard
         label='Total Weight Loss'
         value={totalWeightLossValue}
-        meta='Since first entry'
+        meta='Since start'
         icon={
           totalLossKg >= 0 ? (
             <LuTrendingDown aria-hidden='true' />

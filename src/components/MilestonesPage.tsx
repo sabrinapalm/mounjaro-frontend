@@ -23,7 +23,7 @@ export const MilestonesPage = ({ weights, shots, profile }: MilestonesPageProps)
         shots={shots}
         startWeight={profile.startWeight ?? null}
         goalWeight={profile.goalWeight ?? null}
-        maxVisible={Number.MAX_SAFE_INTEGER}
+        variant='full'
       />
     </section>
   );

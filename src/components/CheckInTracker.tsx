@@ -9,7 +9,7 @@ import './CheckInTracker.css';
 
 type CheckInTrackerVariant = 'compact' | 'full';
 
-const COMPACT_CHECK_IN_LIMIT = 4;
+const COMPACT_LIMIT = 3;
 
 interface CheckInTrackerProps {
   checkIns: CheckInEntry[];
@@ -91,7 +91,7 @@ export const CheckInTracker = ({
 
   const visibleCheckIns = useMemo(() => {
     if (variant === 'compact') {
-      return sortedCheckIns.slice(0, COMPACT_CHECK_IN_LIMIT);
+      return sortedCheckIns.slice(0, COMPACT_LIMIT);
     }
 
     return sortedCheckIns;
@@ -100,7 +100,7 @@ export const CheckInTracker = ({
   const totalCheckIns = sortedCheckIns.length;
 
   const shouldShowViewAll =
-    variant === 'compact' && sortedCheckIns.length > COMPACT_CHECK_IN_LIMIT && onViewAll;
+    variant === 'compact' && sortedCheckIns.length > COMPACT_LIMIT && onViewAll;
 
   const handleOpenAddCheckInModal = () => {
     setError(null);

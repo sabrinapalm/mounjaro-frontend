@@ -11,7 +11,7 @@ import './WeightTracker.css';
 
 type WeightTrackerVariant = 'compact' | 'full';
 
-const COMPACT_WEIGHT_LIMIT = 4;
+const COMPACT_LIMIT = 3;
 
 interface WeightTrackerProps {
   weights: WeightEntry[];
@@ -63,11 +63,11 @@ export const WeightTracker = ({
   }, [weights]);
 
   const visibleWeights = useMemo(() => {
-    return variant === 'compact' ? sortedWeights.slice(0, COMPACT_WEIGHT_LIMIT) : sortedWeights;
+    return variant === 'compact' ? sortedWeights.slice(0, COMPACT_LIMIT) : sortedWeights;
   }, [sortedWeights, variant]);
 
   const shouldShowViewAll =
-    variant === 'compact' && sortedWeights.length > COMPACT_WEIGHT_LIMIT && Boolean(onViewAll);
+    variant === 'compact' && sortedWeights.length > COMPACT_LIMIT && Boolean(onViewAll);
 
   const weightLoss = useMemo(() => {
     if (sortedWeights.length < 2) {

@@ -11,7 +11,7 @@ import { messages } from '../i18n/messages';
 
 type ShotTrackerVariant = 'compact' | 'full';
 
-const COMPACT_SHOT_LIMIT = 4;
+const COMPACT_LIMIT = 3;
 
 interface ShotTrackerProps {
   shots: ShotEntry[];
@@ -53,7 +53,7 @@ export const ShotTracker = ({
 
   const visibleShots = useMemo(() => {
     if (variant === 'compact') {
-      return sortedShots.slice(0, COMPACT_SHOT_LIMIT);
+      return sortedShots.slice(0, COMPACT_LIMIT);
     }
 
     return sortedShots;
@@ -120,7 +120,7 @@ export const ShotTracker = ({
   };
 
   const shouldShowViewAll =
-    variant === 'compact' && sortedShots.length > COMPACT_SHOT_LIMIT && onViewAll;
+    variant === 'compact' && sortedShots.length > COMPACT_LIMIT && onViewAll;
 
   return (
     <section className={`shot-tracker-card shot-tracker-card--${variant}`}>

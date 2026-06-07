@@ -4,14 +4,18 @@ import { type Milestone, useMilestones } from '../hooks/useMilestones';
 import type { ShotEntry, WeightEntry } from '../types';
 import './Milestones.css';
 
+type MilestonesVariant = 'compact' | 'full';
+
 interface MilestonesProps {
   weights: WeightEntry[];
   shots: ShotEntry[];
   startWeight?: number | null;
   goalWeight?: number | null;
-  maxVisible?: number;
   onViewAll?: () => void;
+  variant?: MilestonesVariant;
 }
+
+const COMPACT_LIMIT = 3;
 
 const getMilestoneIcon = (icon: Milestone['icon']) => {
   if (icon === 'target') {
@@ -38,23 +42,30 @@ export const Milestones = ({
   shots,
   startWeight,
   goalWeight,
-  maxVisible,
   onViewAll,
+  variant = 'compact',
 }: MilestonesProps) => {
   const { visibleMilestones } = useMilestones({
     weights,
     shots,
     startWeight,
     goalWeight,
-    maxVisible,
   });
 
+  const isCompact = variant === 'compact';
+
+  const displayedMilestones = isCompact
+    ? visibleMilestones.slice(0, COMPACT_LIMIT)
+    : visibleMilestones;
+
+  const shouldShowViewAll = isCompact && visibleMilestones.length > COMPACT_LIMIT && onViewAll;
+
   return (
-    <section className='milestones-card'>
+    <section className={`milestones-card milestones-card--${variant}`}>
       <header className='milestones-card__header'>
         <h2 className='milestones-card__title'>Milestones</h2>
 
-        {onViewAll ? (
+        {shouldShowViewAll ? (
           <button type='button' className='milestones-card__view-all' onClick={onViewAll}>
             View all
           </button>
@@ -62,7 +73,7 @@ export const Milestones = ({
       </header>
 
       <ul className='milestones-card__list'>
-        {visibleMilestones.map((milestone) => (
+        {displayedMilestones.map((milestone) => (
           <li
             key={milestone.id}
             className={['milestones-card__item', `milestones-card__item--${milestone.status}`].join(
