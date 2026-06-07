@@ -1,4 +1,6 @@
 import type {
+  CheckInEntry,
+  CreateCheckInInput,
   CreateShotInput,
   CreateWeightInput,
   ProfileFormValues,
@@ -81,6 +83,12 @@ export const apiClient = {
     return data as ShotEntry;
   },
 
+  deleteShot: async (id: string, dateTime: string): Promise<void> => {
+    await request(`/shots/${id}?dateTime=${encodeURIComponent(dateTime)}`, {
+      method: 'DELETE',
+    });
+  },
+
   getWeights: async (): Promise<WeightEntry[]> => {
     const data = await request('/weights');
     return data.weights as WeightEntry[];
@@ -95,14 +103,28 @@ export const apiClient = {
     return data as WeightEntry;
   },
 
-  deleteShot: async (id: string, date: string): Promise<void> => {
-    await request(`/shots/${id}?date=${encodeURIComponent(date)}`, {
+  deleteWeight: async (id: string, dateTime: string): Promise<void> => {
+    await request(`/weights/${id}?dateTime=${encodeURIComponent(dateTime)}`, {
       method: 'DELETE',
     });
   },
 
-  deleteWeight: async (id: string, date: string): Promise<void> => {
-    await request(`/weights/${id}?date=${encodeURIComponent(date)}`, {
+  getCheckIns: async (): Promise<CheckInEntry[]> => {
+    const data = await request('/check-ins');
+    return data.checkIns as CheckInEntry[];
+  },
+
+  createCheckIn: async (checkIn: CreateCheckInInput): Promise<CheckInEntry> => {
+    const data = await request('/check-ins', {
+      method: 'POST',
+      body: JSON.stringify(checkIn),
+    });
+
+    return data as CheckInEntry;
+  },
+
+  deleteCheckIn: async (id: string, dateTime: string): Promise<void> => {
+    await request(`/check-ins/${id}?dateTime=${encodeURIComponent(dateTime)}`, {
       method: 'DELETE',
     });
   },

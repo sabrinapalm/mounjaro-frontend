@@ -290,6 +290,144 @@
   opacity: 0.65;
 }
 
+.add-shot-modal__input,
+.add-shot-modal__textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.add-shot-modal__input {
+  height: 52px;
+  padding: 0 16px;
+}
+
+.add-shot-modal__textarea {
+  resize: vertical;
+  min-height: 92px;
+  padding: 14px 16px;
+  line-height: 1.5;
+}
+
+.add-shot-modal__fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.add-shot-modal__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.add-shot-modal__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 9px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.add-shot-modal__chip:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+.add-shot-modal__chip input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+}
+
+.add-shot-modal__chip--selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+
+.add-shot-modal__hint {
+  align-self: flex-end;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.add-shot-modal__fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.add-shot-modal__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.add-shot-modal__chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 9px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.add-shot-modal__chip:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: var(--color-primary);
+  color: var(--color-text);
+  box-shadow: var(--shadow-soft);
+}
+
+.add-shot-modal__chip:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.add-shot-modal__chip--selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+
+.add-shot-modal__chip--selected:hover:not(:disabled) {
+  color: var(--color-primary-dark);
+}
+
 @media (max-width: 640px) {
   .add-shot-modal-backdrop {
     align-items: center;

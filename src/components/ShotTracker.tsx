@@ -6,6 +6,8 @@ import { formatDateLabel, getTimestamp } from '../utils/dateHelpers';
 import { AddShotModal } from './AddShotModal';
 import { ConfirmDialog } from './ConfirmDialog';
 import './ShotTracker.css';
+import { useIntl } from 'react-intl';
+import { messages } from '../i18n/messages';
 
 type ShotTrackerVariant = 'compact' | 'full';
 
@@ -14,7 +16,7 @@ const COMPACT_SHOT_LIMIT = 4;
 interface ShotTrackerProps {
   shots: ShotEntry[];
   onShotAdded: (shot: CreateShotInput) => Promise<void>;
-  onDeleteShot: (id: string, date: string) => Promise<void>;
+  onDeleteShot: (id: string, dateTime: string) => Promise<void>;
   onViewAll?: () => void;
   title?: string;
   summaryLabel?: string;
@@ -30,6 +32,7 @@ export const ShotTracker = ({
   summaryLabel = 'Total shots',
   variant = 'compact',
 }: ShotTrackerProps) => {
+  const { formatMessage } = useIntl();
   const [error, setError] = useState<string | null>(null);
   const [isAddShotModalOpen, setIsAddShotModalOpen] = useState(false);
   const [isAddingShot, setIsAddingShot] = useState(false);
@@ -38,7 +41,7 @@ export const ShotTracker = ({
 
   const sortedShots = useMemo(() => {
     return [...shots].sort((firstShot, secondShot) => {
-      const dateDifference = getTimestamp(secondShot.date) - getTimestamp(firstShot.date);
+      const dateDifference = getTimestamp(secondShot.dateTime) - getTimestamp(firstShot.dateTime);
 
       if (dateDifference !== 0) {
         return dateDifference;
@@ -107,7 +110,7 @@ export const ShotTracker = ({
     setIsDeleting(true);
 
     try {
-      await onDeleteShot(shotToDelete.id, shotToDelete.date);
+      await onDeleteShot(shotToDelete.id, shotToDelete.dateTime);
       setShotToDelete(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to delete shot');
@@ -152,20 +155,18 @@ export const ShotTracker = ({
       ) : (
         <ul className='shot-tracker-card__list'>
           {visibleShots.map((shot) => {
-            const shotDateLabel = formatDateLabel(shot.date);
+            const shotDateLabel = formatDateLabel(shot.dateTime);
 
             return (
               <li key={shot.id} className='shot-tracker-card__item'>
                 <div className='shot-tracker-card__icon'>
                   <PiSyringeBold size={22} />
                 </div>
-
                 <span className='shot-tracker-card__date'>{shotDateLabel}</span>
-
                 <span className='shot-tracker-card__dosage'>{shot.dosage.toFixed(1)} mg</span>
-
-                <span className='shot-tracker-card__site'>{shot.injectionSite || '-'}</span>
-
+                <span className='shot-tracker-card__site'>
+                  {shot.injectionSite ? formatMessage(messages[shot.injectionSite]) : '-'}
+                </span>
                 <button
                   type='button'
                   className='shot-tracker-card__delete-button'
@@ -205,7 +206,7 @@ export const ShotTracker = ({
         message={
           shotToDelete
             ? `This will delete your ${shotToDelete.dosage} mg shot from ${formatDateLabel(
-                shotToDelete.date
+                shotToDelete.dateTime
               )}.`
             : ''
         }

@@ -3,7 +3,7 @@ import {
   // LuChartNoAxesColumnIncreasing,
   LuCircleHelp,
   // LuClipboardList,
-  // LuHeartPulse,
+  LuHeartPulse,
   LuHouse,
   LuSyringe,
   LuUserRound,
@@ -20,7 +20,8 @@ export type SidebarSection =
   | 'dose-history'
   | 'side-effects'
   | 'milestones'
-  | 'profile';
+  | 'profile'
+  | 'check-in';
 
 type SidebarProps = {
   activeSection?: SidebarSection;
@@ -39,6 +40,11 @@ const navItems: Array<{
     id: 'dashboard',
     label: 'Dashboard',
     icon: <LuHouse size={22} />,
+  },
+  {
+    id: 'check-in',
+    label: 'Check-in',
+    icon: <LuHeartPulse size={22} />,
   },
   {
     id: 'shots',

@@ -1,5 +1,12 @@
 import dayjs from 'dayjs';
-import { LuCalendarDays, LuScale, LuTrendingDown, LuTrendingUp } from 'react-icons/lu';
+import {
+  LuCalendarCheck,
+  LuCalendarDays,
+  LuClipboardList,
+  LuScale,
+  LuTrendingDown,
+  LuTrendingUp,
+} from 'react-icons/lu';
 import { useProfile } from '../context/ProfileContext';
 import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { WeightEntry } from '../types';
@@ -9,12 +16,8 @@ type WeightStatsCardsProps = {
   weights: WeightEntry[];
 };
 
-const getWeightDateTime = (entry: WeightEntry) => {
-  return entry.dateTime ?? entry.date;
-};
-
 const getWeightTimestamp = (entry: WeightEntry) => {
-  const timestamp = dayjs(getWeightDateTime(entry)).valueOf();
+  const timestamp = dayjs(entry.dateTime).valueOf();
 
   return Number.isNaN(timestamp) ? 0 : timestamp;
 };
@@ -64,12 +67,14 @@ export const WeightStatsCards = ({ weights }: WeightStatsCardsProps) => {
     );
   }
 
-  const firstDate = dayjs(getWeightDateTime(firstWeight)).startOf('day');
-  const latestDate = dayjs(getWeightDateTime(latestWeight)).startOf('day');
+  const firstDate = dayjs(firstWeight.dateTime).startOf('day');
+  const latestDate = dayjs(latestWeight.dateTime).startOf('day');
 
   const daysBetween = Math.max(latestDate.diff(firstDate, 'day'), 1);
   const weeksBetween = daysBetween / 7;
   const monthsBetween = daysBetween / 30.44;
+
+  const trackingWeeks = Math.max(Math.ceil(daysBetween / 7), 1);
 
   const totalChangeKg = latestWeight.weight - firstWeight.weight;
   const totalLossKg = firstWeight.weight - latestWeight.weight;
@@ -79,6 +84,9 @@ export const WeightStatsCards = ({ weights }: WeightStatsCardsProps) => {
 
   const totalWeightLossClassName =
     totalLossKg >= 0 ? 'total-weight-loss' : 'total-weight-loss weight-gain';
+
+  const checkInMeta =
+    weights.length === 1 ? '1 check-in logged' : `${weights.length} check-ins logged`;
 
   return (
     <div className='dashboard-summary-cards weight-summary-cards'>
@@ -141,6 +149,30 @@ export const WeightStatsCards = ({ weights }: WeightStatsCardsProps) => {
             {formatSignedWeightFromKg(averageChangePerMonthKg, weightUnit, displayWeightFromKg)}
           </span>
           <span className='dashboard-card-meta'>Since {firstDate.format('MMM D')}</span>
+        </div>
+      </div>
+
+      <div className='dashboard-card weight-summary-card'>
+        <div className='dashboard-card-icon dashboard-card-icon-calendar'>
+          <LuCalendarCheck size={38} color='currentColor' aria-hidden='true' />
+        </div>
+
+        <div className='dashboard-card-copy'>
+          <span className='dashboard-card-label'>Journey Week</span>
+          <span className='dashboard-card-value'>Week {trackingWeeks}</span>
+          <span className='dashboard-card-meta'>Your current  monjourney week</span>
+        </div>
+      </div>
+
+      <div className='dashboard-card weight-summary-card'>
+        <div className='dashboard-card-icon dashboard-card-icon-dose'>
+          <LuClipboardList size={38} color='currentColor' aria-hidden='true' />
+        </div>
+
+        <div className='dashboard-card-copy'>
+          <span className='dashboard-card-label'>Check-ins</span>
+          <span className='dashboard-card-value'>{weights.length}</span>
+          <span className='dashboard-card-meta'>{checkInMeta}</span>
         </div>
       </div>
     </div>

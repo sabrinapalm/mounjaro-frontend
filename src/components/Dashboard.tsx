@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { LuMenu, LuMoon, LuSun } from 'react-icons/lu';
+import { useCheckIns, useCreateCheckIn, useDeleteCheckIn } from '../hooks/queries/useCheckInsQuery';
 import { useUpdateGoalWeight } from '../hooks/queries/useProfileQuery';
 import { useCreateShot, useDeleteShot, useShots } from '../hooks/queries/useShotsQuery';
 import { useCreateWeight, useDeleteWeight, useWeights } from '../hooks/queries/useWeightsQuery';
@@ -9,9 +10,10 @@ import {
 } from '../hooks/useDashboardNotifications';
 import { useDashboardSummary } from '../hooks/useDashboardSummary';
 import { useDismissedNotifications } from '../hooks/useDissmisedNotifications';
-import type { CreateShotInput, CreateWeightInput, UserProfile } from '../types';
+import type { CreateCheckInInput, CreateShotInput, CreateWeightInput, UserProfile } from '../types';
 import { getQueryErrorMessage } from '../utils/queryErrorMessage';
 import './Dashboard.css';
+import { CheckInsPage } from './CheckInsPage';
 import { DashboardErrorNotice } from './DashboardErrorNotice';
 import { DashboardNotifications } from './DashboardNotifications';
 import { DashboardOverview } from './DashboardOverview';
@@ -45,6 +47,7 @@ export const Dashboard = ({
 
   const shotsQuery = useShots(true);
   const weightsQuery = useWeights(true);
+  const checkInsQuery = useCheckIns(true);
 
   const createShotMutation = useCreateShot();
   const deleteShotMutation = useDeleteShot();
@@ -52,14 +55,19 @@ export const Dashboard = ({
   const createWeightMutation = useCreateWeight();
   const deleteWeightMutation = useDeleteWeight();
 
+  const createCheckInMutation = useCreateCheckIn();
+  const deleteCheckInMutation = useDeleteCheckIn();
+
   const updateGoalWeightMutation = useUpdateGoalWeight();
 
   const { dismissedNotificationIds, dismissNotification } = useDismissedNotifications();
 
   const shots = shotsQuery.data ?? [];
   const weights = weightsQuery.data ?? [];
+  const checkIns = checkInsQuery.data ?? [];
 
-  const isInitialLoading = shotsQuery.isLoading || weightsQuery.isLoading;
+  const isInitialLoading =
+    shotsQuery.isLoading || weightsQuery.isLoading || checkInsQuery.isLoading;
 
   const summary = useDashboardSummary({
     shots,
@@ -70,11 +78,12 @@ export const Dashboard = ({
     profile,
     weights,
     shots,
+    checkIns,
     summary,
     dismissedNotificationIds,
   });
 
-  const hasQueryError = shotsQuery.isError || weightsQuery.isError;
+  const hasQueryError = shotsQuery.isError || weightsQuery.isError || checkInsQuery.isError;
 
   const queryErrorMessage = (() => {
     if (shotsQuery.isError) {
@@ -83,6 +92,10 @@ export const Dashboard = ({
 
     if (weightsQuery.isError) {
       return getQueryErrorMessage(weightsQuery.error, 'Your weight entries could not be loaded.');
+    }
+
+    if (checkInsQuery.isError) {
+      return getQueryErrorMessage(checkInsQuery.error, 'Your check-ins could not be loaded.');
     }
 
     return null;
@@ -122,6 +135,10 @@ export const Dashboard = ({
     if (weightsQuery.isError) {
       void weightsQuery.refetch();
     }
+
+    if (checkInsQuery.isError) {
+      void checkInsQuery.refetch();
+    }
   };
 
   const handleNavigate = (section: SidebarSection) => {
@@ -138,6 +155,11 @@ export const Dashboard = ({
 
     if (action === 'view-shots') {
       handleNavigate('shots');
+      return;
+    }
+
+    if (action === 'add-check-in') {
+      handleNavigate('check-in');
       return;
     }
 
@@ -173,23 +195,44 @@ export const Dashboard = ({
     }
   };
 
-  const handleDeleteShot = async (id: string, date: string) => {
+  const handleCheckInAdded = async (checkIn: CreateCheckInInput) => {
     setDashboardError(null);
 
     try {
-      await deleteShotMutation.mutateAsync({ id, date });
+      await createCheckInMutation.mutateAsync(checkIn);
+    } catch (err) {
+      setDashboardError(err instanceof Error ? err.message : 'Unable to save check-in.');
+      throw err;
+    }
+  };
+
+  const handleDeleteShot = async (id: string, dateTime: string) => {
+    setDashboardError(null);
+
+    try {
+      await deleteShotMutation.mutateAsync({ id, dateTime });
     } catch (err) {
       setDashboardError(err instanceof Error ? err.message : 'Unable to delete shot.');
     }
   };
 
-  const handleDeleteWeight = async (id: string, date: string) => {
+  const handleDeleteWeight = async (id: string, dateTime: string) => {
     setDashboardError(null);
 
     try {
-      await deleteWeightMutation.mutateAsync({ id, date });
+      await deleteWeightMutation.mutateAsync({ id, dateTime });
     } catch (err) {
       setDashboardError(err instanceof Error ? err.message : 'Unable to delete weight.');
+    }
+  };
+
+  const handleDeleteCheckIn = async (id: string, dateTime: string) => {
+    setDashboardError(null);
+
+    try {
+      await deleteCheckInMutation.mutateAsync({ id, dateTime });
+    } catch (err) {
+      setDashboardError(err instanceof Error ? err.message : 'Unable to delete check-in.');
     }
   };
 
@@ -227,6 +270,15 @@ export const Dashboard = ({
       case 'profile':
         return <ProfileSettingsPage profile={profile} onProfileUpdated={onProfileUpdated} />;
 
+      case 'check-in':
+        return (
+          <CheckInsPage
+            checkIns={checkIns}
+            onCheckInAdded={handleCheckInAdded}
+            onDeleteCheckIn={handleDeleteCheckIn}
+          />
+        );
+
       default:
         return (
           <DashboardOverview
@@ -234,14 +286,18 @@ export const Dashboard = ({
             summary={summary}
             shots={shots}
             weights={weights}
+            checkIns={checkIns}
             onShotAdded={handleShotAdded}
             onWeightAdded={handleWeightAdded}
+            onCheckInAdded={handleCheckInAdded}
             onDeleteShot={handleDeleteShot}
             onDeleteWeight={handleDeleteWeight}
+            onDeleteCheckIn={handleDeleteCheckIn}
             onGoalWeightUpdated={handleGoalWeightUpdated}
             onViewAllMilestones={() => handleNavigate('milestones')}
             onViewAllShots={() => handleNavigate('shots')}
             onViewAllWeights={() => handleNavigate('weight')}
+            onViewAllCheckIns={() => handleNavigate('check-in')}
           />
         );
     }

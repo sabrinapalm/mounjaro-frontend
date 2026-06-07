@@ -16,7 +16,7 @@ const COMPACT_WEIGHT_LIMIT = 4;
 interface WeightTrackerProps {
   weights: WeightEntry[];
   onWeightAdded: (weight: CreateWeightInput) => Promise<void>;
-  onDeleteWeight: (id: string, date: string) => Promise<void>;
+  onDeleteWeight: (id: string, dateTime: string) => Promise<void>;
   onViewAll?: () => void;
   title?: string;
   summaryLabel?: string;
@@ -24,7 +24,7 @@ interface WeightTrackerProps {
 }
 
 const getWeightDateTime = (entry: WeightEntry) => {
-  return entry.dateTime ?? entry.date;
+  return entry.dateTime;
 };
 
 const getWeightTimestamp = (entry: WeightEntry) => {
@@ -138,7 +138,7 @@ export const WeightTracker = ({
     setIsDeleting(true);
 
     try {
-      await onDeleteWeight(weightToDelete.id, weightToDelete.date);
+      await onDeleteWeight(weightToDelete.id, weightToDelete.dateTime);
       setWeightToDelete(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to delete weight');

@@ -6,7 +6,6 @@ import type { CreateWeightInput } from '../types';
 import {
   createDateTimeFromDateAndTimeValue,
   getCurrentTimeValue,
-  getIsoWeekInfo,
   getTodayDateValue,
 } from '../utils/dateHelpers';
 import './AddWeightModal.css';
@@ -75,15 +74,9 @@ export const AddWeightModal = ({
       return;
     }
 
-    const dateTime = createDateTimeFromDateAndTimeValue(date, time);
-    const { week, year } = getIsoWeekInfo(dateTime);
-
     const newWeight: CreateWeightInput = {
-      date,
-      dateTime,
+      dateTime: createDateTimeFromDateAndTimeValue(date, time),
       weight: weightInKg,
-      week,
-      year,
     };
 
     await onWeightAdded(newWeight);

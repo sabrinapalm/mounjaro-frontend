@@ -31,7 +31,7 @@ const clampProgress = (value: number) => {
 };
 
 const getWeightDateTime = (entry: WeightEntry) => {
-  return entry.dateTime ?? entry.date;
+  return entry.dateTime ?? entry.dateTime;
 };
 
 const getWeightTimestamp = (entry: WeightEntry) => {
@@ -47,7 +47,7 @@ const getWeightTimestamp = (entry: WeightEntry) => {
 };
 
 const getShotTimestamp = (entry: ShotEntry) => {
-  const timestamp = getTimestamp(entry.date);
+  const timestamp = getTimestamp(entry.dateTime);
 
   if (!Number.isNaN(timestamp)) {
     return timestamp;
@@ -63,7 +63,7 @@ const getLatestWeight = (weights: WeightEntry[]) => {
 };
 
 const getFirstShotDate = (shots: ShotEntry[]) => {
-  return [...shots].sort((a, b) => getShotTimestamp(a) - getShotTimestamp(b))[0]?.date;
+  return [...shots].sort((a, b) => getShotTimestamp(a) - getShotTimestamp(b))[0]?.dateTime;
 };
 
 const getFirstWeightDateTime = (weights: WeightEntry[]) => {

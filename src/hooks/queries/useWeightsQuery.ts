@@ -6,7 +6,7 @@ import { getTimestamp } from '../../utils/dateHelpers';
 
 type DeleteWeightInput = {
   id: string;
-  date: string;
+  dateTime: string;
 };
 
 const sortWeightsNewestFirst = (weights: WeightEntry[]) => {
@@ -46,7 +46,7 @@ export function useDeleteWeight() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, date }: DeleteWeightInput) => apiClient.deleteWeight(id, date),
+    mutationFn: ({ id, dateTime }: DeleteWeightInput) => apiClient.deleteWeight(id, dateTime),
 
     onSuccess: async (_response, deletedWeight) => {
       queryClient.setQueryData<WeightEntry[]>(queryKeys.weights, (currentWeights = []) => {

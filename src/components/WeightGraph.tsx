@@ -27,14 +27,14 @@ interface WeightGraphProps {
 }
 
 const periodOptions: { value: Period; label: string }[] = [
+  { value: 'all', label: 'All Time' },
   { value: '1m', label: '1 Month' },
   { value: '3m', label: '3 Months' },
   { value: '6m', label: '6 Months' },
-  { value: 'all', label: 'All Time' },
 ];
 
 const getWeightDateTime = (entry: WeightEntry) => {
-  return entry.dateTime ?? entry.date;
+  return entry.dateTime ?? entry.dateTime;
 };
 
 const getPeriodStartDateTime = (period: Period) => {

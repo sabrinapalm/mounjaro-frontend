@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import './App.css';
+import { useIntl } from 'react-intl';
 import { AuthLayout } from './components/AuthLayout';
 import { ConfirmSignUpForm } from './components/ConfirmSignUpForm';
 import { Dashboard } from './components/Dashboard';
@@ -13,6 +14,7 @@ import { SignUpForm } from './components/SignUpForm';
 import { ProfileProvider } from './context/ProfileContext';
 import { useProfile, useUpdateProfile } from './hooks/queries/useProfileQuery';
 import { useTheme } from './hooks/useTheme';
+import { messages } from './i18n/messages';
 import { queryKeys } from './query/queryKeys';
 import { cognitoAuth } from './services/cognitoAuth';
 import type { ProfileFormValues, UserProfile } from './types';
@@ -22,6 +24,7 @@ type AuthView = 'login' | 'signup' | 'confirm';
 
 function App() {
   const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
 
   const [initialized, setInitialized] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
@@ -109,10 +112,10 @@ function App() {
       return (
         <main className='app-content app-content--centered'>
           <DashboardErrorNotice
-            title='Profile could not be loaded'
+            title={formatMessage(messages.errorProfileTitle)}
             message={getQueryErrorMessage(
               profileQuery.error,
-              'Your profile could not be loaded. Please try again.'
+              formatMessage(messages.errorProfileMessage)
             )}
             onRetry={() => {
               void profileQuery.refetch();
@@ -128,7 +131,10 @@ function App() {
           initialProfile={null}
           onSubmit={handleSaveProfile}
           isSubmitting={updateProfileMutation.isPending}
-          submitError={getQueryErrorMessage(updateProfileMutation.error, 'Unable to save profile.')}
+          submitError={getQueryErrorMessage(
+            updateProfileMutation.error,
+            formatMessage(messages.saveProfileError)
+          )}
         />
       );
     }

@@ -1,10 +1,15 @@
 import { type FormEvent, useState } from 'react';
 import { FiCheckCircle } from 'react-icons/fi';
 import { PiSyringeBold } from 'react-icons/pi';
-import type { CreateShotInput } from '../types';
-import { getIsoWeekInfo, getTodayDateValue } from '../utils/dateHelpers';
+import type { CreateShotInput, InjectionSite, ShotSideEffect } from '../types';
+import {
+  createDateTimeFromDateAndTimeValue,
+  getCurrentTimeValue,
+  getTodayDateValue,
+} from '../utils/dateHelpers';
 import './AddShotModal.css';
 import { DateField } from './DateField';
+import { TimeField } from './TimeField';
 
 interface AddShotModalProps {
   open: boolean;
@@ -16,9 +21,30 @@ interface AddShotModalProps {
 
 const doseOptions = ['2.5', '5', '7.5', '10', '12.5', '15'];
 
-const injectionSiteOptions = ['Stomach', 'Left thigh', 'Right thigh', 'Left arm', 'Right arm'];
+const injectionSiteOptions: Array<{ value: InjectionSite; label: string }> = [
+  { value: 'abdomen_left', label: 'Left abdomen' },
+  { value: 'abdomen_right', label: 'Right abdomen' },
+  { value: 'left_thigh', label: 'Left thigh' },
+  { value: 'right_thigh', label: 'Right thigh' },
+  { value: 'left_upper_arm', label: 'Left upper arm' },
+  { value: 'right_upper_arm', label: 'Right upper arm' },
+  { value: 'other', label: 'Other' },
+];
 
-const defaultInjectionSite = 'Stomach';
+const sideEffectOptions: Array<{ value: ShotSideEffect; label: string }> = [
+  { value: 'nausea', label: 'Nausea' },
+  { value: 'fatigue', label: 'Fatigue' },
+  { value: 'headache', label: 'Headache' },
+  { value: 'constipation', label: 'Constipation' },
+  { value: 'diarrhea', label: 'Diarrhea' },
+  { value: 'stomach_pain', label: 'Stomach pain' },
+  { value: 'injection_site_reaction', label: 'Injection site reaction' },
+  { value: 'reduced_appetite', label: 'Reduced appetite' },
+  { value: 'heartburn', label: 'Heartburn' },
+  { value: 'other', label: 'Other' },
+];
+
+const defaultInjectionSite: InjectionSite = 'abdomen_left';
 
 export const AddShotModal = ({
   open,
@@ -28,14 +54,20 @@ export const AddShotModal = ({
   onShotAdded,
 }: AddShotModalProps) => {
   const [date, setDate] = useState<string>(getTodayDateValue());
+  const [time, setTime] = useState<string>(getCurrentTimeValue());
   const [dosage, setDosage] = useState<string>('2.5');
-  const [injectionSite, setInjectionSite] = useState<string>(defaultInjectionSite);
+  const [injectionSite, setInjectionSite] = useState<InjectionSite>(defaultInjectionSite);
+  const [sideEffects, setSideEffects] = useState<ShotSideEffect[]>([]);
+  const [notes, setNotes] = useState<string>('');
   const [localError, setLocalError] = useState<string | null>(null);
 
   const resetForm = () => {
     setDate(getTodayDateValue());
+    setTime(getCurrentTimeValue());
     setDosage('2.5');
     setInjectionSite(defaultInjectionSite);
+    setSideEffects([]);
+    setNotes('');
     setLocalError(null);
   };
 
@@ -48,12 +80,22 @@ export const AddShotModal = ({
     onClose();
   };
 
+  const handleSideEffectChange = (sideEffect: ShotSideEffect) => {
+    setSideEffects((currentSideEffects) => {
+      if (currentSideEffects.includes(sideEffect)) {
+        return currentSideEffects.filter((currentSideEffect) => currentSideEffect !== sideEffect);
+      }
+
+      return [...currentSideEffects, sideEffect];
+    });
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLocalError(null);
 
-    if (!date || !dosage || !injectionSite) {
-      setLocalError('Please select date, dose and injection site.');
+    if (!date || !time || !dosage || !injectionSite) {
+      setLocalError('Please select date, time, dose and injection site.');
       return;
     }
 
@@ -64,14 +106,19 @@ export const AddShotModal = ({
       return;
     }
 
-    const { week, year } = getIsoWeekInfo(date);
+    const trimmedNotes = notes.trim();
+
+    if (trimmedNotes.length > 250) {
+      setLocalError('Notes can be max 250 characters.');
+      return;
+    }
 
     const newShot: CreateShotInput = {
-      date,
+      dateTime: createDateTimeFromDateAndTimeValue(date, time),
       dosage: parsedDosage,
-      week,
-      year,
       injectionSite,
+      ...(sideEffects.length > 0 ? { sideEffects } : {}),
+      ...(trimmedNotes ? { notes: trimmedNotes } : {}),
     };
 
     await onShotAdded(newShot);
@@ -128,6 +175,16 @@ export const AddShotModal = ({
               disabled={isSubmitting}
             />
 
+            <TimeField
+              id='shot-time'
+              label='Time'
+              value={time}
+              onChange={setTime}
+              disabled={isSubmitting}
+            />
+          </div>
+
+          <div className='add-shot-modal__row'>
             <label className='add-shot-modal__field' htmlFor='shot-dosage'>
               <span className='add-shot-modal__label'>Dose (mg)</span>
 
@@ -150,25 +207,67 @@ export const AddShotModal = ({
                 <span className='add-shot-modal__unit'>mg</span>
               </div>
             </label>
+
+            <label className='add-shot-modal__field' htmlFor='shot-injection-site'>
+              <span className='add-shot-modal__label'>Injection site</span>
+
+              <select
+                id='shot-injection-site'
+                className='add-shot-modal__select'
+                value={injectionSite}
+                onChange={(event) => setInjectionSite(event.target.value as InjectionSite)}
+                disabled={isSubmitting}
+                required
+              >
+                {injectionSiteOptions.map((site) => (
+                  <option key={site.value} value={site.value}>
+                    {site.label}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
 
-          <label className='add-shot-modal__field' htmlFor='shot-injection-site'>
-            <span className='add-shot-modal__label'>Injection Site</span>
+          <fieldset className='add-shot-modal__fieldset'>
+            <legend className='add-shot-modal__label'>Side effects</legend>
 
-            <select
-              id='shot-injection-site'
-              className='add-shot-modal__select'
-              value={injectionSite}
-              onChange={(event) => setInjectionSite(event.target.value)}
+            <div className='add-shot-modal__chips'>
+              {sideEffectOptions.map((sideEffect) => {
+                const selected = sideEffects.includes(sideEffect.value);
+
+                return (
+                  <button
+                    key={sideEffect.value}
+                    type='button'
+                    className={`add-shot-modal__chip ${
+                      selected ? 'add-shot-modal__chip--selected' : ''
+                    }`}
+                    onClick={() => handleSideEffectChange(sideEffect.value)}
+                    disabled={isSubmitting}
+                    aria-pressed={selected}
+                  >
+                    {sideEffect.label}
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
+
+          <label className='add-shot-modal__field' htmlFor='shot-notes'>
+            <span className='add-shot-modal__label'>Notes</span>
+
+            <textarea
+              id='shot-notes'
+              className='add-shot-modal__textarea'
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
               disabled={isSubmitting}
-              required
-            >
-              {injectionSiteOptions.map((site) => (
-                <option key={site} value={site}>
-                  {site}
-                </option>
-              ))}
-            </select>
+              maxLength={250}
+              rows={3}
+              placeholder='Optional note...'
+            />
+
+            <span className='add-shot-modal__hint'>{notes.length}/250</span>
           </label>
 
           {(localError || error) && <p className='add-shot-modal__error'>{localError || error}</p>}

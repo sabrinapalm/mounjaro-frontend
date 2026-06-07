@@ -30,7 +30,7 @@ export interface DashboardSummary {
 }
 
 const getWeightDateTime = (entry: WeightEntry) => {
-  return entry.dateTime ?? entry.date;
+  return entry.dateTime ?? entry.dateTime;
 };
 
 const getWeightTimestamp = (entry: WeightEntry) => {
@@ -46,7 +46,7 @@ const getWeightTimestamp = (entry: WeightEntry) => {
 };
 
 const getShotTimestamp = (entry: ShotEntry) => {
-  return getTimestamp(getLocalDate(entry.date));
+  return getTimestamp(getLocalDate(entry.dateTime));
 };
 
 const getDoseWeek = (sortedShots: ShotEntry[], latestShot: ShotEntry | null) => {
@@ -88,7 +88,7 @@ export const useDashboardSummary = ({
 
     const latestShot = sortedShots.length > 0 ? sortedShots[sortedShots.length - 1] : null;
 
-    const nextShotDate = latestShot ? addDays(getLocalDate(latestShot.date), 7) : null;
+    const nextShotDate = latestShot ? addDays(getLocalDate(latestShot.dateTime), 7) : null;
     const nextShotLabel = nextShotDate ? formatDateLabel(nextShotDate) : '—';
     const nextShotMeta = nextShotDate ? getDueLabel(nextShotDate, today) : 'No shots yet';
 

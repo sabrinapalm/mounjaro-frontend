@@ -6,12 +6,12 @@ import { getTimestamp } from '../../utils/dateHelpers';
 
 type DeleteShotInput = {
   id: string;
-  date: string;
+  dateTime: string;
 };
 
 const sortShotsNewestFirst = (shots: ShotEntry[]) => {
   return [...shots].sort((firstShot, secondShot) => {
-    const dateDifference = getTimestamp(secondShot.date) - getTimestamp(firstShot.date);
+    const dateDifference = getTimestamp(secondShot.dateTime) - getTimestamp(firstShot.dateTime);
 
     if (dateDifference !== 0) {
       return dateDifference;
@@ -52,7 +52,7 @@ export function useDeleteShot() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, date }: DeleteShotInput) => apiClient.deleteShot(id, date),
+    mutationFn: ({ id, dateTime }: DeleteShotInput) => apiClient.deleteShot(id, dateTime),
 
     onSuccess: async (_response, deletedShot) => {
       queryClient.setQueryData<ShotEntry[]>(queryKeys.shots, (currentShots = []) => {

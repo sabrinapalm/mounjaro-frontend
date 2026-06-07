@@ -1,9 +1,10 @@
-import { IoScaleOutline } from 'react-icons/io5';
-import { LuCalendarHeart, LuSyringe } from 'react-icons/lu';
-import { RiEmotionHappyLine } from 'react-icons/ri';
+import { LuCalendarHeart, LuScale, LuSyringe, LuTrendingDown } from 'react-icons/lu';
+
 import type { DashboardSummary } from '../hooks/useDashboardSummary';
 import { useUnitSettings } from '../hooks/useUnitSettings';
 import type {
+  CheckInEntry,
+  CreateCheckInInput,
   CreateShotInput,
   CreateWeightInput,
   ShotEntry,
@@ -11,6 +12,7 @@ import type {
   WeightEntry,
 } from '../types';
 import { formatDateLabel } from '../utils/dateHelpers';
+import { CheckInTracker } from './CheckInTracker';
 import { GoalProgress } from './GoalProgress';
 import { Milestones } from './Milestones';
 import { ShotTracker } from './ShotTracker';
@@ -22,14 +24,18 @@ interface DashboardOverviewProps {
   summary: DashboardSummary;
   shots: ShotEntry[];
   weights: WeightEntry[];
+  checkIns: CheckInEntry[];
+  onCheckInAdded: (checkIn: CreateCheckInInput) => Promise<void>;
+  onDeleteCheckIn: (id: string, dateTime: string) => Promise<void>;
   onShotAdded: (shot: CreateShotInput) => Promise<void>;
   onWeightAdded: (weight: CreateWeightInput) => Promise<void>;
-  onDeleteShot: (id: string, date: string) => Promise<void>;
-  onDeleteWeight: (id: string, date: string) => Promise<void>;
+  onDeleteShot: (id: string, dateTime: string) => Promise<void>;
+  onDeleteWeight: (id: string, dateTime: string) => Promise<void>;
   onGoalWeightUpdated: (goalWeight: number) => Promise<void>;
   onViewAllMilestones: () => void;
   onViewAllShots: () => void;
   onViewAllWeights: () => void;
+  onViewAllCheckIns: () => void;
 }
 
 export const DashboardOverview = ({
@@ -37,14 +43,18 @@ export const DashboardOverview = ({
   summary,
   shots,
   weights,
+  checkIns,
   onShotAdded,
   onWeightAdded,
+  onDeleteCheckIn,
+  onCheckInAdded,
   onDeleteShot,
   onDeleteWeight,
   onGoalWeightUpdated,
   onViewAllMilestones,
   onViewAllShots,
   onViewAllWeights,
+  onViewAllCheckIns,
 }: DashboardOverviewProps) => {
   const { weightUnit, displayWeightFromKg } = useUnitSettings(profile.unitSystem ?? 'metric');
 
@@ -83,7 +93,7 @@ export const DashboardOverview = ({
       <div className='dashboard-summary-cards'>
         <div className='dashboard-card'>
           <div className='dashboard-card-icon dashboard-card-icon-weight'>
-            <RiEmotionHappyLine size={38} color='currentColor' aria-hidden='true' />
+            <LuScale size={38} color='currentColor' aria-hidden='true' />
           </div>
 
           <div className='dashboard-card-copy'>
@@ -95,7 +105,7 @@ export const DashboardOverview = ({
 
         <div className='dashboard-card'>
           <div className='dashboard-card-icon dashboard-card-icon-loss'>
-            <IoScaleOutline size={38} color='currentColor' aria-hidden='true' />
+            <LuTrendingDown size={38} color='currentColor' aria-hidden='true' />
           </div>
 
           <div className='dashboard-card-copy'>
@@ -172,16 +182,27 @@ export const DashboardOverview = ({
         </section>
       </div>
 
-      <section id='milestones'>
-        <Milestones
-          weights={weights}
-          shots={shots}
-          startWeight={profile.startWeight ?? null}
-          goalWeight={profile.goalWeight ?? null}
-          maxVisible={5}
-          onViewAll={onViewAllMilestones}
-        />
-      </section>
+      <div className='dashboard-grid'>
+        <section id='milestones' className='tracker-section'>
+          <Milestones
+            weights={weights}
+            shots={shots}
+            startWeight={profile.startWeight ?? null}
+            goalWeight={profile.goalWeight ?? null}
+            maxVisible={5}
+            onViewAll={onViewAllMilestones}
+          />
+        </section>
+
+        <section id='checkins' className='checkin-section'>
+          <CheckInTracker
+            checkIns={checkIns}
+            onCheckInAdded={onCheckInAdded}
+            onDeleteCheckIn={onDeleteCheckIn}
+            onViewAll={onViewAllCheckIns}
+          />
+        </section>
+      </div>
     </>
   );
 };

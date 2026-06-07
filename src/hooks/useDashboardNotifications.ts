@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import { useUnitSettings } from '../hooks/useUnitSettings';
-import type { ShotEntry, UserProfile, WeightEntry } from '../types';
+import type { CheckInEntry, ShotEntry, UserProfile, WeightEntry } from '../types';
 import type { DashboardSummary } from './useDashboardSummary';
 
-export type DashboardNotificationType = 'weight' | 'shot' | 'goal';
+export type DashboardNotificationType = 'weight' | 'shot' | 'goal' | 'check-in';
 
 export type DashboardNotificationTone = 'success' | 'warning' | 'info';
 
@@ -12,7 +12,8 @@ export type DashboardNotificationAction =
   | 'add-weight'
   | 'view-weight'
   | 'view-shots'
-  | 'view-profile';
+  | 'view-profile'
+  | 'add-check-in';
 
 export type DashboardNotification = {
   id: string;
@@ -32,6 +33,7 @@ type UseDashboardNotificationsParams = {
   profile: UserProfile;
   weights: WeightEntry[];
   shots: ShotEntry[];
+  checkIns: CheckInEntry[];
   summary: DashboardSummary;
   dismissedNotificationIds?: string[];
 };
@@ -39,11 +41,11 @@ type UseDashboardNotificationsParams = {
 const SHOT_INTERVAL_DAYS = 7;
 
 const getWeightDateTime = (entry: WeightEntry) => {
-  return entry.dateTime ?? entry.date;
+  return entry.dateTime;
 };
 
 const getWeightTimestamp = (entry: WeightEntry) => {
-  const timestamp = dayjs(getWeightDateTime(entry)).valueOf();
+  const timestamp = dayjs(entry.dateTime).valueOf();
 
   if (!Number.isNaN(timestamp)) {
     return timestamp;
@@ -55,7 +57,19 @@ const getWeightTimestamp = (entry: WeightEntry) => {
 };
 
 const getShotTimestamp = (entry: ShotEntry) => {
-  const timestamp = dayjs(entry.date).valueOf();
+  const timestamp = dayjs(entry.dateTime).valueOf();
+
+  if (!Number.isNaN(timestamp)) {
+    return timestamp;
+  }
+
+  const timestampFromId = entry.id?.split('_')[1];
+
+  return timestampFromId ? Number(timestampFromId) : 0;
+};
+
+const getCheckInTimestamp = (entry: CheckInEntry) => {
+  const timestamp = dayjs(entry.dateTime).valueOf();
 
   if (!Number.isNaN(timestamp)) {
     return timestamp;
@@ -80,10 +94,19 @@ const getDaysUntil = (dateTime: string) => {
   return date.diff(today, 'day');
 };
 
+const hasCheckInToday = (checkIns: CheckInEntry[]) => {
+  const today = dayjs();
+
+  return checkIns.some((checkIn) => {
+    return dayjs(checkIn.dateTime).isSame(today, 'day');
+  });
+};
+
 export const useDashboardNotifications = ({
   profile,
   weights,
   shots,
+  checkIns,
   summary,
   dismissedNotificationIds = [],
 }: UseDashboardNotificationsParams) => {
@@ -100,6 +123,46 @@ export const useDashboardNotifications = ({
 
       notifications.push(notification);
     };
+
+    const latestCheckIn = [...checkIns].sort(
+      (a, b) => getCheckInTimestamp(b) - getCheckInTimestamp(a)
+    )[0];
+
+    if (!latestCheckIn) {
+      addNotification({
+        id: 'check-in-first',
+        type: 'check-in',
+        tone: 'info',
+        title: 'Add your first daily check-in',
+        message:
+          'Log how you feel today to start finding patterns in hunger, energy and side effects.',
+        priority: 88,
+        action: {
+          label: 'Add check-in',
+          target: 'add-check-in',
+        },
+        isDismissible: false,
+      });
+    } else if (!hasCheckInToday(checkIns)) {
+      const daysSinceLatestCheckIn = getDaysSince(latestCheckIn.dateTime);
+
+      addNotification({
+        id: 'check-in-today',
+        type: 'check-in',
+        tone: daysSinceLatestCheckIn >= 2 ? 'warning' : 'info',
+        title: 'Daily check-in missing',
+        message:
+          daysSinceLatestCheckIn === 1
+            ? 'You have not added today’s check-in yet.'
+            : `It has been ${daysSinceLatestCheckIn} days since your last daily check-in.`,
+        priority: daysSinceLatestCheckIn >= 2 ? 87 : 72,
+        action: {
+          label: 'Add check-in',
+          target: 'add-check-in',
+        },
+        isDismissible: true,
+      });
+    }
 
     const latestWeight = [...weights].sort(
       (a, b) => getWeightTimestamp(b) - getWeightTimestamp(a)
@@ -156,7 +219,7 @@ export const useDashboardNotifications = ({
         isDismissible: false,
       });
     } else {
-      const nextShotDate = dayjs(latestShot.date).add(SHOT_INTERVAL_DAYS, 'day').toISOString();
+      const nextShotDate = dayjs(latestShot.dateTime).add(SHOT_INTERVAL_DAYS, 'day').toISOString();
       const daysUntilNextShot = getDaysUntil(nextShotDate);
 
       if (daysUntilNextShot < 0) {
@@ -259,6 +322,7 @@ export const useDashboardNotifications = ({
 
     return notifications.sort((a, b) => b.priority - a.priority).slice(0, 5);
   }, [
+    checkIns,
     dismissedNotificationIds,
     displayWeightFromKg,
     profile.goalWeight,

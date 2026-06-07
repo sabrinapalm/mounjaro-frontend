@@ -14,7 +14,7 @@ interface GoalProgressProps {
 }
 
 const getWeightDateTime = (entry: WeightEntry) => {
-  return entry.dateTime ?? entry.date;
+  return entry.dateTime ?? entry.dateTime;
 };
 
 const getWeightTimestamp = (entry: WeightEntry) => {
@@ -30,16 +30,28 @@ const getWeightTimestamp = (entry: WeightEntry) => {
 };
 
 const getGoalProgressSubtitle = ({
+  hasWeights,
+  hasGoalWeight,
   progress,
   weightLost,
   weightToGo,
   formatWeight,
 }: {
+  hasWeights: boolean;
+  hasGoalWeight: boolean;
   progress: number;
   weightLost: number;
   weightToGo: number;
   formatWeight: (weightInKg: number) => string;
 }) => {
+  if (!hasGoalWeight) {
+    return 'Set a goal weight to start tracking your progress toward it.';
+  }
+
+  if (!hasWeights) {
+    return 'Add your first weight check-in to start seeing your goal progress.';
+  }
+
   if (weightLost < 0) {
     return 'A little bump up is okay. Progress is not always linear — your next check-in is a fresh start.';
   }
@@ -71,9 +83,16 @@ const getFormattedWeightLost = ({
   weightLost,
   formatWeight,
 }: {
-  weightLost: number;
+  weightLost: number | null;
   formatWeight: (weightInKg: number) => string;
 }) => {
+  if (weightLost === null) {
+    return {
+      text: '—',
+      className: '',
+    };
+  }
+
   if (weightLost > 0) {
     return {
       text: `-${formatWeight(weightLost)}`,
@@ -103,25 +122,55 @@ export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProg
   const [isSavingGoal, setIsSavingGoal] = useState(false);
   const [goalError, setGoalError] = useState<string | null>(null);
 
-  const formatWeight = (weightInKg: number) => {
+  const hasGoalWeight = typeof goalWeight === 'number';
+  const hasWeights = weights.length > 0;
+
+  const formatWeight = (weightInKg: number | null) => {
+    if (typeof weightInKg !== 'number') {
+      return '—';
+    }
+
     return `${displayWeightFromKg(weightInKg)} ${weightUnit}`;
   };
 
   const goalData = useMemo(() => {
-    if (weights.length === 0 || typeof goalWeight !== 'number') {
-      return null;
-    }
-
     const sortedWeights = [...weights].sort(
       (firstWeight, secondWeight) =>
         getWeightTimestamp(firstWeight) - getWeightTimestamp(secondWeight)
     );
 
-    const startWeight = profile.startWeight ?? sortedWeights[0].weight;
-    const currentWeight = sortedWeights[sortedWeights.length - 1].weight;
+    const firstWeightEntry = sortedWeights[0] ?? null;
+    const latestWeightEntry = sortedWeights[sortedWeights.length - 1] ?? null;
+
+    const startWeight = profile.startWeight ?? firstWeightEntry?.weight ?? null;
+    const currentWeight = latestWeightEntry?.weight ?? null;
+
+    if (typeof goalWeight !== 'number') {
+      return {
+        startWeight,
+        currentWeight,
+        totalToLose: null,
+        weightLost: null,
+        weightToGo: null,
+        progress: 0,
+      };
+    }
+
+    if (typeof startWeight !== 'number') {
+      return {
+        startWeight: null,
+        currentWeight,
+        totalToLose: null,
+        weightLost: null,
+        weightToGo: null,
+        progress: 0,
+      };
+    }
+
+    const weightForProgress = currentWeight ?? startWeight;
     const totalToLose = startWeight - goalWeight;
-    const weightLost = startWeight - currentWeight;
-    const weightToGo = Math.max(0, currentWeight - goalWeight);
+    const weightLost = startWeight - weightForProgress;
+    const weightToGo = Math.max(0, weightForProgress - goalWeight);
 
     const rawProgress = totalToLose > 0 ? (weightLost / totalToLose) * 100 : 0;
     const clampedProgress = Math.min(100, Math.max(0, rawProgress));
@@ -136,22 +185,20 @@ export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProg
     };
   }, [weights, profile.startWeight, goalWeight]);
 
-  if (!goalData || typeof goalWeight !== 'number') {
-    return null;
-  }
-
   const { progress, startWeight, weightLost, weightToGo, currentWeight } = goalData;
 
   const subtitle = getGoalProgressSubtitle({
+    hasWeights,
+    hasGoalWeight,
     progress,
-    weightLost,
-    weightToGo,
-    formatWeight,
+    weightLost: weightLost ?? 0,
+    weightToGo: weightToGo ?? 0,
+    formatWeight: (weightInKg) => formatWeight(weightInKg),
   });
 
   const formattedWeightLost = getFormattedWeightLost({
     weightLost,
-    formatWeight,
+    formatWeight: (weightInKg) => formatWeight(weightInKg),
   });
 
   const handleOpenEditGoal = () => {
@@ -183,7 +230,17 @@ export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProg
     }
   };
 
-  const bmi = typeof height === 'number' ? calculateBmi(currentWeight, height) : '—';
+  const bmi =
+    typeof height === 'number' && typeof currentWeight === 'number'
+      ? calculateBmi(currentWeight, height)
+      : '—';
+
+  const modalGoalWeight =
+    typeof goalWeight === 'number'
+      ? goalWeight
+      : typeof profile.startWeight === 'number'
+        ? profile.startWeight
+        : 0;
 
   return (
     <section className='goal-progress-card'>
@@ -242,13 +299,13 @@ export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProg
         </div>
 
         <button type='button' className='target-card__add-button' onClick={handleOpenEditGoal}>
-          Edit Goal
+          {hasGoalWeight ? 'Edit Goal' : 'Set Goal'}
         </button>
       </div>
 
       <EditGoalWeightModal
         open={isEditGoalOpen}
-        currentGoalWeight={goalWeight}
+        currentGoalWeight={modalGoalWeight}
         isSubmitting={isSavingGoal}
         error={goalError}
         onClose={handleCloseEditGoal}
