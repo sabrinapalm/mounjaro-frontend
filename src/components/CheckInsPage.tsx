@@ -14,7 +14,6 @@ export const CheckInsPage = ({ checkIns, onCheckInAdded, onDeleteCheckIn }: Chec
     <section className='check-ins-page'>
       <header className='check-ins-page__header'>
         <div>
-          <p className='check-ins-page__eyebrow'>Daily check-ins</p>
           <h1>All Check-ins</h1>
           <p>View your daily check-in history and log how you feel over time.</p>
         </div>

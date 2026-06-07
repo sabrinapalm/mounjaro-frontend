@@ -13,7 +13,6 @@ export const MilestonesPage = ({ weights, shots, profile }: MilestonesPageProps)
     <section className='milestones-page'>
       <header className='milestones-page__header'>
         <div>
-          <p className='milestones-page__eyebrow'>Milestones</p>
           <h1>All Milestones</h1>
           <p>Track your achievements and see what progress milestones are coming next.</p>
         </div>

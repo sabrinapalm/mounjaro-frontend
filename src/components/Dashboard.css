@@ -13,6 +13,7 @@
   padding: calc(32px + env(safe-area-inset-top)) 32px 32px;
   overflow-x: hidden;
 }
+
 /* Topbar */
 
 .dashboard-topbar {
@@ -149,7 +150,6 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
-  padding: 6px 0 16px;
 }
 
 .dashboard-header h1 {
@@ -159,7 +159,6 @@
 }
 
 .dashboard-header p {
-  margin-top: 8px;
   color: var(--color-text-muted);
   font-size: 1rem;
   font-weight: 700;
@@ -189,77 +188,6 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
-}
-
-.dashboard-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  min-width: 0;
-  min-height: 136px;
-  padding: 24px;
-  border: 1px solid var(--color-border);
-  border-radius: 24px;
-  background: var(--color-surface);
-  box-shadow: 0 20px 48px rgba(111, 77, 246, 0.08);
-}
-
-.dashboard-card-icon {
-  display: grid;
-  place-items: center;
-  min-width: 48px;
-  min-height: 48px;
-  border-radius: 16px;
-  background: var(--color-surface-soft);
-  color: var(--color-primary);
-}
-
-.dashboard-card-icon-loss {
-  background: var(--color-accent-soft);
-  color: var(--color-accent-dark);
-}
-
-.dashboard-card-icon-calendar {
-  background: rgba(111, 77, 246, 0.1);
-  color: var(--color-primary);
-}
-
-.dashboard-card-icon-dose {
-  background: linear-gradient(180deg, rgba(36, 199, 165, 0.16) 0%, rgba(36, 199, 165, 0.06) 100%);
-  color: var(--color-accent-dark);
-}
-
-.dashboard-card-copy {
-  display: grid;
-  gap: 6px;
-  min-width: 0;
-}
-
-.dashboard-card-label {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.dashboard-card-value {
-  color: var(--color-text);
-  font-size: 1.5rem;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.dashboard-card-meta {
-  color: var(--color-text-muted);
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-.total-weight-loss {
-  color: var(--color-accent-dark);
-}
-
-.total-weight-loss.weight-gain {
-  color: var(--color-text);
 }
 
 /* Main grid */

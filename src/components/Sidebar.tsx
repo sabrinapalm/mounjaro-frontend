@@ -1,5 +1,6 @@
 import { IoScaleOutline, IoStarOutline } from 'react-icons/io5';
 import {
+  LuChartBar,
   // LuChartNoAxesColumnIncreasing,
   LuCircleHelp,
   // LuClipboardList,
@@ -21,7 +22,8 @@ export type SidebarSection =
   | 'side-effects'
   | 'milestones'
   | 'profile'
-  | 'check-in';
+  | 'check-in'
+  | 'insights';
 
 type SidebarProps = {
   activeSection?: SidebarSection;
@@ -56,21 +58,11 @@ const navItems: Array<{
     label: 'Weight',
     icon: <IoScaleOutline size={22} />,
   },
-  // {
-  //   id: 'progress',
-  //   label: 'Progress',
-  //   icon: <LuChartNoAxesColumnIncreasing size={22} />,
-  // },
-  // {
-  //   id: 'dose-history',
-  //   label: 'Dose History',
-  //   icon: <LuClipboardList size={22} />,
-  // },
-  // {
-  //   id: 'side-effects',
-  //   label: 'Side Effects',
-  //   icon: <LuHeartPulse size={22} />,
-  // },
+  {
+    id: 'insights',
+    label: 'Insights',
+    icon: <LuChartBar size={22} />,
+  },
   {
     id: 'milestones',
     label: 'Milestones',
@@ -112,9 +104,9 @@ export const Sidebar = ({
         <div className='sidebar__inner'>
           <div className='sidebar__brand'>
             <img key={logoSrc} className='sidebar__logo' src={logoSrc} alt='Tracksy' />
-            <div>
+            {/* <div>
               <p className='sidebar__brand-subtitle'>Your Mounjaro journey</p>
-            </div>
+            </div> */}
           </div>
 
           <nav className='sidebar__nav' aria-label='Dashboard sections'>

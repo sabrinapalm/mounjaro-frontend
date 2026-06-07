@@ -10,6 +10,7 @@ import {
 import { useProfile } from '../context/ProfileContext';
 import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { WeightEntry } from '../types';
+import { MetricCard } from './general/MetricCard';
 import './WeightStatsCards.css';
 
 type WeightStatsCardsProps = {
@@ -52,17 +53,14 @@ export const WeightStatsCards = ({ weights }: WeightStatsCardsProps) => {
   if (!firstWeight || !latestWeight) {
     return (
       <div className='dashboard-summary-cards weight-summary-cards'>
-        <div className='dashboard-card weight-summary-card weight-summary-card--empty'>
-          <div className='dashboard-card-icon dashboard-card-icon-weight'>
-            <LuScale size={38} color='currentColor' aria-hidden='true' />
-          </div>
-
-          <div className='dashboard-card-copy'>
-            <span className='dashboard-card-label'>Weight Insights</span>
-            <span className='dashboard-card-value'>No data yet</span>
-            <span className='dashboard-card-meta'>Add your first check-in to see trends</span>
-          </div>
-        </div>
+        <MetricCard
+          label='Weight Insights'
+          value='No data yet'
+          meta='Add your first check-in to see trends'
+          icon={<LuScale aria-hidden='true' />}
+          tone='primary'
+          className='weight-summary-card weight-summary-card--empty'
+        />
       </div>
     );
   }
@@ -82,99 +80,79 @@ export const WeightStatsCards = ({ weights }: WeightStatsCardsProps) => {
   const averageChangePerWeekKg = totalChangeKg / weeksBetween;
   const averageChangePerMonthKg = totalChangeKg / monthsBetween;
 
-  const totalWeightLossClassName =
-    totalLossKg >= 0 ? 'total-weight-loss' : 'total-weight-loss weight-gain';
+  const totalWeightLossTone = totalLossKg >= 0 ? 'accent' : 'danger';
+  const totalWeightLossValue =
+    totalLossKg >= 0
+      ? `${displayWeightFromKg(totalLossKg)} ${weightUnit}`
+      : formatSignedWeightFromKg(totalChangeKg, weightUnit, displayWeightFromKg);
 
   const checkInMeta =
     weights.length === 1 ? '1 check-in logged' : `${weights.length} check-ins logged`;
 
   return (
     <div className='dashboard-summary-cards weight-summary-cards'>
-      <div className='dashboard-card weight-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-weight'>
-          <LuScale size={38} color='currentColor' aria-hidden='true' />
-        </div>
+      <MetricCard
+        label='Current Weight'
+        value={`${displayWeightFromKg(latestWeight.weight)} ${weightUnit}`}
+        meta={`Latest check-in ${latestDate.format('MMM D')}`}
+        icon={<LuScale aria-hidden='true' />}
+        tone='primary'
+        className='weight-summary-card'
+      />
 
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Current Weight</span>
-          <span className='dashboard-card-value'>
-            {displayWeightFromKg(latestWeight.weight)} {weightUnit}
-          </span>
-          <span className='dashboard-card-meta'>Latest check-in {latestDate.format('MMM D')}</span>
-        </div>
-      </div>
-
-      <div className='dashboard-card weight-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-loss'>
-          {totalLossKg >= 0 ? (
-            <LuTrendingDown size={38} color='currentColor' aria-hidden='true' />
+      <MetricCard
+        label='Total Weight Loss'
+        value={totalWeightLossValue}
+        meta='Since first entry'
+        icon={
+          totalLossKg >= 0 ? (
+            <LuTrendingDown aria-hidden='true' />
           ) : (
-            <LuTrendingUp size={38} color='currentColor' aria-hidden='true' />
-          )}
-        </div>
+            <LuTrendingUp aria-hidden='true' />
+          )
+        }
+        tone={totalWeightLossTone}
+        highlightValue
+        className='weight-summary-card'
+      />
 
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Total Weight Loss</span>
-          <span className={`dashboard-card-value ${totalWeightLossClassName}`}>
-            {totalLossKg >= 0
-              ? `${displayWeightFromKg(totalLossKg)} ${weightUnit}`
-              : formatSignedWeightFromKg(totalChangeKg, weightUnit, displayWeightFromKg)}
-          </span>
-          <span className='dashboard-card-meta'>Since first entry</span>
-        </div>
-      </div>
+      <MetricCard
+        label='Average / Week'
+        value={formatSignedWeightFromKg(averageChangePerWeekKg, weightUnit, displayWeightFromKg)}
+        meta='Based on full history'
+        icon={<LuCalendarDays aria-hidden='true' />}
+        tone={averageChangePerWeekKg <= 0 ? 'accent' : 'warning'}
+        highlightValue
+        className='weight-summary-card'
+      />
 
-      <div className='dashboard-card weight-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-calendar'>
-          <LuCalendarDays size={38} color='currentColor' aria-hidden='true' />
-        </div>
+      <MetricCard
+        label='Average / Month'
+        value={formatSignedWeightFromKg(averageChangePerMonthKg, weightUnit, displayWeightFromKg)}
+        meta={`Since ${firstDate.format('MMM D')}`}
+        icon={<LuCalendarDays aria-hidden='true' />}
+        tone={averageChangePerMonthKg <= 0 ? 'accent' : 'warning'}
+        highlightValue
+        className='weight-summary-card'
+      />
 
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Average / Week</span>
-          <span className='dashboard-card-value'>
-            {formatSignedWeightFromKg(averageChangePerWeekKg, weightUnit, displayWeightFromKg)}
-          </span>
-          <span className='dashboard-card-meta'>Based on full history</span>
-        </div>
-      </div>
+      <MetricCard
+        label='Journey Week'
+        value={`Week ${trackingWeeks}`}
+        meta='Your current monjourney week'
+        icon={<LuCalendarCheck aria-hidden='true' />}
+        tone='info'
+        className='weight-summary-card'
+      />
 
-      <div className='dashboard-card weight-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-dose'>
-          <LuCalendarDays size={38} color='currentColor' aria-hidden='true' />
-        </div>
-
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Average / Month</span>
-          <span className='dashboard-card-value'>
-            {formatSignedWeightFromKg(averageChangePerMonthKg, weightUnit, displayWeightFromKg)}
-          </span>
-          <span className='dashboard-card-meta'>Since {firstDate.format('MMM D')}</span>
-        </div>
-      </div>
-
-      <div className='dashboard-card weight-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-calendar'>
-          <LuCalendarCheck size={38} color='currentColor' aria-hidden='true' />
-        </div>
-
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Journey Week</span>
-          <span className='dashboard-card-value'>Week {trackingWeeks}</span>
-          <span className='dashboard-card-meta'>Your current  monjourney week</span>
-        </div>
-      </div>
-
-      <div className='dashboard-card weight-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-dose'>
-          <LuClipboardList size={38} color='currentColor' aria-hidden='true' />
-        </div>
-
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Check-ins</span>
-          <span className='dashboard-card-value'>{weights.length}</span>
-          <span className='dashboard-card-meta'>{checkInMeta}</span>
-        </div>
-      </div>
+      <MetricCard
+        label='Check-ins'
+        value={weights.length}
+        meta={checkInMeta}
+        icon={<LuClipboardList aria-hidden='true' />}
+        tone='neutral'
+        className='weight-summary-card'
+      />
     </div>
   );
 };

@@ -14,6 +14,7 @@ import type {
 import { formatDateLabel } from '../utils/dateHelpers';
 import { CheckInTracker } from './CheckInTracker';
 import { GoalProgress } from './GoalProgress';
+import { MetricCard } from './general/MetricCard';
 import { Milestones } from './Milestones';
 import { ShotTracker } from './ShotTracker';
 import { WeightGraph } from './WeightGraph';
@@ -70,10 +71,8 @@ export const DashboardOverview = ({
         : `+${formatWeight(Math.abs(summary.totalWeightLoss))}`
       : '—';
 
-  const totalWeightLossClassName =
-    summary.totalWeightLoss !== null && summary.totalWeightLoss < 0
-      ? 'total-weight-loss weight-gain'
-      : 'total-weight-loss';
+  const totalWeightLossTone =
+    summary.totalWeightLoss !== null && summary.totalWeightLoss < 0 ? 'danger' : 'accent';
 
   const currentWeightDateLabel = summary.currentWeightDate
     ? formatDateLabel(summary.currentWeightDate)
@@ -91,55 +90,38 @@ export const DashboardOverview = ({
       </div>
 
       <div className='dashboard-summary-cards'>
-        <div className='dashboard-card'>
-          <div className='dashboard-card-icon dashboard-card-icon-weight'>
-            <LuScale size={38} color='currentColor' aria-hidden='true' />
-          </div>
+        <MetricCard
+          label='Current Weight'
+          value={currentWeightLabel}
+          meta={currentWeightDateLabel}
+          icon={<LuScale aria-hidden='true' />}
+          tone='primary'
+        />
 
-          <div className='dashboard-card-copy'>
-            <span className='dashboard-card-label'>Current Weight</span>
-            <span className='dashboard-card-value'>{currentWeightLabel}</span>
-            <span className='dashboard-card-meta'>{currentWeightDateLabel}</span>
-          </div>
-        </div>
+        <MetricCard
+          label='Total Weight Loss'
+          value={totalWeightLossLabel}
+          meta='Since first entry'
+          icon={<LuTrendingDown aria-hidden='true' />}
+          tone={totalWeightLossTone}
+          highlightValue
+        />
 
-        <div className='dashboard-card'>
-          <div className='dashboard-card-icon dashboard-card-icon-loss'>
-            <LuTrendingDown size={38} color='currentColor' aria-hidden='true' />
-          </div>
+        <MetricCard
+          label='Next Shot'
+          value={summary.nextShotLabel}
+          meta={summary.nextShotMeta}
+          icon={<LuCalendarHeart aria-hidden='true' />}
+          tone='info'
+        />
 
-          <div className='dashboard-card-copy'>
-            <span className='dashboard-card-label'>Total Weight Loss</span>
-            <span className={`dashboard-card-value ${totalWeightLossClassName}`}>
-              {totalWeightLossLabel}
-            </span>
-            <span className='dashboard-card-meta'>Since first entry</span>
-          </div>
-        </div>
-
-        <div className='dashboard-card'>
-          <div className='dashboard-card-icon dashboard-card-icon-calendar'>
-            <LuCalendarHeart size={38} color='currentColor' aria-hidden='true' />
-          </div>
-
-          <div className='dashboard-card-copy'>
-            <span className='dashboard-card-label'>Next Shot</span>
-            <span className='dashboard-card-value'>{summary.nextShotLabel}</span>
-            <span className='dashboard-card-meta'>{summary.nextShotMeta}</span>
-          </div>
-        </div>
-
-        <div className='dashboard-card'>
-          <div className='dashboard-card-icon dashboard-card-icon-dose'>
-            <LuSyringe size={38} color='currentColor' aria-hidden='true' />
-          </div>
-
-          <div className='dashboard-card-copy'>
-            <span className='dashboard-card-label'>Current Dose</span>
-            <span className='dashboard-card-value'>{summary.currentDose}</span>
-            <span className='dashboard-card-meta'>{summary.currentDoseMeta}</span>
-          </div>
-        </div>
+        <MetricCard
+          label='Current Dose'
+          value={summary.currentDose}
+          meta={summary.currentDoseMeta}
+          icon={<LuSyringe aria-hidden='true' />}
+          tone='success'
+        />
       </div>
 
       <div className='dashboard-progress-grid'>

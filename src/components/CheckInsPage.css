@@ -12,15 +12,6 @@
   min-width: 0;
 }
 
-.check-ins-page__eyebrow {
-  margin-bottom: 8px;
-  color: var(--color-accent-dark);
-  font-size: 0.82rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .check-ins-page__header h1 {
   font-size: 1.9rem;
   font-weight: 800;
@@ -28,7 +19,6 @@
 }
 
 .check-ins-page__header p {
-  margin-top: 8px;
   color: var(--color-text-muted);
   font-size: 1rem;
   font-weight: 700;

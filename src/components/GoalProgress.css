@@ -23,10 +23,10 @@
 }
 
 .goal-progress-title {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
   color: var(--color-text);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
 }
 
 .goal-progress-subtitle {
@@ -59,7 +59,7 @@
 .goal-progress-bar-fill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(135deg, var(--color-accent), var(--color-primary));
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
   box-shadow: 0 10px 24px rgba(36, 199, 165, 0.24);
 }
 

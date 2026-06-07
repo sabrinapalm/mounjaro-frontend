@@ -157,7 +157,7 @@
 
 .check-in-tracker-card__level strong {
   color: var(--color-accent-dark);
-  font-weight: 900;
+  font-weight: 800;
 }
 
 .check-in-tracker-card__meta {
@@ -227,7 +227,7 @@
   color: var(--button-neutral-hover-color);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 800px) {
   .check-in-tracker-card__item {
     grid-template-columns: 42px minmax(0, 1fr) minmax(84px, auto) 38px;
     grid-template-areas:

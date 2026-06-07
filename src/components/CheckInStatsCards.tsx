@@ -8,6 +8,7 @@ import {
   LuSparkles,
 } from 'react-icons/lu';
 import type { CheckInEntry, CheckInLevel, SideEffect } from '../types';
+import { MetricCard } from './general/MetricCard';
 import './CheckInStatsCards.css';
 
 type CheckInStatsCardsProps = {
@@ -189,19 +190,14 @@ export const CheckInStatsCards = ({ checkIns }: CheckInStatsCardsProps) => {
   if (!latestCheckIn) {
     return (
       <div className='dashboard-summary-cards check-in-summary-cards'>
-        <div className='dashboard-card check-in-summary-card check-in-summary-card--empty'>
-          <div className='dashboard-card-icon dashboard-card-icon-check-in'>
-            <LuHeartPulse size={38} color='currentColor' aria-hidden='true' />
-          </div>
-
-          <div className='dashboard-card-copy'>
-            <span className='dashboard-card-label'>Check-in Insights</span>
-            <span className='dashboard-card-value'>No data yet</span>
-            <span className='dashboard-card-meta'>
-              Log your first daily check-in to see patterns
-            </span>
-          </div>
-        </div>
+        <MetricCard
+          label='Check-in Insights'
+          value='No data yet'
+          meta='Log your first daily check-in to see patterns'
+          icon={<LuHeartPulse aria-hidden='true' />}
+          tone='primary'
+          className='check-in-summary-card check-in-summary-card--empty'
+        />
       </div>
     );
   }
@@ -216,105 +212,77 @@ export const CheckInStatsCards = ({ checkIns }: CheckInStatsCardsProps) => {
 
   return (
     <div className='dashboard-summary-cards check-in-summary-cards'>
-      <div className='dashboard-card check-in-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-check-in'>
-          <LuCalendarCheck size={38} color='currentColor' aria-hidden='true' />
-        </div>
+      <MetricCard
+        label='Total Check-ins'
+        value={checkIns.length}
+        meta={checkIns.length === 1 ? '1 check-in logged' : `${checkIns.length} check-ins logged`}
+        icon={<LuCalendarCheck aria-hidden='true' />}
+        tone='info'
+        className='check-in-summary-card'
+      />
 
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Total Check-ins</span>
-          <span className='dashboard-card-value'>{checkIns.length}</span>
-          <span className='dashboard-card-meta'>
-            {checkIns.length === 1 ? '1 check-in logged' : `${checkIns.length} check-ins logged`}
-          </span>
-        </div>
-      </div>
+      <MetricCard
+        label='Current Streak'
+        value={currentStreak}
+        meta={currentStreak === 1 ? '1 day in a row' : `${currentStreak} days in a row`}
+        icon={<LuFlame aria-hidden='true' />}
+        tone='warning'
+        className='check-in-summary-card'
+      />
 
-      <div className='dashboard-card check-in-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-streak'>
-          <LuFlame size={38} color='currentColor' aria-hidden='true' />
-        </div>
+      <MetricCard
+        label='Average Energy'
+        value={formatAverage(averageEnergy)}
+        meta='Out of 5'
+        icon={<LuSparkles aria-hidden='true' />}
+        tone='accent'
+        className='check-in-summary-card'
+      />
 
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Current Streak</span>
-          <span className='dashboard-card-value'>{currentStreak}</span>
-          <span className='dashboard-card-meta'>
-            {currentStreak === 1 ? '1 day in a row' : `${currentStreak} days in a row`}
-          </span>
-        </div>
-      </div>
+      <MetricCard
+        label='Average Mood'
+        value={formatAverage(averageMood)}
+        meta='Out of 5'
+        icon={<LuHeartPulse aria-hidden='true' />}
+        tone='primary'
+        className='check-in-summary-card'
+      />
 
-      <div className='dashboard-card check-in-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-energy'>
-          <LuSparkles size={38} color='currentColor' aria-hidden='true' />
-        </div>
+      <MetricCard
+        label='Average Hunger'
+        value={formatAverage(averageHunger)}
+        meta='Out of 5'
+        icon={<LuActivity aria-hidden='true' />}
+        tone='secondary'
+        className='check-in-summary-card'
+      />
 
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Average Energy</span>
-          <span className='dashboard-card-value'>{formatAverage(averageEnergy)}</span>
-          <span className='dashboard-card-meta'>Out of 5</span>
-        </div>
-      </div>
+      <MetricCard
+        label='Side Effects'
+        value={sideEffectStats.value}
+        meta={sideEffectStats.meta}
+        icon={<LuActivity aria-hidden='true' />}
+        tone='warning'
+        className='check-in-summary-card'
+      />
 
-      <div className='dashboard-card check-in-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-mood'>
-          <LuHeartPulse size={38} color='currentColor' aria-hidden='true' />
-        </div>
+      <MetricCard
+        label='Notes'
+        value={notesStats.value}
+        meta={notesStats.meta}
+        icon={<LuMessageSquareText aria-hidden='true' />}
+        tone='neutral'
+        className='check-in-summary-card'
+      />
 
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Average Mood</span>
-          <span className='dashboard-card-value'>{formatAverage(averageMood)}</span>
-          <span className='dashboard-card-meta'>Out of 5</span>
-        </div>
-      </div>
-
-      <div className='dashboard-card check-in-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-hunger'>
-          <LuActivity size={38} color='currentColor' aria-hidden='true' />
-        </div>
-
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Average Hunger</span>
-          <span className='dashboard-card-value'>{formatAverage(averageHunger)}</span>
-          <span className='dashboard-card-meta'>Out of 5</span>
-        </div>
-      </div>
-
-      <div className='dashboard-card check-in-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-side-effects'>
-          <LuActivity size={38} color='currentColor' aria-hidden='true' />
-        </div>
-
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Side Effects</span>
-          <span className='dashboard-card-value'>{sideEffectStats.value}</span>
-          <span className='dashboard-card-meta'>{sideEffectStats.meta}</span>
-        </div>
-      </div>
-
-      <div className='dashboard-card check-in-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-notes'>
-          <LuMessageSquareText size={38} color='currentColor' aria-hidden='true' />
-        </div>
-
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Notes</span>
-          <span className='dashboard-card-value'>{notesStats.value}</span>
-          <span className='dashboard-card-meta'>{notesStats.meta}</span>
-        </div>
-      </div>
-
-      <div className='dashboard-card check-in-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-latest'>
-          <LuHeartPulse size={38} color='currentColor' aria-hidden='true' />
-        </div>
-
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Latest Check-in</span>
-          <span className='dashboard-card-value'>{latestCheckInStats.value}</span>
-          <span className='dashboard-card-meta'>{latestCheckInStats.meta}</span>
-        </div>
-      </div>
+      <MetricCard
+        label='Latest Check-in'
+        value={latestCheckInStats.value}
+        meta={latestCheckInStats.meta}
+        icon={<LuHeartPulse aria-hidden='true' />}
+        tone='success'
+        className='check-in-summary-card'
+      />
     </div>
   );
 };

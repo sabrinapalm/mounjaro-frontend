@@ -14,7 +14,6 @@ export const ShotsPage = ({ shots, onShotAdded, onDeleteShot }: ShotsPageProps) 
     <section className='shots-page'>
       <header className='shots-page__header'>
         <div>
-          <p className='shots-page__eyebrow'>Shots</p>
           <h1>All Shots</h1>
           <p>View your full injection history and add new shots when needed.</p>
         </div>

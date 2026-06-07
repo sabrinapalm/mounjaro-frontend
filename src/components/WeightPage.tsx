@@ -14,7 +14,6 @@ export const WeightPage = ({ weights, onWeightAdded, onDeleteWeight }: WeightPag
     <section className='weight-page'>
       <header className='weight-page__header'>
         <div>
-          <p className='weight-page__eyebrow'>Weight</p>
           <h1>All Weight Entries</h1>
           <p>View your full weight history and add new check-ins when needed.</p>
         </div>

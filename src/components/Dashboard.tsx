@@ -17,6 +17,7 @@ import { CheckInsPage } from './CheckInsPage';
 import { DashboardErrorNotice } from './DashboardErrorNotice';
 import { DashboardNotifications } from './DashboardNotifications';
 import { DashboardOverview } from './DashboardOverview';
+import { InsightsPage } from './InsightsPage';
 import { MilestonesPage } from './MilestonesPage';
 import { ProfileSettingsPage } from './ProfileSettingsPage';
 import { ShotsPage } from './ShotsPage';
@@ -277,6 +278,11 @@ export const Dashboard = ({
             onCheckInAdded={handleCheckInAdded}
             onDeleteCheckIn={handleDeleteCheckIn}
           />
+        );
+
+      case 'insights':
+        return (
+          <InsightsPage weights={weights} shots={shots} checkIns={checkIns} profile={profile} />
         );
 
       default:

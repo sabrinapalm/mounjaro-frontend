@@ -7,6 +7,7 @@ import {
   LuSyringe,
 } from 'react-icons/lu';
 import type { ShotEntry } from '../types';
+import { MetricCard } from './general/MetricCard';
 import './ShotStatsCards.css';
 
 type ShotStatsCardsProps = {
@@ -163,6 +164,7 @@ const getNextShotLabel = (latestShotDate: dayjs.Dayjs) => {
     return {
       value: 'Overdue',
       meta: `${overdueDays} ${overdueDays === 1 ? 'day' : 'days'} late`,
+      tone: 'danger' as const,
     };
   }
 
@@ -170,6 +172,7 @@ const getNextShotLabel = (latestShotDate: dayjs.Dayjs) => {
     return {
       value: 'Today',
       meta: 'Your next shot is due today',
+      tone: 'warning' as const,
     };
   }
 
@@ -177,12 +180,14 @@ const getNextShotLabel = (latestShotDate: dayjs.Dayjs) => {
     return {
       value: 'Tomorrow',
       meta: nextShotDate.format('MMM D'),
+      tone: 'info' as const,
     };
   }
 
   return {
     value: `In ${daysUntilNextShot} days`,
     meta: nextShotDate.format('MMM D'),
+    tone: 'info' as const,
   };
 };
 
@@ -197,17 +202,14 @@ export const ShotStatsCards = ({ shots }: ShotStatsCardsProps) => {
   if (!latestShot) {
     return (
       <div className='dashboard-summary-cards shot-summary-cards'>
-        <div className='dashboard-card shot-summary-card shot-summary-card--empty'>
-          <div className='dashboard-card-icon dashboard-card-icon-shot'>
-            <LuSyringe size={38} color='currentColor' aria-hidden='true' />
-          </div>
-
-          <div className='dashboard-card-copy'>
-            <span className='dashboard-card-label'>Shot Insights</span>
-            <span className='dashboard-card-value'>No data yet</span>
-            <span className='dashboard-card-meta'>Log your first shot to see your rhythm</span>
-          </div>
-        </div>
+        <MetricCard
+          label='Shot Insights'
+          value='No data yet'
+          meta='Log your first shot to see your rhythm'
+          icon={<LuSyringe aria-hidden='true' />}
+          tone='primary'
+          className='shot-summary-card shot-summary-card--empty'
+        />
       </div>
     );
   }
@@ -217,79 +219,60 @@ export const ShotStatsCards = ({ shots }: ShotStatsCardsProps) => {
 
   return (
     <div className='dashboard-summary-cards shot-summary-cards'>
-      <div className='dashboard-card shot-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-shot'>
-          <LuSyringe size={38} color='currentColor' aria-hidden='true' />
-        </div>
+      <MetricCard
+        label='Total Shots'
+        value={shots.length}
+        meta={shots.length === 1 ? '1 shot logged' : `${shots.length} shots logged`}
+        icon={<LuSyringe aria-hidden='true' />}
+        tone='primary'
+        className='shot-summary-card'
+      />
 
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Total Shots</span>
-          <span className='dashboard-card-value'>{shots.length}</span>
-          <span className='dashboard-card-meta'>
-            {shots.length === 1 ? '1 shot logged' : `${shots.length} shots logged`}
-          </span>
-        </div>
-      </div>
+      <MetricCard
+        label='Latest Dose'
+        value={formatDosage(latestShot.dosage)}
+        meta={`Logged ${latestShotDate.format('MMM D')}`}
+        icon={<LuCalendarHeart aria-hidden='true' />}
+        tone='success'
+        className='shot-summary-card'
+      />
 
-      <div className='dashboard-card shot-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-dose'>
-          <LuCalendarHeart size={38} color='currentColor' aria-hidden='true' />
-        </div>
+      <MetricCard
+        label='Next Shot'
+        value={nextShot.value}
+        meta={nextShot.meta}
+        icon={<LuClock3 aria-hidden='true' />}
+        tone={nextShot.tone}
+        highlightValue={nextShot.tone === 'danger' || nextShot.tone === 'warning'}
+        className='shot-summary-card'
+      />
 
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Latest Dose</span>
-          <span className='dashboard-card-value'>{formatDosage(latestShot.dosage)}</span>
-          <span className='dashboard-card-meta'>Logged {latestShotDate.format('MMM D')}</span>
-        </div>
-      </div>
+      <MetricCard
+        label='Most Used Site'
+        value={mostUsedSite.value}
+        meta={mostUsedSite.meta}
+        icon={<LuMapPin aria-hidden='true' />}
+        tone='info'
+        className='shot-summary-card'
+      />
 
-      <div className='dashboard-card shot-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-calendar'>
-          <LuClock3 size={38} color='currentColor' aria-hidden='true' />
-        </div>
+      <MetricCard
+        label='Side Effects'
+        value={sideEffectStats.value}
+        meta={sideEffectStats.meta}
+        icon={<LuCalendarHeart aria-hidden='true' />}
+        tone='warning'
+        className='shot-summary-card'
+      />
 
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Next Shot</span>
-          <span className='dashboard-card-value'>{nextShot.value}</span>
-          <span className='dashboard-card-meta'>{nextShot.meta}</span>
-        </div>
-      </div>
-
-      <div className='dashboard-card shot-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-site'>
-          <LuMapPin size={38} color='currentColor' aria-hidden='true' />
-        </div>
-
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Most Used Site</span>
-          <span className='dashboard-card-value'>{mostUsedSite.value}</span>
-          <span className='dashboard-card-meta'>{mostUsedSite.meta}</span>
-        </div>
-      </div>
-
-      <div className='dashboard-card shot-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-tracking'>
-          <LuCalendarHeart size={38} color='currentColor' aria-hidden='true' />
-        </div>
-
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Side Effects</span>
-          <span className='dashboard-card-value'>{sideEffectStats.value}</span>
-          <span className='dashboard-card-meta'>{sideEffectStats.meta}</span>
-        </div>
-      </div>
-
-      <div className='dashboard-card shot-summary-card'>
-        <div className='dashboard-card-icon dashboard-card-icon-tracking'>
-          <LuMessageSquareText size={38} color='currentColor' aria-hidden='true' />
-        </div>
-
-        <div className='dashboard-card-copy'>
-          <span className='dashboard-card-label'>Notes</span>
-          <span className='dashboard-card-value'>{notesStats.value}</span>
-          <span className='dashboard-card-meta'>{notesStats.meta}</span>
-        </div>
-      </div>
+      <MetricCard
+        label='Notes'
+        value={notesStats.value}
+        meta={notesStats.meta}
+        icon={<LuMessageSquareText aria-hidden='true' />}
+        tone='neutral'
+        className='shot-summary-card'
+      />
     </div>
   );
 };

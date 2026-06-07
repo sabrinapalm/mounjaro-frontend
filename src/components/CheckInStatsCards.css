@@ -7,104 +7,8 @@
   margin-bottom: 24px;
 }
 
-.check-in-summary-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  min-width: 0;
-  min-height: 136px;
-  padding: 24px;
-  border: 1px solid var(--color-border);
-  border-radius: 24px;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-soft);
-}
-
 .check-in-summary-card--empty {
   grid-column: 1 / -1;
-}
-
-.check-in-summary-card .dashboard-card-icon {
-  display: grid;
-  place-items: center;
-  min-width: 48px;
-  min-height: 48px;
-  border-radius: 16px;
-  background: var(--color-surface-soft);
-  color: var(--color-primary);
-}
-
-.check-in-summary-card .dashboard-card-icon-check-in {
-  background: var(--color-accent-soft);
-  color: var(--color-accent-dark);
-}
-
-.check-in-summary-card .dashboard-card-icon-streak {
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
-}
-
-.check-in-summary-card .dashboard-card-icon-energy {
-  background: var(--color-accent-soft);
-  color: var(--color-accent-dark);
-}
-
-.check-in-summary-card .dashboard-card-icon-mood {
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
-}
-
-.check-in-summary-card .dashboard-card-icon-hunger {
-  background: var(--color-info-soft);
-  color: var(--color-info);
-}
-
-.check-in-summary-card .dashboard-card-icon-side-effects {
-  background: var(--color-surface-soft);
-  color: var(--color-primary);
-}
-
-.check-in-summary-card .dashboard-card-icon-notes {
-  background: var(--color-surface-soft);
-  color: var(--color-primary);
-}
-
-.check-in-summary-card .dashboard-card-icon-latest {
-  background: var(--color-accent-soft);
-  color: var(--color-accent-dark);
-}
-
-.check-in-summary-card .dashboard-card-copy {
-  display: grid;
-  gap: 6px;
-  min-width: 0;
-}
-
-.check-in-summary-card .dashboard-card-label {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.check-in-summary-card .dashboard-card-value {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--color-text);
-  font-size: 1.5rem;
-  font-weight: 800;
-  line-height: 1;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.check-in-summary-card .dashboard-card-meta {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--color-text-muted);
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 @media (max-width: 1180px) {
@@ -117,14 +21,5 @@
   .check-in-summary-cards {
     grid-template-columns: 1fr;
     gap: 14px;
-  }
-
-  .check-in-summary-card {
-    min-height: auto;
-    padding: 18px;
-  }
-
-  .check-in-summary-card .dashboard-card-value {
-    font-size: 1.3rem;
   }
 }

@@ -138,7 +138,6 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
     <section className='profile-settings-page'>
       <header className='profile-settings-page__header'>
         <div>
-          <p className='profile-settings-page__eyebrow'>Profile</p>
           <h1>Profile Settings</h1>
           <p>Manage your personal details, account information and progress targets.</p>
         </div>

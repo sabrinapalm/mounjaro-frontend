@@ -11,15 +11,6 @@
   gap: 20px;
 }
 
-.profile-settings-page__eyebrow {
-  margin-bottom: 8px;
-  color: var(--color-primary);
-  font-size: 0.82rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .profile-settings-page__header h1 {
   margin: 0;
   color: var(--color-text);
@@ -29,7 +20,6 @@
 }
 
 .profile-settings-page__header p {
-  margin: 8px 0 0;
   color: var(--color-text-muted);
   font-size: 1rem;
   font-weight: 700;

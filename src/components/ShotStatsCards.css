@@ -7,81 +7,8 @@
   margin-bottom: 24px;
 }
 
-.shot-summary-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  min-width: 0;
-  min-height: 136px;
-  padding: 24px;
-  border: 1px solid var(--color-border);
-  border-radius: 24px;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-soft);
-}
-
 .shot-summary-card--empty {
   grid-column: 1 / -1;
-}
-
-.shot-summary-card .dashboard-card-icon {
-  display: grid;
-  place-items: center;
-  min-width: 48px;
-  min-height: 48px;
-  border-radius: 16px;
-  background: var(--color-surface-soft);
-  color: var(--color-primary);
-}
-
-.shot-summary-card .dashboard-card-icon-shot {
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
-}
-
-.shot-summary-card .dashboard-card-icon-dose {
-  background: var(--color-accent-soft);
-  color: var(--color-accent-dark);
-}
-
-.shot-summary-card .dashboard-card-icon-calendar {
-  background: var(--color-info-soft);
-  color: var(--color-info);
-}
-
-.shot-summary-card .dashboard-card-icon-tracking {
-  background: var(--color-surface-soft);
-  color: var(--color-primary);
-}
-
-.shot-summary-card .dashboard-card-copy {
-  display: grid;
-  gap: 6px;
-  min-width: 0;
-}
-
-.shot-summary-card .dashboard-card-label {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.shot-summary-card .dashboard-card-value {
-  color: var(--color-text);
-  font-size: 1.5rem;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.shot-summary-card .dashboard-card-meta {
-  color: var(--color-text-muted);
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-.shot-summary-card .dashboard-card-icon-site {
-  background: var(--color-accent-soft);
-  color: var(--color-accent-dark);
 }
 
 @media (max-width: 1180px) {
@@ -94,14 +21,5 @@
   .shot-summary-cards {
     grid-template-columns: 1fr;
     gap: 14px;
-  }
-
-  .shot-summary-card {
-    min-height: auto;
-    padding: 18px;
-  }
-
-  .shot-summary-card .dashboard-card-value {
-    font-size: 1.3rem;
   }
 }
