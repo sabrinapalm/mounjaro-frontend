@@ -1,0 +1,188 @@
+.today-focus-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  width: 100%;
+  min-width: 0;
+  padding: 22px 24px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(
+      circle at top left,
+      color-mix(in srgb, var(--color-accent) 12%, transparent),
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-surface-soft) 24%, var(--color-surface) 76%),
+      var(--color-surface)
+    );
+  box-shadow: var(--shadow-soft);
+}
+
+.today-focus-card__main {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+}
+
+.today-focus-card__icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  color: var(--color-accent);
+}
+
+.today-focus-card__content {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.today-focus-card__eyebrow {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+}
+
+.today-focus-card__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  color: var(--color-text-muted);
+  list-style: none;
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
+.today-focus-card__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.today-focus-card__item:not(:last-child)::after {
+  content: "·";
+  margin-left: 6px;
+  color: color-mix(in srgb, var(--color-text-muted) 62%, transparent);
+}
+
+.today-focus-card__item-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: var(--color-accent);
+}
+
+.today-focus-card__actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.today-focus-card__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 46%, transparent);
+  border-radius: 15px;
+  background: linear-gradient(135deg, var(--color-accent-dark), var(--color-accent));
+  color: #ffffff;
+  box-shadow: var(--button-shadow-accent);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 850;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.today-focus-card__button:hover {
+  transform: translateY(-1px);
+}
+
+.today-focus-card__button:active {
+  transform: scale(0.99);
+}
+
+.today-focus-card__button--secondary {
+  border-color: var(--button-neutral-border);
+  background: var(--button-neutral-bg);
+  color: var(--button-neutral-color);
+  box-shadow: none;
+}
+
+.today-focus-card__button--secondary:hover {
+  border-color: var(--button-neutral-hover-border);
+  background: var(--button-neutral-hover-bg);
+  color: var(--button-neutral-hover-color);
+}
+
+@media (max-width: 900px) {
+  .today-focus-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .today-focus-card__actions {
+    width: 100%;
+  }
+
+  .today-focus-card__button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 560px) {
+  .today-focus-card {
+    padding: 20px;
+  }
+
+  .today-focus-card__main {
+    align-items: flex-start;
+  }
+
+  .today-focus-card__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+  }
+
+  .today-focus-card__list {
+    display: grid;
+    gap: 8px;
+  }
+
+  .today-focus-card__item:not(:last-child)::after {
+    content: none;
+  }
+
+  .today-focus-card__actions {
+    flex-direction: column;
+  }
+
+  .today-focus-card__button {
+    width: 100%;
+  }
+}

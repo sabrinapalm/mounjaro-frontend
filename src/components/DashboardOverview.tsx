@@ -139,15 +139,12 @@ export const DashboardOverview = ({
       </div>
 
       <div className='dashboard-grid'>
-        <section id='shots' className='tracker-section'>
-          <ShotTracker
-            title='Recent Shots'
-            summaryLabel='Total shots'
-            variant='compact'
-            shots={shots}
-            onShotAdded={onShotAdded}
-            onDeleteShot={onDeleteShot}
-            onViewAll={onViewAllShots}
+        <section id='checkins' className='checkin-section'>
+          <CheckInTracker
+            checkIns={checkIns}
+            onCheckInAdded={onCheckInAdded}
+            onDeleteCheckIn={onDeleteCheckIn}
+            onViewAll={onViewAllCheckIns}
           />
         </section>
 
@@ -165,6 +162,18 @@ export const DashboardOverview = ({
       </div>
 
       <div className='dashboard-grid'>
+        <section id='shots' className='tracker-section'>
+          <ShotTracker
+            title='Recent Shots'
+            summaryLabel='Total shots'
+            variant='compact'
+            shots={shots}
+            onShotAdded={onShotAdded}
+            onDeleteShot={onDeleteShot}
+            onViewAll={onViewAllShots}
+          />
+        </section>
+
         <section id='milestones' className='tracker-section'>
           <Milestones
             weights={weights}
@@ -172,15 +181,6 @@ export const DashboardOverview = ({
             startWeight={profile.startWeight ?? null}
             goalWeight={profile.goalWeight ?? null}
             onViewAll={onViewAllMilestones}
-          />
-        </section>
-
-        <section id='checkins' className='checkin-section'>
-          <CheckInTracker
-            checkIns={checkIns}
-            onCheckInAdded={onCheckInAdded}
-            onDeleteCheckIn={onDeleteCheckIn}
-            onViewAll={onViewAllCheckIns}
           />
         </section>
       </div>
