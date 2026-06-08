@@ -3,6 +3,7 @@ import { FiArrowLeft, FiMail, FiUserPlus } from 'react-icons/fi';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { cognitoAuth } from '../services/cognitoAuth';
 import './SignUpForm.css';
+import { Button } from './general/Button';
 
 interface SignUpFormProps {
   onSignedUp: (email: string) => Promise<void> | void;
@@ -108,22 +109,27 @@ export const SignUpForm = ({ onSignedUp, onSwitchToLogin }: SignUpFormProps) => 
 
         {error ? <p className='signup-form__error'>{error}</p> : null}
 
-        <button className='signup-form__submit' type='submit' disabled={loading}>
-          <FiUserPlus size={20} />
+        <Button
+          size='lg'
+          variant='solid'
+          type='submit'
+          disabled={loading}
+          icon={<FiUserPlus size={20} />}
+        >
           {loading ? 'Creating account…' : 'Sign Up'}
-        </button>
+        </Button>
       </form>
 
       <footer className='signup-card__actions'>
-        <button
-          type='button'
+        <Button
+          variant='text'
+          color='muted'
           onClick={onSwitchToLogin}
-          className='signup-card__link-button'
           disabled={loading}
+          icon={<FiArrowLeft size={18} />}
         >
-          <FiArrowLeft size={18} />
           Back to sign in
-        </button>
+        </Button>
       </footer>
     </section>
   );

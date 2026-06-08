@@ -1,5 +1,6 @@
 import { FiAlertCircle, FiRefreshCw } from 'react-icons/fi';
 import './DashboardErrorNotice.css';
+import { Button } from './general/Button';
 
 interface DashboardErrorNoticeProps {
   title?: string;
@@ -24,10 +25,9 @@ export const DashboardErrorNotice = ({
       </div>
 
       {onRetry ? (
-        <button type='button' className='dashboard-error-notice__button' onClick={onRetry}>
-          <FiRefreshCw size={16} />
+        <Button icon={<FiRefreshCw size={16} />} variant='outline' color='danger' onClick={onRetry}>
           Try again
-        </button>
+        </Button>
       ) : null}
     </section>
   );

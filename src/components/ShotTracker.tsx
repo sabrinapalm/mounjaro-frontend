@@ -6,8 +6,11 @@ import { formatDateLabel, getTimestamp } from '../utils/dateHelpers';
 import { AddShotModal } from './AddShotModal';
 import { ConfirmDialog } from './ConfirmDialog';
 import './ShotTracker.css';
+import { LuPlus } from 'react-icons/lu';
 import { useIntl } from 'react-intl';
 import { messages } from '../i18n/messages';
+import { Button } from './general/Button';
+import { ViewAllButton } from './general/ViewAllButton';
 
 type ShotTrackerVariant = 'compact' | 'full';
 
@@ -127,19 +130,14 @@ export const ShotTracker = ({
       <header className='shot-tracker-card__header'>
         <div>
           <h2 className='shot-tracker-card__title'>{title}</h2>
-
           <p className='shot-tracker-card__summary'>
             {summaryLabel}: <span>{totalShots}</span>
           </p>
         </div>
 
-        <button
-          type='button'
-          className='shot-tracker-card__add-button'
-          onClick={handleOpenAddShotModal}
-        >
-          Add Shot
-        </button>
+        <Button icon={<LuPlus size={22} />} onClick={handleOpenAddShotModal}>
+          Add shot
+        </Button>
       </header>
 
       {error && !isAddShotModalOpen && <p className='shot-tracker-card__error'>{error}</p>}
@@ -180,13 +178,7 @@ export const ShotTracker = ({
           })}
           {shouldShowViewAll ? (
             <footer className='shot-tracker-card__footer'>
-              <button
-                type='button'
-                className='shot-tracker-card__view-all-button'
-                onClick={onViewAll}
-              >
-                View all
-              </button>
+              <ViewAllButton title='View all' onClick={onViewAll} />
             </footer>
           ) : null}
         </ul>

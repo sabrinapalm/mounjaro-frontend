@@ -1,6 +1,6 @@
 .confirm-signup-card {
   display: grid;
-  gap: 30px;
+  gap: 24px;
   width: min(100%, 520px);
   min-width: 0;
   padding: 34px;
@@ -129,71 +129,10 @@
   font-weight: 800;
 }
 
-.confirm-signup-form__submit {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-height: 58px;
-  width: 100%;
-  border: 1px solid color-mix(in srgb, var(--color-accent) 50%, transparent);
-  border-radius: 18px;
-  background: linear-gradient(135deg, var(--color-accent-dark), var(--color-accent));
-  color: #ffffff;
-  box-shadow: var(--button-shadow-accent);
-  font-size: 1rem;
-  font-weight: 800;
-  transition:
-    transform 0.2s ease,
-    opacity 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.confirm-signup-form__submit:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 16px 32px color-mix(in srgb, var(--color-accent) 22%, transparent);
-}
-
-.confirm-signup-form__submit:active:not(:disabled) {
-  transform: scale(0.98);
-}
-
-.confirm-signup-form__submit:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
-  transform: none;
-  box-shadow: none;
-}
-
 .confirm-signup-card__actions {
   display: grid;
   justify-items: center;
   gap: 12px;
-}
-
-.confirm-signup-card__link-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: 0;
-  background: transparent;
-  color: var(--color-text-muted);
-  font-size: 0.95rem;
-  font-weight: 800;
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.confirm-signup-card__link-button:hover:not(:disabled) {
-  color: var(--color-accent);
-  transform: translateY(-1px);
-}
-
-.confirm-signup-card__link-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
 }
 
 .confirm-signup-card__hint {

@@ -3,6 +3,7 @@ import { FiLogIn, FiMail } from 'react-icons/fi';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { cognitoAuth } from '../services/cognitoAuth';
 import './LoginForm.css';
+import { Button } from './general/Button';
 
 interface LoginFormProps {
   onLogin: () => Promise<void> | void;
@@ -109,34 +110,25 @@ export const LoginForm = ({ onLogin, onSwitchToSignUp, onSwitchToConfirm }: Logi
 
         {error ? <p className='login-form__error'>{error}</p> : null}
 
-        <button className='login-form__submit' type='submit' disabled={loading}>
-          <FiLogIn size={20} />
+        <Button
+          color='secondary'
+          variant='solid'
+          type='submit'
+          disabled={loading}
+          size='lg'
+          icon={<FiLogIn size={20} />}
+        >
           {loading ? 'Signing in…' : 'Sign In'}
-        </button>
+        </Button>
       </form>
 
       <footer className='login-card__actions'>
-        <button
-          type='button'
-          onClick={onSwitchToSignUp}
-          className='login-card__link-button'
-          disabled={loading}
-        >
+        <Button onClick={onSwitchToSignUp} disabled={loading} variant='text' color='muted'>
           Create account
-        </button>
-
-        <span className='login-card__actions-divider' aria-hidden='true'>
-          ·
-        </span>
-
-        <button
-          type='button'
-          onClick={onSwitchToConfirm}
-          className='login-card__link-button'
-          disabled={loading}
-        >
+        </Button>
+        <Button onClick={onSwitchToConfirm} disabled={loading} variant='text' color='muted'>
           Confirm account
-        </button>
+        </Button>
       </footer>
     </section>
   );

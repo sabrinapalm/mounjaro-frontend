@@ -8,6 +8,9 @@ import { formatDateLabel, getTimestamp } from '../utils/dateHelpers';
 import { AddWeightModal } from './AddWeightModal';
 import { ConfirmDialog } from './ConfirmDialog';
 import './WeightTracker.css';
+import { LuPlus } from 'react-icons/lu';
+import { Button } from './general/Button';
+import { ViewAllButton } from './general/ViewAllButton';
 
 type WeightTrackerVariant = 'compact' | 'full';
 
@@ -161,13 +164,14 @@ export const WeightTracker = ({
           ) : null}
         </div>
 
-        <button
-          type='button'
-          className='weight-tracker-card__add-button'
+        <Button
+          icon={<LuPlus />}
+          variant='outline'
+          color='secondary'
           onClick={handleOpenAddWeightModal}
         >
           Add Weight
-        </button>
+        </Button>
       </header>
 
       {error && !isAddWeightModalOpen ? (
@@ -244,13 +248,7 @@ export const WeightTracker = ({
 
       {shouldShowViewAll ? (
         <footer className='weight-tracker-card__footer'>
-          <button
-            type='button'
-            className='weight-tracker-card__view-all-button'
-            onClick={onViewAll}
-          >
-            View all
-          </button>
+          <ViewAllButton title='View all' onClick={onViewAll} />
         </footer>
       ) : null}
 

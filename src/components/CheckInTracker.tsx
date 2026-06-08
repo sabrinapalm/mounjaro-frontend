@@ -7,6 +7,7 @@ import { AddCheckInModal } from './AddCheckInModal';
 import { ConfirmDialog } from './ConfirmDialog';
 import './CheckInTracker.css';
 import { Button } from './general/Button';
+import { ViewAllButton } from './general/ViewAllButton';
 
 type CheckInTrackerVariant = 'compact' | 'full';
 
@@ -230,13 +231,7 @@ export const CheckInTracker = ({
 
           {shouldShowViewAll ? (
             <footer className='check-in-tracker-card__footer'>
-              <button
-                type='button'
-                className='check-in-tracker-card__view-all-button'
-                onClick={onViewAll}
-              >
-                View all
-              </button>
+              <ViewAllButton title='View all' onClick={onViewAll} />
             </footer>
           ) : null}
         </>

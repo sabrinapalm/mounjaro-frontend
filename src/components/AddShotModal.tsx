@@ -9,6 +9,7 @@ import {
 } from '../utils/dateHelpers';
 import './AddShotModal.css';
 import { DateField } from './DateField';
+import { Button } from './general/Button';
 import { TimeField } from './TimeField';
 
 interface AddShotModalProps {
@@ -229,7 +230,11 @@ export const AddShotModal = ({
           </div>
 
           <fieldset className='add-shot-modal__fieldset'>
-            <legend className='add-shot-modal__label'>Side effects</legend>
+            <legend className='add-shot-modal__label'>How was last week?</legend>
+
+            <p className='add-shot-modal__helper-text'>
+              Select any side effects you noticed since your previous shot.
+            </p>
 
             <div className='add-shot-modal__chips'>
               {sideEffectOptions.map((sideEffect) => {
@@ -252,7 +257,6 @@ export const AddShotModal = ({
               })}
             </div>
           </fieldset>
-
           <label className='add-shot-modal__field' htmlFor='shot-notes'>
             <span className='add-shot-modal__label'>Notes</span>
 
@@ -273,19 +277,19 @@ export const AddShotModal = ({
           {(localError || error) && <p className='add-shot-modal__error'>{localError || error}</p>}
 
           <footer className='add-shot-modal__footer'>
-            <button type='submit' className='add-shot-modal__submit' disabled={isSubmitting}>
-              <FiCheckCircle size={20} />
-              {isSubmitting ? 'Adding...' : 'Add Shot'}
-            </button>
-
-            <button
-              type='button'
-              className='add-shot-modal__cancel'
-              onClick={handleClose}
+            <Button
+              variant='solid'
+              color='primary'
+              icon={<FiCheckCircle size={20} />}
+              type='submit'
               disabled={isSubmitting}
+              size='lg'
             >
+              {isSubmitting ? 'Adding...' : 'Add Shot'}
+            </Button>
+            <Button onClick={handleClose} disabled={isSubmitting} variant='text' color='muted'>
               Cancel
-            </button>
+            </Button>
           </footer>
         </form>
       </section>

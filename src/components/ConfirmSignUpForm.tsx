@@ -3,6 +3,7 @@ import { FiArrowLeft, FiCheckCircle, FiMail } from 'react-icons/fi';
 import { MdOutlineMarkEmailRead } from 'react-icons/md';
 import { cognitoAuth } from '../services/cognitoAuth';
 import './ConfirmSignUpForm.css';
+import { Button } from './general/Button';
 
 interface ConfirmSignUpFormProps {
   email?: string;
@@ -114,22 +115,28 @@ export const ConfirmSignUpForm = ({
 
         {error ? <p className='confirm-signup-form__error'>{error}</p> : null}
 
-        <button className='confirm-signup-form__submit' type='submit' disabled={loading}>
-          <FiCheckCircle size={20} />
+        <Button
+          icon={<FiCheckCircle size={20} />}
+          variant='solid'
+          size='lg'
+          color='secondary'
+          disabled={loading}
+          type='submit'
+        >
           {loading ? 'Confirming…' : 'Confirm'}
-        </button>
+        </Button>
       </form>
 
       <footer className='confirm-signup-card__actions'>
-        <button
-          type='button'
+        <Button
+          variant='text'
+          color='muted'
+          icon={<FiArrowLeft size={18} />}
           onClick={onSwitchToLogin}
-          className='confirm-signup-card__link-button'
           disabled={loading}
         >
-          <FiArrowLeft size={18} />
           Back to sign in
-        </button>
+        </Button>
       </footer>
     </section>
   );

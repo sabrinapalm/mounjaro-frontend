@@ -42,31 +42,6 @@
   font-weight: 800;
 }
 
-.shot-tracker-card__add-button {
-  min-height: 46px;
-  padding: 0 22px;
-  border: 1px solid color-mix(in srgb, var(--color-primary) 24%, transparent);
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface));
-  color: var(--color-primary);
-  font-size: 0.95rem;
-  font-weight: 800;
-  white-space: nowrap;
-  cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.shot-tracker-card__add-button:hover {
-  transform: translateY(-1px);
-  border-color: var(--color-primary);
-  background: var(--color-primary-soft);
-  box-shadow: var(--button-shadow-primary);
-}
-
 .shot-tracker-card__error {
   padding: 12px 14px;
   border: 1px solid var(--message-error-border);
@@ -198,32 +173,6 @@
   padding-top: 4px;
 }
 
-.shot-tracker-card__view-all-button {
-  min-height: 42px;
-  padding: 0 16px;
-  border: 1px solid var(--button-neutral-border);
-  border-radius: var(--radius-pill);
-  background: var(--button-neutral-bg);
-  color: var(--button-neutral-color);
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 800;
-  cursor: pointer;
-  box-shadow: var(--button-shadow-neutral);
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    background 0.2s ease,
-    color 0.2s ease;
-}
-
-.shot-tracker-card__view-all-button:hover {
-  transform: translateY(-1px);
-  border-color: var(--button-neutral-hover-border);
-  background: var(--button-neutral-hover-bg);
-  color: var(--button-neutral-hover-color);
-}
-
 @media (max-width: 900px) {
   .shot-tracker-card__item {
     grid-template-columns: 42px minmax(0, 1fr) minmax(76px, auto) 38px;
@@ -266,16 +215,6 @@
   .shot-tracker-card__header {
     align-items: stretch;
     flex-direction: column;
-  }
-
-  .shot-tracker-card__add-button {
-    width: 100%;
-  }
-}
-
-@media (max-width: 520px) {
-  .shot-tracker-card__view-all-button {
-    width: 100%;
   }
 }
 

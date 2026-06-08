@@ -7,6 +7,7 @@ import { useUnitSettings } from '../hooks/useUnitSettings';
 import { cognitoAuth } from '../services/cognitoAuth';
 import type { ProfileFormValues, UnitSystem, UserProfile } from '../types';
 import './ProfileSettingsPage.css';
+import { Button } from './general/Button';
 
 type ProfileSettingsPageProps = {
   profile: UserProfile;
@@ -340,10 +341,16 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
         )}
 
         <footer className='profile-settings-page__actions'>
-          <button type='submit' className='profile-settings-page__save-button' disabled={isSaving}>
-            <FiSave size={19} />
+          <Button
+            size='lg'
+            color='secondary'
+            variant='solid'
+            type='submit'
+            disabled={isSaving}
+            icon={<FiSave size={19} />}
+          >
             {isSaving ? 'Saving...' : 'Save changes'}
-          </button>
+          </Button>
         </footer>
       </form>
     </section>

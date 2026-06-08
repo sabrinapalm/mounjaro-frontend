@@ -10,6 +10,7 @@ import {
 } from '../utils/dateHelpers';
 import './AddWeightModal.css';
 import { DateField } from './DateField';
+import { Button } from './general/Button';
 import { TimeField } from './TimeField';
 
 interface AddWeightModalProps {
@@ -168,19 +169,19 @@ export const AddWeightModal = ({
           )}
 
           <footer className='add-weight-modal__footer'>
-            <button type='submit' className='add-weight-modal__submit' disabled={isSubmitting}>
-              <FiActivity size={20} />
-              {isSubmitting ? 'Adding...' : 'Add Weight'}
-            </button>
-
-            <button
-              type='button'
-              className='add-weight-modal__cancel'
-              onClick={handleClose}
-              disabled={isSubmitting}
+            <Button
+              size='lg'
+              icon={<FiActivity size={20} />}
+              variant='solid'
+              color='secondary'
+              type='submit'
             >
+              {isSubmitting ? 'Adding...' : 'Add Weight'}
+            </Button>
+
+            <Button onClick={handleClose} disabled={isSubmitting} variant='text' color='muted'>
               Cancel
-            </button>
+            </Button>
           </footer>
         </form>
       </section>
