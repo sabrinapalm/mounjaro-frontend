@@ -131,10 +131,14 @@ function App() {
           initialProfile={null}
           onSubmit={handleSaveProfile}
           isSubmitting={updateProfileMutation.isPending}
-          submitError={getQueryErrorMessage(
-            updateProfileMutation.error,
-            formatMessage(messages.saveProfileError)
-          )}
+          submitError={
+            updateProfileMutation.isError
+              ? getQueryErrorMessage(
+                  updateProfileMutation.error,
+                  formatMessage(messages.saveProfileError)
+                )
+              : undefined
+          }
         />
       );
     }
@@ -175,7 +179,11 @@ function App() {
 
     return (
       <AuthLayout>
-        <LoginForm onLogin={handleLoginSuccess} onSwitchToSignUp={() => setAuthView('signup')} />
+        <LoginForm
+          onLogin={handleLoginSuccess}
+          onSwitchToConfirm={() => setAuthView('confirm')}
+          onSwitchToSignUp={() => setAuthView('signup')}
+        />
       </AuthLayout>
     );
   };

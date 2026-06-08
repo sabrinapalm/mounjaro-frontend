@@ -6,6 +6,7 @@ import { calculateBmi } from '../utils/calculateBmi';
 import { getTimestamp } from '../utils/dateHelpers';
 import { EditGoalWeightModal } from './EditGoalWeightModal';
 import './GoalProgress.css';
+import { Button } from './general/Button';
 
 interface GoalProgressProps {
   weights: WeightEntry[];
@@ -298,9 +299,9 @@ export const GoalProgress = ({ weights, profile, onGoalWeightUpdated }: GoalProg
           <span className='target-card-value'>{formatWeight(goalWeight)}</span>
         </div>
 
-        <button type='button' className='target-card__add-button' onClick={handleOpenEditGoal}>
-          {hasGoalWeight ? 'Edit Goal' : 'Set Goal'}
-        </button>
+        <Button variant='outline' color='primary' onClick={handleOpenEditGoal}>
+          {hasGoalWeight ? 'Edit Goal' : 'Set Goal'}{' '}
+        </Button>
       </div>
 
       <EditGoalWeightModal

@@ -299,56 +299,6 @@
   padding-top: 2px;
 }
 
-.add-check-in-modal__submit,
-.add-check-in-modal__cancel {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-height: 54px;
-  border-radius: 18px;
-  font: inherit;
-  font-size: 0.95rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    background 0.2s ease,
-    color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.add-check-in-modal__submit {
-  border: 1px solid transparent;
-  background: linear-gradient(135deg, var(--color-accent-dark), var(--color-accent));
-  color: #ffffff;
-  box-shadow: var(--button-shadow-accent);
-}
-
-.add-check-in-modal__submit:hover:not(:disabled) {
-  transform: translateY(-1px);
-}
-
-.add-check-in-modal__cancel {
-  border: 1px solid var(--button-neutral-border);
-  background: var(--button-neutral-bg);
-  color: var(--button-neutral-color);
-}
-
-.add-check-in-modal__cancel:hover:not(:disabled) {
-  transform: translateY(-1px);
-  border-color: var(--button-neutral-hover-border);
-  background: var(--button-neutral-hover-bg);
-  color: var(--button-neutral-hover-color);
-}
-
-.add-check-in-modal__submit:disabled,
-.add-check-in-modal__cancel:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
-}
-
 @media (max-width: 640px) {
   .add-check-in-modal-backdrop {
     display: block;

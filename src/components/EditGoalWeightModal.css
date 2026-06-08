@@ -196,43 +196,6 @@
   gap: 12px;
 }
 
-.edit-goal-modal__submit,
-.edit-goal-modal__cancel {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-height: 54px;
-  border-radius: 18px;
-  font: inherit;
-  font-size: 0.95rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    background 0.2s ease,
-    color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.edit-goal-modal__submit {
-  width: 100%;
-  border: 1px solid color-mix(in srgb, var(--color-accent) 50%, transparent);
-  background: linear-gradient(135deg, var(--color-accent-dark), var(--color-accent));
-  color: #ffffff;
-  box-shadow: var(--button-shadow-accent);
-}
-
-.edit-goal-modal__submit:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 16px 32px color-mix(in srgb, var(--color-accent) 22%, transparent);
-}
-
-.edit-goal-modal__submit:active:not(:disabled) {
-  transform: scale(0.99);
-}
-
 .edit-goal-modal__cancel {
   width: 100%;
   border: 1px solid var(--button-neutral-border);
@@ -245,12 +208,6 @@
   border-color: var(--button-neutral-hover-border);
   background: var(--button-neutral-hover-bg);
   color: var(--button-neutral-hover-color);
-}
-
-.edit-goal-modal__submit:disabled,
-.edit-goal-modal__cancel:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
 }
 
 @media (max-width: 640px) {

@@ -9,6 +9,7 @@ import {
 } from '../utils/dateHelpers';
 import './AddCheckInModal.css';
 import { DateField } from './DateField';
+import { Button } from './general/Button';
 import { TimeField } from './TimeField';
 
 interface AddCheckInModalProps {
@@ -314,19 +315,21 @@ export const AddCheckInModal = ({
           )}
 
           <footer className='add-check-in-modal__footer'>
-            <button type='submit' className='add-check-in-modal__submit' disabled={isSubmitting}>
-              <FiCheckCircle size={20} />
-              {isSubmitting ? 'Saving...' : 'Save check-in'}
-            </button>
-
-            <button
-              type='button'
-              className='add-check-in-modal__cancel'
-              onClick={handleClose}
-              disabled={isSubmitting}
+            <Button
+              variant='solid'
+              type='submit'
+              color='secondary'
+              size='lg'
+              fullWidth
+              isLoading={isSubmitting}
+              icon={<FiCheckCircle size={20} />}
             >
+              {isSubmitting ? 'Saving...' : 'Save check-in'}
+            </Button>
+
+            <Button variant='text' color='muted' onClick={handleClose} disabled={isSubmitting}>
               Cancel
-            </button>
+            </Button>
           </footer>
         </form>
       </section>

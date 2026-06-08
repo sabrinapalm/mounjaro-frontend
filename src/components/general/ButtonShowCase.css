@@ -1,0 +1,133 @@
+.button-showcase {
+  display: grid;
+  gap: 28px;
+  width: 100%;
+  padding: 32px;
+}
+
+.button-showcase__header {
+  display: grid;
+  gap: 8px;
+}
+
+.button-showcase__eyebrow {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.button-showcase__header h1 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+}
+
+.button-showcase__header p {
+  max-width: 620px;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.button-showcase__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.button-showcase__card {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-surface-soft) 24%, var(--color-surface) 76%),
+    var(--color-surface)
+  );
+}
+
+.button-showcase__card h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.button-showcase__card p {
+  margin: -8px 0 4px;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.button-showcase__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.button-showcase__row--align-center {
+  align-items: center;
+}
+
+.button-showcase__stack {
+  display: grid;
+  gap: 12px;
+}
+
+.button-showcase__modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+@media (max-width: 900px) {
+  .button-showcase {
+    padding: 24px;
+  }
+
+  .button-showcase__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .button-showcase {
+    padding: 16px;
+  }
+
+  .button-showcase__card {
+    padding: 18px;
+  }
+
+  .button-showcase__row {
+    display: grid;
+  }
+
+  .button-showcase__row .button {
+    width: 100%;
+  }
+
+  .button-showcase__modal-actions {
+    display: grid;
+  }
+
+  .button-showcase__modal-actions .button {
+    width: 100%;
+  }
+}

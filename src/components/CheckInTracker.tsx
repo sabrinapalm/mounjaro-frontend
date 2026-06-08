@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
-import { LuHeartPulse } from 'react-icons/lu';
+import { LuHeartPulse, LuPlus } from 'react-icons/lu';
 import type { CheckInEntry, CheckInLevel, CreateCheckInInput } from '../types';
 import { formatDateLabel, getTimestamp } from '../utils/dateHelpers';
 import { AddCheckInModal } from './AddCheckInModal';
 import { ConfirmDialog } from './ConfirmDialog';
 import './CheckInTracker.css';
+import { Button } from './general/Button';
 
 type CheckInTrackerVariant = 'compact' | 'full';
 
@@ -172,13 +173,14 @@ export const CheckInTracker = ({
           </p>
         </div>
 
-        <button
-          type='button'
-          className='check-in-tracker-card__add-button'
+        <Button
+          icon={<LuPlus />}
+          variant='outline'
+          color='secondary'
           onClick={handleOpenAddCheckInModal}
         >
           Add check-in
-        </button>
+        </Button>
       </header>
 
       {error && !isAddCheckInModalOpen && <p className='check-in-tracker-card__error'>{error}</p>}

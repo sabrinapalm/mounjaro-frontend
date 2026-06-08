@@ -14,6 +14,7 @@ import type {
 import { formatDateLabel } from '../utils/dateHelpers';
 import { CheckInTracker } from './CheckInTracker';
 import { GoalProgress } from './GoalProgress';
+// import { ButtonShowcase } from './general/ButtonShowCase';
 import { MetricCard } from './general/MetricCard';
 import { Milestones } from './Milestones';
 import { ShotTracker } from './ShotTracker';
@@ -88,6 +89,8 @@ export const DashboardOverview = ({
 
         <div className='dashboard-header-date'>Today, {summary.todayLabel}</div>
       </div>
+
+      {/* <ButtonShowcase /> */}
 
       <div className='dashboard-summary-cards'>
         <MetricCard

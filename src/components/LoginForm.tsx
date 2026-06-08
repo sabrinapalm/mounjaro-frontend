@@ -1,5 +1,5 @@
 import { type FormEvent, useState } from 'react';
-import { FiLogIn, FiMail, FiUserPlus } from 'react-icons/fi';
+import { FiLogIn, FiMail } from 'react-icons/fi';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { cognitoAuth } from '../services/cognitoAuth';
 import './LoginForm.css';
@@ -7,9 +7,10 @@ import './LoginForm.css';
 interface LoginFormProps {
   onLogin: () => Promise<void> | void;
   onSwitchToSignUp: () => void;
+  onSwitchToConfirm: () => void;
 }
 
-export const LoginForm = ({ onLogin, onSwitchToSignUp }: LoginFormProps) => {
+export const LoginForm = ({ onLogin, onSwitchToSignUp, onSwitchToConfirm }: LoginFormProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -121,8 +122,20 @@ export const LoginForm = ({ onLogin, onSwitchToSignUp }: LoginFormProps) => {
           className='login-card__link-button'
           disabled={loading}
         >
-          <FiUserPlus size={18} />
           Create account
+        </button>
+
+        <span className='login-card__actions-divider' aria-hidden='true'>
+          ·
+        </span>
+
+        <button
+          type='button'
+          onClick={onSwitchToConfirm}
+          className='login-card__link-button'
+          disabled={loading}
+        >
+          Confirm account
         </button>
       </footer>
     </section>

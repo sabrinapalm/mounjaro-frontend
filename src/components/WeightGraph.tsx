@@ -8,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
 import { useProfile } from '../context/ProfileContext';
 import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { WeightEntry } from '../types';
@@ -18,7 +19,7 @@ type Period = '1m' | '3m' | '6m' | 'all';
 
 interface ChartData {
   label: string;
-  weight?: number;
+  weight: number;
   dateTime: string;
 }
 
@@ -33,8 +34,10 @@ const periodOptions: { value: Period; label: string }[] = [
   { value: '6m', label: '6 Months' },
 ];
 
-const getWeightDateTime = (entry: WeightEntry) => {
-  return entry.dateTime ?? entry.dateTime;
+const periodMonths: Record<Exclude<Period, 'all'>, number> = {
+  '1m': 1,
+  '3m': 3,
+  '6m': 6,
 };
 
 const getPeriodStartDateTime = (period: Period) => {
@@ -42,24 +45,15 @@ const getPeriodStartDateTime = (period: Period) => {
     return null;
   }
 
-  const periodMonths: Record<Exclude<Period, 'all'>, number> = {
-    '1m': 1,
-    '3m': 3,
-    '6m': 6,
-  };
-
   return getStartDateForMonthsAgo(periodMonths[period]);
 };
 
 const getYAxisDomain = (data: ChartData[]) => {
-  const weightValues = data
-    .map((entry) => entry.weight)
-    .filter((weight): weight is number => typeof weight === 'number');
-
-  if (weightValues.length === 0) {
+  if (data.length === 0) {
     return ['auto', 'auto'] as const;
   }
 
+  const weightValues = data.map((entry) => entry.weight);
   const minWeight = Math.min(...weightValues);
   const maxWeight = Math.max(...weightValues);
   const range = maxWeight - minWeight;
@@ -68,22 +62,33 @@ const getYAxisDomain = (data: ChartData[]) => {
   return [Math.floor(minWeight - padding), Math.ceil(maxWeight + padding)] as const;
 };
 
-const getTicks = (data: ChartData[]) => {
+const getXAxisTicks = (data: ChartData[]) => {
   if (data.length <= 6) {
-    return data.map((entry) => entry.label);
+    return data.map((entry) => entry.dateTime);
   }
 
-  const first = data[0]?.label;
-  const last = data[data.length - 1]?.label;
-  const middleIndexes = [
-    Math.floor(data.length * 0.25),
-    Math.floor(data.length * 0.5),
-    Math.floor(data.length * 0.75),
+  const first = data[0]?.dateTime;
+  const last = data[data.length - 1]?.dateTime;
+
+  const middleTicks = [
+    data[Math.floor(data.length * 0.25)]?.dateTime,
+    data[Math.floor(data.length * 0.5)]?.dateTime,
+    data[Math.floor(data.length * 0.75)]?.dateTime,
   ];
 
-  return Array.from(
-    new Set([first, ...middleIndexes.map((index) => data[index]?.label), last].filter(Boolean))
-  );
+  return Array.from(new Set([first, ...middleTicks, last].filter(Boolean)));
+};
+
+const getPeriodMeta = (period: Period, visibleCount: number, totalCount: number) => {
+  if (totalCount === 0) {
+    return 'No weight entries yet';
+  }
+
+  if (period === 'all') {
+    return `${totalCount} total ${totalCount === 1 ? 'entry' : 'entries'}`;
+  }
+
+  return `${visibleCount} of ${totalCount} ${totalCount === 1 ? 'entry' : 'entries'} shown`;
 };
 
 export const WeightGraph = ({ weights }: WeightGraphProps) => {
@@ -92,7 +97,7 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
   const { unitSystem } = useProfile();
   const { weightUnit, convertWeightFromKg } = useUnitSettings(unitSystem);
 
-  const chartData = useMemo(() => {
+  const chartData = useMemo<ChartData[]>(() => {
     const periodStartDateTime = getPeriodStartDateTime(period);
     const periodStartTimestamp = periodStartDateTime ? getTimestamp(periodStartDateTime) : null;
 
@@ -102,27 +107,34 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
           return true;
         }
 
-        return getTimestamp(getWeightDateTime(entry)) >= periodStartTimestamp;
+        return getTimestamp(entry.dateTime) >= periodStartTimestamp;
       })
-      .sort((a, b) => getTimestamp(getWeightDateTime(a)) - getTimestamp(getWeightDateTime(b)))
-      .map((entry) => {
-        const dateTime = getWeightDateTime(entry);
-
-        return {
-          label: formatShortDateLabel(dateTime),
-          dateTime,
-          weight: convertWeightFromKg(entry.weight),
-        };
-      });
-  }, [convertWeightFromKg, weights, period]);
+      .sort((a, b) => getTimestamp(a.dateTime) - getTimestamp(b.dateTime))
+      .map((entry) => ({
+        label: formatShortDateLabel(entry.dateTime),
+        dateTime: entry.dateTime,
+        weight: convertWeightFromKg(entry.weight),
+      }));
+  }, [convertWeightFromKg, period, weights]);
 
   const yAxisDomain = useMemo(() => getYAxisDomain(chartData), [chartData]);
-  const xAxisTicks = useMemo(() => getTicks(chartData), [chartData]);
+  const xAxisTicks = useMemo(() => getXAxisTicks(chartData), [chartData]);
+
+  const selectedPeriodLabel =
+    periodOptions.find((option) => option.value === period)?.label ?? 'All Time';
+
+  const periodMeta = getPeriodMeta(period, chartData.length, weights.length);
 
   return (
     <section className='weight-graph-card'>
       <header className='weight-graph-card__header'>
-        <h2 className='weight-graph-card__title'>Weight Over Time</h2>
+        <div>
+          <p className='weight-graph-card__eyebrow'>Progress</p>
+          <h2 className='weight-graph-card__title'>Weight Over Time</h2>
+          <p className='weight-graph-card__meta'>
+            {selectedPeriodLabel} · {periodMeta}
+          </p>
+        </div>
 
         <label className='weight-graph-card__period'>
           <span className='weight-graph-card__period-label'>Period</span>
@@ -144,7 +156,7 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
 
       {chartData.length === 0 ? (
         <div className='weight-graph-card__empty-state'>
-          <p>No data to display yet. Add weights to see your progress chart.</p>
+          <p>No data to display for this period.</p>
         </div>
       ) : (
         <div className='weight-graph-card__chart'>
@@ -169,8 +181,9 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
               <CartesianGrid vertical={false} stroke='var(--color-border)' strokeOpacity={0.36} />
 
               <XAxis
-                dataKey='label'
+                dataKey='dateTime'
                 ticks={xAxisTicks}
+                tickFormatter={(value) => formatShortDateLabel(value)}
                 axisLine={false}
                 tickLine={false}
                 tickMargin={18}
@@ -203,16 +216,20 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
                   strokeWidth: 1,
                   strokeOpacity: 0.35,
                 }}
-                content={({ active, payload, label }) => {
+                labelFormatter={(value) => formatShortDateLabel(String(value))}
+                content={({ active, payload }) => {
                   if (!active || !payload?.length) {
                     return null;
                   }
 
+                  const entry = payload[0]?.payload as ChartData | undefined;
                   const value = payload[0]?.value;
 
                   return (
                     <div className='weight-graph-card__tooltip'>
-                      <span className='weight-graph-card__tooltip-label'>{label}</span>
+                      <span className='weight-graph-card__tooltip-label'>
+                        {entry?.dateTime ? formatShortDateLabel(entry.dateTime) : ''}
+                      </span>
 
                       <strong className='weight-graph-card__tooltip-value'>
                         {typeof value === 'number' ? `${value.toFixed(1)} ${weightUnit}` : value}

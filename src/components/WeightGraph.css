@@ -22,8 +22,18 @@
   min-width: 0;
 }
 
+.weight-graph-card__eyebrow {
+  margin: 0 0 4px;
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .weight-graph-card__title {
   min-width: 0;
+  margin: 0;
   color: var(--color-text);
   font-size: 1.35rem;
   font-weight: 800;
@@ -92,7 +102,7 @@
   background-repeat: no-repeat;
 }
 
-.weight-graph-card__select:focus {
+.weight-graph-card__select:focus-visible {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 16%, transparent);
 }
@@ -111,6 +121,7 @@
   border: 1px solid color-mix(in srgb, var(--color-primary) 32%, var(--color-border));
   border-radius: 14px;
   background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  box-shadow: var(--shadow-soft);
   backdrop-filter: blur(12px);
 }
 
@@ -123,7 +134,7 @@
 .weight-graph-card__tooltip-value {
   color: var(--color-text);
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .weight-graph-card__empty-state {
@@ -139,6 +150,7 @@
 
 .weight-graph-card__empty-state p {
   max-width: 320px;
+  margin: 0;
   color: var(--color-text-muted);
   font-size: 0.95rem;
   font-weight: 700;

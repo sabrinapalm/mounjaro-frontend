@@ -3,6 +3,7 @@ import { LuGoal } from 'react-icons/lu';
 import { useProfile } from '../context/ProfileContext';
 import { useUnitSettings } from '../hooks/useUnitSettings';
 import './EditGoalWeightModal.css';
+import { Button } from './general/Button';
 
 interface EditGoalWeightModalProps {
   open: boolean;
@@ -163,19 +164,19 @@ const EditGoalWeightModalContent = ({
           {(localError || error) && <p className='edit-goal-modal__error'>{localError || error}</p>}
 
           <footer className='edit-goal-modal__footer'>
-            <button type='submit' className='edit-goal-modal__submit' disabled={isSubmitting}>
-              <LuGoal size={20} />
-              {isSubmitting ? 'Saving...' : 'Save Goal'}
-            </button>
-
-            <button
-              type='button'
-              className='edit-goal-modal__cancel'
-              onClick={handleClose}
-              disabled={isSubmitting}
+            <Button
+              variant='solid'
+              color='secondary'
+              size='lg'
+              fullWidth
+              isLoading={isSubmitting}
+              icon={<LuGoal size={20} />}
             >
+              {isSubmitting ? 'Saving...' : 'Save Goal'}
+            </Button>
+            <Button variant='text' color='muted' onClick={handleClose} disabled={isSubmitting}>
               Cancel
-            </button>
+            </Button>
           </footer>
         </form>
       </section>

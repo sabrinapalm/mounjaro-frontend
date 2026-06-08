@@ -212,3 +212,51 @@
     font-size: 1.4rem;
   }
 }
+
+.login-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.login-card__link-button {
+  border: 0;
+  padding: 6px 2px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 850;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.login-card__link-button:hover:not(:disabled) {
+  color: var(--color-accent);
+  transform: translateY(-1px);
+}
+
+.login-card__link-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
+}
+
+.login-card__link-button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.login-card__actions-divider {
+  color: color-mix(in srgb, var(--color-text-muted) 55%, transparent);
+  font-size: 1.2rem;
+  font-weight: 900;
+  line-height: 1;
+}
