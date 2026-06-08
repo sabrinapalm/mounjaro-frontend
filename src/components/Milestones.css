@@ -28,27 +28,6 @@
   letter-spacing: -0.04em;
 }
 
-.milestones-card__view-all {
-  border: 0;
-  background: transparent;
-  color: var(--color-primary);
-  font-size: 0.95rem;
-  font-weight: 800;
-  white-space: nowrap;
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.milestones-card__view-all:hover {
-  color: var(--color-primary-dark);
-  transform: translateY(-1px);
-}
-
-html[data-theme="dark"] .milestones-card__view-all:hover {
-  color: var(--color-primary);
-}
-
 .milestones-card__list {
   display: grid;
   gap: 12px;

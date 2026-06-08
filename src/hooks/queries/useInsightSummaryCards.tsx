@@ -1,10 +1,9 @@
-import { useMemo, type ReactNode } from 'react';
+import { type ReactNode, useMemo } from 'react';
 import { LuCalendarCheck, LuFlame, LuHeartPulse, LuTrendingDown } from 'react-icons/lu';
 import type { MetricCardTone } from '../../components/general/MetricCard';
 import { useProfile } from '../../context/ProfileContext';
-import { useUnitSettings } from '../useUnitSettings';
 import type { useInsights } from '../useInsights';
-
+import { useUnitSettings } from '../useUnitSettings';
 
 export type SummaryCard = {
   label: string;
@@ -21,7 +20,7 @@ type UseInsightsSummaryCardsParams = {
 
 export const useInsightsSummaryCards = ({ insights }: UseInsightsSummaryCardsParams) => {
   const { unitSystem } = useProfile();
-  const { displayWeightFromKg } = useUnitSettings(unitSystem);
+  const { displayWeightFromKg, weightUnit } = useUnitSettings(unitSystem);
 
   return useMemo<SummaryCard[]>(() => {
     return [
@@ -49,7 +48,7 @@ export const useInsightsSummaryCards = ({ insights }: UseInsightsSummaryCardsPar
         label: 'Weight Trend',
         value:
           insights.averageLossPerWeek !== null && Number.isFinite(insights.averageLossPerWeek)
-            ? `${displayWeightFromKg(Math.abs(insights.averageLossPerWeek))}/week`
+            ? `${displayWeightFromKg(Math.abs(insights.averageLossPerWeek))} ${weightUnit}/week`
             : '—',
         meta: insights.trendDescription,
         icon: <LuTrendingDown aria-hidden='true' />,
@@ -66,5 +65,5 @@ export const useInsightsSummaryCards = ({ insights }: UseInsightsSummaryCardsPar
         tone: insights.sideEffectTone,
       },
     ];
-  }, [displayWeightFromKg, insights]);
+  }, [displayWeightFromKg, weightUnit, insights]);
 };

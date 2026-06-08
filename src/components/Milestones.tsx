@@ -3,6 +3,7 @@ import { LuPartyPopper } from 'react-icons/lu';
 import { type Milestone, useMilestones } from '../hooks/useMilestones';
 import type { ShotEntry, WeightEntry } from '../types';
 import './Milestones.css';
+import { Button } from './general/Button';
 
 type MilestonesVariant = 'compact' | 'full';
 
@@ -64,11 +65,10 @@ export const Milestones = ({
     <section className={`milestones-card milestones-card--${variant}`}>
       <header className='milestones-card__header'>
         <h2 className='milestones-card__title'>Milestones</h2>
-
         {shouldShowViewAll ? (
-          <button type='button' className='milestones-card__view-all' onClick={onViewAll}>
+          <Button variant='text' onClick={onViewAll}>
             View all
-          </button>
+          </Button>
         ) : null}
       </header>
 
