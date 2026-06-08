@@ -1,9 +1,9 @@
 import { type FormEvent, useState } from 'react';
 import { FiArrowLeft, FiCheckCircle, FiMail } from 'react-icons/fi';
 import { MdOutlineMarkEmailRead } from 'react-icons/md';
-import { cognitoAuth } from '../services/cognitoAuth';
+import { cognitoAuth } from '../../services/cognitoAuth';
 import './ConfirmSignUpForm.css';
-import { Button } from './general/Button';
+import { Button } from '../general/Button';
 
 interface ConfirmSignUpFormProps {
   email?: string;

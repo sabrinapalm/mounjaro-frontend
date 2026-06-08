@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { FiCalendar } from 'react-icons/fi';
-import { formatDateLabel } from '../utils/dateHelpers';
 import './DateField.css';
+import { formatDateLabel } from '../../utils/dateHelpers';
 
 interface DateFieldProps {
   id: string;

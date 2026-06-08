@@ -7,9 +7,9 @@ import {
   LuMessageSquareText,
   LuSparkles,
 } from 'react-icons/lu';
-import type { CheckInEntry, CheckInLevel, SideEffect } from '../types';
-import { MetricCard } from './general/MetricCard';
+import type { CheckInEntry, CheckInLevel, SideEffect } from '../../types';
 import './CheckInStatsCards.css';
+import { MetricCard } from '../general/MetricCard';
 
 type CheckInStatsCardsProps = {
   checkIns: CheckInEntry[];

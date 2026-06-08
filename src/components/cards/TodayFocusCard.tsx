@@ -2,8 +2,8 @@ import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import { FiActivity, FiPlus, FiTrendingDown, FiTrendingUp } from 'react-icons/fi';
 import { LuCalendarClock, LuHeartPulse, LuScale } from 'react-icons/lu';
-import type { CheckInEntry, ShotEntry, WeightEntry } from '../types';
-import { formatDateLabel, getTimestamp } from '../utils/dateHelpers';
+import type { CheckInEntry, ShotEntry, WeightEntry } from '../../types';
+import { formatDateLabel, getTimestamp } from '../../utils/dateHelpers';
 import './TodayFocusCard.css';
 
 interface TodayFocusCardProps {

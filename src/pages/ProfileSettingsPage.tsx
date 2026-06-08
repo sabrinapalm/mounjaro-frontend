@@ -7,7 +7,7 @@ import { useUnitSettings } from '../hooks/useUnitSettings';
 import { cognitoAuth } from '../services/cognitoAuth';
 import type { ProfileFormValues, UnitSystem, UserProfile } from '../types';
 import './ProfileSettingsPage.css';
-import { Button } from './general/Button';
+import { Button } from '../components/general/Button';
 
 type ProfileSettingsPageProps = {
   profile: UserProfile;

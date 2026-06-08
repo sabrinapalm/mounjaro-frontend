@@ -1,16 +1,17 @@
 import { useMemo, useState } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { PiSyringeBold } from 'react-icons/pi';
-import type { CreateShotInput, ShotEntry } from '../types';
-import { formatDateLabel, getTimestamp } from '../utils/dateHelpers';
-import { AddShotModal } from './AddShotModal';
-import { ConfirmDialog } from './ConfirmDialog';
+import type { CreateShotInput, ShotEntry } from '../../types';
+import { formatDateLabel, getTimestamp } from '../../utils/dateHelpers';
+import { ConfirmDialog } from '../modals/ConfirmDialog';
+
 import './ShotTracker.css';
 import { LuPlus } from 'react-icons/lu';
 import { useIntl } from 'react-intl';
-import { messages } from '../i18n/messages';
-import { Button } from './general/Button';
-import { ViewAllButton } from './general/ViewAllButton';
+import { messages } from '../../i18n/messages';
+import { Button } from '../general/Button';
+import { ViewAllButton } from '../general/ViewAllButton';
+import { AddShotModal } from '../modals/AddShotModal';
 
 type ShotTrackerVariant = 'compact' | 'full';
 
@@ -134,7 +135,6 @@ export const ShotTracker = ({
             {summaryLabel}: <span>{totalShots}</span>
           </p>
         </div>
-
         <Button icon={<LuPlus size={22} />} onClick={handleOpenAddShotModal}>
           Add shot
         </Button>
@@ -147,7 +147,6 @@ export const ShotTracker = ({
           <div className='shot-tracker-card__empty-icon'>
             <PiSyringeBold size={24} />
           </div>
-
           <p>No shots recorded yet</p>
         </div>
       ) : (
@@ -183,7 +182,6 @@ export const ShotTracker = ({
           ) : null}
         </ul>
       )}
-
       <AddShotModal
         open={isAddShotModalOpen}
         isSubmitting={isAddingShot}
@@ -191,7 +189,6 @@ export const ShotTracker = ({
         onClose={handleCloseAddShotModal}
         onShotAdded={handleAddShot}
       />
-
       <ConfirmDialog
         open={Boolean(shotToDelete)}
         title='Delete shot?'

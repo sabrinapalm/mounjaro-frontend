@@ -1,7 +1,7 @@
 import { LuCalendarHeart, LuScale, LuSyringe, LuTrendingDown } from 'react-icons/lu';
 
-import type { DashboardSummary } from '../hooks/useDashboardSummary';
-import { useUnitSettings } from '../hooks/useUnitSettings';
+import type { DashboardSummary } from '../../hooks/useDashboardSummary';
+import { useUnitSettings } from '../../hooks/useUnitSettings';
 import type {
   CheckInEntry,
   CreateCheckInInput,
@@ -10,16 +10,16 @@ import type {
   ShotEntry,
   UserProfile,
   WeightEntry,
-} from '../types';
-import { formatDateLabel } from '../utils/dateHelpers';
-import { CheckInTracker } from './CheckInTracker';
-import { GoalProgress } from './GoalProgress';
+} from '../../types';
+import { formatDateLabel } from '../../utils/dateHelpers';
+import { GoalProgress } from '../GoalProgress';
 // import { ButtonShowcase } from './general/ButtonShowCase';
-import { MetricCard } from './general/MetricCard';
-import { Milestones } from './Milestones';
-import { ShotTracker } from './ShotTracker';
-import { WeightGraph } from './WeightGraph';
-import { WeightTracker } from './WeightTracker';
+import { MetricCard } from '../general/MetricCard';
+import { Milestones } from '../Milestones';
+import { CheckInTracker } from '../trackers/CheckInTracker';
+import { ShotTracker } from '../trackers/ShotTracker';
+import { WeightTracker } from '../trackers/WeightTracker';
+import { WeightGraph } from '../WeightGraph';
 
 interface DashboardOverviewProps {
   profile: UserProfile;

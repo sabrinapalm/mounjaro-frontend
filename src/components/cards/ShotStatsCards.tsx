@@ -6,9 +6,9 @@ import {
   LuMessageSquareText,
   LuSyringe,
 } from 'react-icons/lu';
-import type { ShotEntry } from '../types';
-import { MetricCard } from './general/MetricCard';
 import './ShotStatsCards.css';
+import type { ShotEntry } from '../../types';
+import { MetricCard } from '../general/MetricCard';
 
 type ShotStatsCardsProps = {
   shots: ShotEntry[];

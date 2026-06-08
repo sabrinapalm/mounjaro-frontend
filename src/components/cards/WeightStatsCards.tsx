@@ -7,11 +7,11 @@ import {
   LuTrendingDown,
   LuTrendingUp,
 } from 'react-icons/lu';
-import { useProfile } from '../context/ProfileContext';
-import { useUnitSettings } from '../hooks/useUnitSettings';
-import type { WeightEntry } from '../types';
-import { MetricCard } from './general/MetricCard';
 import './WeightStatsCards.css';
+import { useProfile } from '../../context/ProfileContext';
+import { useUnitSettings } from '../../hooks/useUnitSettings';
+import type { WeightEntry } from '../../types';
+import { MetricCard } from '../general/MetricCard';
 
 type WeightStatsCardsProps = {
   weights: WeightEntry[];

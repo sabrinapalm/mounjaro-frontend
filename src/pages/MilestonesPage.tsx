@@ -1,5 +1,5 @@
+import { Milestones } from '../components/Milestones';
 import type { ShotEntry, UserProfile, WeightEntry } from '../types';
-import { Milestones } from './Milestones';
 import './MilestonesPage.css';
 
 type MilestonesPageProps = {

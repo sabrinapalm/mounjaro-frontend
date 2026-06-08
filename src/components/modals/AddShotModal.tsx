@@ -1,16 +1,16 @@
 import { type FormEvent, useState } from 'react';
 import { FiCheckCircle } from 'react-icons/fi';
 import { PiSyringeBold } from 'react-icons/pi';
-import type { CreateShotInput, InjectionSite, ShotSideEffect } from '../types';
+import './AddShotModal.css';
+import type { CreateShotInput, InjectionSite, ShotSideEffect } from '../../types';
 import {
   createDateTimeFromDateAndTimeValue,
   getCurrentTimeValue,
   getTodayDateValue,
-} from '../utils/dateHelpers';
-import './AddShotModal.css';
-import { DateField } from './DateField';
-import { Button } from './general/Button';
-import { TimeField } from './TimeField';
+} from '../../utils/dateHelpers';
+import { Button } from '../general/Button';
+import { DateField } from '../general/DateField';
+import { TimeField } from '../general/TimeField';
 
 interface AddShotModalProps {
   open: boolean;

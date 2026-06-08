@@ -1,28 +1,37 @@
 import { useEffect, useRef, useState } from 'react';
 import { LuMenu, LuMoon, LuSun } from 'react-icons/lu';
-import { useCheckIns, useCreateCheckIn, useDeleteCheckIn } from '../hooks/queries/useCheckInsQuery';
-import { useUpdateGoalWeight } from '../hooks/queries/useProfileQuery';
-import { useCreateShot, useDeleteShot, useShots } from '../hooks/queries/useShotsQuery';
-import { useCreateWeight, useDeleteWeight, useWeights } from '../hooks/queries/useWeightsQuery';
+import {
+  useCheckIns,
+  useCreateCheckIn,
+  useDeleteCheckIn,
+} from '../../hooks/queries/useCheckInsQuery';
+import { useUpdateGoalWeight } from '../../hooks/queries/useProfileQuery';
+import { useCreateShot, useDeleteShot, useShots } from '../../hooks/queries/useShotsQuery';
+import { useCreateWeight, useDeleteWeight, useWeights } from '../../hooks/queries/useWeightsQuery';
 import {
   type DashboardNotificationAction,
   useDashboardNotifications,
-} from '../hooks/useDashboardNotifications';
-import { useDashboardSummary } from '../hooks/useDashboardSummary';
-import { useDismissedNotifications } from '../hooks/useDissmisedNotifications';
-import type { CreateCheckInInput, CreateShotInput, CreateWeightInput, UserProfile } from '../types';
-import { getQueryErrorMessage } from '../utils/queryErrorMessage';
+} from '../../hooks/useDashboardNotifications';
+import { useDashboardSummary } from '../../hooks/useDashboardSummary';
+import { useDismissedNotifications } from '../../hooks/useDissmisedNotifications';
+import type {
+  CreateCheckInInput,
+  CreateShotInput,
+  CreateWeightInput,
+  UserProfile,
+} from '../../types';
+import { getQueryErrorMessage } from '../../utils/queryErrorMessage';
 import './Dashboard.css';
-import { CheckInsPage } from './CheckInsPage';
+import { CheckInsPage } from '../../pages/CheckInsPage';
+import { InsightsPage } from '../../pages/InsightsPage';
+import { MilestonesPage } from '../../pages/MilestonesPage';
+import { ProfileSettingsPage } from '../../pages/ProfileSettingsPage';
+import { ShotsPage } from '../../pages/ShotsPage';
+import { WeightPage } from '../../pages/WeightPage';
+import { Sidebar, type SidebarSection } from '../Sidebar';
 import { DashboardErrorNotice } from './DashboardErrorNotice';
 import { DashboardNotifications } from './DashboardNotifications';
 import { DashboardOverview } from './DashboardOverview';
-import { InsightsPage } from './InsightsPage';
-import { MilestonesPage } from './MilestonesPage';
-import { ProfileSettingsPage } from './ProfileSettingsPage';
-import { ShotsPage } from './ShotsPage';
-import { Sidebar, type SidebarSection } from './Sidebar';
-import { WeightPage } from './WeightPage';
 
 type DashboardProps = {
   profile: UserProfile;

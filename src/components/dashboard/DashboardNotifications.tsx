@@ -4,7 +4,7 @@ import type {
   DashboardNotification,
   DashboardNotificationAction,
   DashboardNotificationType,
-} from '../hooks/useDashboardNotifications';
+} from '../../hooks/useDashboardNotifications';
 import './DashboardNotifications.css';
 
 type DashboardNotificationsProps = {

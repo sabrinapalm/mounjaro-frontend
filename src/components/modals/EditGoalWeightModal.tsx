@@ -1,9 +1,9 @@
 import { type FormEvent, useEffect, useState } from 'react';
 import { LuGoal } from 'react-icons/lu';
-import { useProfile } from '../context/ProfileContext';
-import { useUnitSettings } from '../hooks/useUnitSettings';
+import { useProfile } from '../../context/ProfileContext';
+import { useUnitSettings } from '../../hooks/useUnitSettings';
 import './EditGoalWeightModal.css';
-import { Button } from './general/Button';
+import { Button } from '../general/Button';
 
 interface EditGoalWeightModalProps {
   open: boolean;

@@ -1,8 +1,8 @@
 import type { FormEvent } from 'react';
 import { useState } from 'react';
 import { FiArrowRight, FiTarget, FiTrendingUp, FiUser } from 'react-icons/fi';
-import { useUnitSettings } from '../hooks/useUnitSettings';
-import type { ProfileFormValues, UnitSystem, UserProfile } from '../types';
+import { useUnitSettings } from '../../hooks/useUnitSettings';
+import type { ProfileFormValues, UnitSystem, UserProfile } from '../../types';
 import './ProfileForm.css';
 
 type ProfileFormProps = {

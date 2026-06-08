@@ -4,7 +4,7 @@ import { useUnitSettings } from '../hooks/useUnitSettings';
 import type { UserProfile, WeightEntry } from '../types';
 import { calculateBmi } from '../utils/calculateBmi';
 import { getTimestamp } from '../utils/dateHelpers';
-import { EditGoalWeightModal } from './EditGoalWeightModal';
+import { EditGoalWeightModal } from './modals/EditGoalWeightModal';
 import './GoalProgress.css';
 import { Button } from './general/Button';
 

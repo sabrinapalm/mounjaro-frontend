@@ -1,6 +1,6 @@
+import { CheckInStatsCards } from '../components/cards/CheckInStatsCards';
+import { CheckInTracker } from '../components/trackers/CheckInTracker';
 import type { CheckInEntry, CreateCheckInInput } from '../types';
-import { CheckInStatsCards } from './CheckInStatsCards';
-import { CheckInTracker } from './CheckInTracker';
 import './CheckInsPage.css';
 
 interface CheckInsPageProps {

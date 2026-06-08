@@ -1,16 +1,16 @@
 import { type FormEvent, useState } from 'react';
 import { FiCheckCircle } from 'react-icons/fi';
 import { LuHeartPulse } from 'react-icons/lu';
-import type { CheckInLevel, CreateCheckInInput, SideEffect } from '../types';
+import type { CheckInLevel, CreateCheckInInput, SideEffect } from '../../types';
 import {
   createDateTimeFromDateAndTimeValue,
   getCurrentTimeValue,
   getTodayDateValue,
-} from '../utils/dateHelpers';
+} from '../../utils/dateHelpers';
 import './AddCheckInModal.css';
-import { DateField } from './DateField';
-import { Button } from './general/Button';
-import { TimeField } from './TimeField';
+import { Button } from '../general/Button';
+import { DateField } from '../general/DateField';
+import { TimeField } from '../general/TimeField';
 
 interface AddCheckInModalProps {
   open: boolean;

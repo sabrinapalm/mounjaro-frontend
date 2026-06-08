@@ -1,6 +1,6 @@
+import { WeightStatsCards } from '../components/cards/WeightStatsCards';
+import { WeightTracker } from '../components/trackers/WeightTracker';
 import type { CreateWeightInput, WeightEntry } from '../types';
-import { WeightStatsCards } from './WeightStatsCards';
-import { WeightTracker } from './WeightTracker';
 import './WeightPage.css';
 
 interface WeightPageProps {
@@ -18,9 +18,7 @@ export const WeightPage = ({ weights, onWeightAdded, onDeleteWeight }: WeightPag
           <p>View your full weight history and add new check-ins when needed.</p>
         </div>
       </header>
-
       <WeightStatsCards weights={weights} />
-
       <WeightTracker
         weights={weights}
         title='All Weight Entries'

@@ -1,9 +1,9 @@
 import { type FormEvent, useState } from 'react';
 import { FiArrowLeft, FiMail, FiUserPlus } from 'react-icons/fi';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import { cognitoAuth } from '../services/cognitoAuth';
 import './SignUpForm.css';
-import { Button } from './general/Button';
+import { cognitoAuth } from '../../services/cognitoAuth';
+import { Button } from '../general/Button';
 
 interface SignUpFormProps {
   onSignedUp: (email: string) => Promise<void> | void;

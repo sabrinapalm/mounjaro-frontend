@@ -1,17 +1,17 @@
 import { type FormEvent, useState } from 'react';
 import { FiActivity } from 'react-icons/fi';
-import { useProfile } from '../context/ProfileContext';
-import { useUnitSettings } from '../hooks/useUnitSettings';
-import type { CreateWeightInput } from '../types';
+import { useProfile } from '../../context/ProfileContext';
+import { useUnitSettings } from '../../hooks/useUnitSettings';
+import type { CreateWeightInput } from '../../types';
 import {
   createDateTimeFromDateAndTimeValue,
   getCurrentTimeValue,
   getTodayDateValue,
-} from '../utils/dateHelpers';
+} from '../../utils/dateHelpers';
 import './AddWeightModal.css';
-import { DateField } from './DateField';
-import { Button } from './general/Button';
-import { TimeField } from './TimeField';
+import { Button } from '../general/Button';
+import { DateField } from '../general/DateField';
+import { TimeField } from '../general/TimeField';
 
 interface AddWeightModalProps {
   open: boolean;

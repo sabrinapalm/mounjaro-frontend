@@ -7,6 +7,7 @@ import {
   LuSyringe,
   LuTarget,
 } from 'react-icons/lu';
+import { MetricCard } from '../components/general/MetricCard';
 import {
   getAverageScoreLabel,
   getDayMetaLabel,
@@ -16,7 +17,6 @@ import {
 } from '../hooks/useCurrentShotCycle';
 import { type DailyCheckInEntry, formatSideEffectLabel, useInsights } from '../hooks/useInsights';
 import type { ShotEntry, UserProfile, WeightEntry } from '../types';
-import { MetricCard } from './general/MetricCard';
 import './InsightsPage.css';
 import { useInsightsSummaryCards } from '../hooks/queries/useInsightSummaryCards';
 

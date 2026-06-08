@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { LuHeartPulse, LuPlus } from 'react-icons/lu';
-import type { CheckInEntry, CheckInLevel, CreateCheckInInput } from '../types';
-import { formatDateLabel, getTimestamp } from '../utils/dateHelpers';
-import { AddCheckInModal } from './AddCheckInModal';
-import { ConfirmDialog } from './ConfirmDialog';
 import './CheckInTracker.css';
-import { Button } from './general/Button';
-import { ViewAllButton } from './general/ViewAllButton';
+import type { CheckInEntry, CheckInLevel, CreateCheckInInput } from '../../types';
+import { formatDateLabel, getTimestamp } from '../../utils/dateHelpers';
+import { Button } from '../general/Button';
+import { ViewAllButton } from '../general/ViewAllButton';
+import { AddCheckInModal } from '../modals/AddCheckInModal';
+import { ConfirmDialog } from '../modals/ConfirmDialog';
 
 type CheckInTrackerVariant = 'compact' | 'full';
 

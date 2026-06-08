@@ -1,6 +1,6 @@
 import { FiAlertCircle, FiRefreshCw } from 'react-icons/fi';
 import './DashboardErrorNotice.css';
-import { Button } from './general/Button';
+import { Button } from '../general/Button';
 
 interface DashboardErrorNoticeProps {
   title?: string;

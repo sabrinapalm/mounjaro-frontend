@@ -1,9 +1,9 @@
 import { type FormEvent, useState } from 'react';
 import { FiLogIn, FiMail } from 'react-icons/fi';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import { cognitoAuth } from '../services/cognitoAuth';
 import './LoginForm.css';
-import { Button } from './general/Button';
+import { cognitoAuth } from '../../services/cognitoAuth';
+import { Button } from '../general/Button';
 
 interface LoginFormProps {
   onLogin: () => Promise<void> | void;

@@ -1,6 +1,6 @@
+import { ShotStatsCards } from '../components/cards/ShotStatsCards';
+import { ShotTracker } from '../components/trackers/ShotTracker';
 import type { CreateShotInput, ShotEntry } from '../types';
-import { ShotStatsCards } from './ShotStatsCards';
-import { ShotTracker } from './ShotTracker';
 import './ShotsPage.css';
 
 interface ShotsPageProps {
@@ -18,9 +18,7 @@ export const ShotsPage = ({ shots, onShotAdded, onDeleteShot }: ShotsPageProps) 
           <p>View your full injection history and add new shots when needed.</p>
         </div>
       </header>
-
       <ShotStatsCards shots={shots} />
-
       <ShotTracker
         shots={shots}
         title='All Shots'
