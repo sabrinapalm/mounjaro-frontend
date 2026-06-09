@@ -1,3 +1,4 @@
+import { CheckInNotesList } from '../components/CheckInNotesList';
 import { CheckInStatsCards } from '../components/cards/CheckInStatsCards';
 import { CheckInTracker } from '../components/trackers/CheckInTracker';
 import type { CheckInEntry, CreateCheckInInput } from '../types';
@@ -20,7 +21,7 @@ export const CheckInsPage = ({ checkIns, onCheckInAdded, onDeleteCheckIn }: Chec
       </header>
 
       <CheckInStatsCards checkIns={checkIns} />
-
+      <CheckInNotesList checkIns={checkIns} />
       <CheckInTracker
         checkIns={checkIns}
         title='All Check-ins'

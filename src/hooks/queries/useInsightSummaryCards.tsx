@@ -48,7 +48,7 @@ export const useInsightsSummaryCards = ({ insights }: UseInsightsSummaryCardsPar
         label: 'Weight Trend',
         value:
           insights.averageLossPerWeek !== null && Number.isFinite(insights.averageLossPerWeek)
-            ? `${displayWeightFromKg(Math.abs(insights.averageLossPerWeek))} ${weightUnit}/week`
+            ? `${displayWeightFromKg(Math.abs(insights.averageLossPerWeek))}${weightUnit}/week`
             : '—',
         meta: insights.trendDescription,
         icon: <LuTrendingDown aria-hidden='true' />,

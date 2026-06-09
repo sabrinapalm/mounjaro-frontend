@@ -1,0 +1,135 @@
+.check-in-notes-card {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-surface-soft) 18%, var(--color-surface) 82%),
+    var(--color-surface)
+  );
+  box-shadow: var(--shadow-soft);
+}
+
+.check-in-notes-card__header {
+  min-width: 0;
+}
+
+.check-in-notes-card__eyebrow {
+  margin: 0 0 4px;
+  color: var(--color-accent-dark);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.check-in-notes-card__header h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.15rem;
+  font-weight: 850;
+  letter-spacing: -0.035em;
+}
+
+.check-in-notes-card__header p:not(.check-in-notes-card__eyebrow) {
+  margin-top: 2px;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.check-in-notes-card__list {
+  display: grid;
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--color-border) 86%, transparent);
+  border-radius: 18px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-surface-soft) 28%, transparent);
+}
+
+.check-in-notes-card__item {
+  display: grid;
+  /* grid-template-columns: minmax(108px, 0.28fr) minmax(0, 1fr); */
+  gap: 4px;
+  min-width: 0;
+  padding: 12px 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 76%, transparent);
+}
+
+.check-in-notes-card__item:last-child {
+  border-bottom: 0;
+}
+
+.check-in-notes-card__date {
+  min-width: 0;
+  color: var(--color-text);
+  font-size: 0.84rem;
+  font-weight: 850;
+  line-height: 1.4;
+}
+
+.check-in-notes-card__note {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 7px;
+  align-items: flex-start;
+  min-width: 0;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.check-in-notes-card__note svg {
+  margin-top: 2px;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.check-in-notes-card__note span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.check-in-notes-card__empty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 58px;
+  padding: 14px;
+  border: 1px dashed var(--color-border);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--color-surface-soft) 38%, transparent);
+  color: var(--color-text-muted);
+}
+
+.check-in-notes-card__empty p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .check-in-notes-card {
+    padding: 18px;
+  }
+
+  .check-in-notes-card__item {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .check-in-notes-card__date {
+    font-size: 0.82rem;
+  }
+
+  .check-in-notes-card__note {
+    font-size: 0.84rem;
+  }
+}
