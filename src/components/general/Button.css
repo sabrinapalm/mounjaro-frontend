@@ -223,3 +223,9 @@
     transform: rotate(360deg);
   }
 }
+
+@media (max-width: 680px) {
+  .button {
+    width: 100%;
+  }
+}
