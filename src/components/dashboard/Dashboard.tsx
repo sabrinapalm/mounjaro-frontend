@@ -262,7 +262,12 @@ export const Dashboard = ({
     switch (activeSection) {
       case 'shots':
         return (
-          <ShotsPage shots={shots} onShotAdded={handleShotAdded} onDeleteShot={handleDeleteShot} />
+          <ShotsPage
+            shots={shots}
+            weights={weights}
+            onShotAdded={handleShotAdded}
+            onDeleteShot={handleDeleteShot}
+          />
         );
 
       case 'weight':

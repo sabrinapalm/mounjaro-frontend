@@ -4,16 +4,16 @@ import {
   LuHeartPulse,
   LuMoon,
   LuSparkles,
-  LuSyringe,
+  // LuSyringe,
   LuTarget,
 } from 'react-icons/lu';
 import { MetricCard } from '../components/general/MetricCard';
 import {
   getAverageScoreLabel,
-  getDayMetaLabel,
-  getDaySummaryLabel,
+  // getDayMetaLabel,
+  // getDaySummaryLabel,
+  // useCurrentShotCycle,
   getShotCycleDayLabel,
-  useCurrentShotCycle,
 } from '../hooks/useCurrentShotCycle';
 import { type DailyCheckInEntry, formatSideEffectLabel, useInsights } from '../hooks/useInsights';
 import type { ShotEntry, UserProfile, WeightEntry } from '../types';
@@ -45,7 +45,7 @@ export const InsightsPage = ({ weights, shots, checkIns, profile }: InsightsPage
   });
 
   const summaryCards = useInsightsSummaryCards({ insights });
-  const currentCycleDays = useCurrentShotCycle({ shots, checkIns });
+  // const currentCycleDays = useCurrentShotCycle({ shots, checkIns });
 
   return (
     <section className='insights-page'>
@@ -93,7 +93,7 @@ export const InsightsPage = ({ weights, shots, checkIns, profile }: InsightsPage
       </section>
 
       <section className='insights-main-grid'>
-        <article className='insights-card insights-card--wide'>
+        {/* <article className='insights-card insights-card--wide'>
           <div className='insights-card__header'>
             <div>
               <span>Current cycle</span>
@@ -161,7 +161,7 @@ export const InsightsPage = ({ weights, shots, checkIns, profile }: InsightsPage
               );
             })}
           </div>
-        </article>
+        </article> */}
 
         <article className='insights-card'>
           <div className='insights-card__header'>

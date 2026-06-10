@@ -1,15 +1,17 @@
 import { ShotStatsCards } from '../components/cards/ShotStatsCards';
+import { InjectionSiteWeightLossStats } from '../components/InjectionSiteWeightLossStats';
 import { ShotTracker } from '../components/trackers/ShotTracker';
-import type { CreateShotInput, ShotEntry } from '../types';
+import type { CreateShotInput, ShotEntry, WeightEntry } from '../types';
 import './ShotsPage.css';
 
 interface ShotsPageProps {
   shots: ShotEntry[];
+  weights: WeightEntry[];
   onShotAdded: (shot: CreateShotInput) => Promise<void>;
   onDeleteShot: (id: string, dateTime: string) => Promise<void>;
 }
 
-export const ShotsPage = ({ shots, onShotAdded, onDeleteShot }: ShotsPageProps) => {
+export const ShotsPage = ({ shots, weights, onShotAdded, onDeleteShot }: ShotsPageProps) => {
   return (
     <section className='shots-page'>
       <header className='shots-page__header'>
@@ -27,6 +29,7 @@ export const ShotsPage = ({ shots, onShotAdded, onDeleteShot }: ShotsPageProps) 
         onShotAdded={onShotAdded}
         onDeleteShot={onDeleteShot}
       />
+      <InjectionSiteWeightLossStats shots={shots} weights={weights} />
     </section>
   );
 };

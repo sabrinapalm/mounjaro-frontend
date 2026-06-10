@@ -33,7 +33,7 @@ export type ShotEntry = {
   id: string;
   dateTime: string;
   dosage: number;
-  injectionSite?: InjectionSite;
+  injectionSite: InjectionSite;
   sideEffects?: SideEffect[];
   notes?: string;
 };
