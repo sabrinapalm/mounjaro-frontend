@@ -22,15 +22,6 @@
   min-width: 0;
 }
 
-.weight-graph-card__eyebrow {
-  margin: 0 0 4px;
-  color: var(--color-primary);
-  font-size: 0.78rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .weight-graph-card__title {
   min-width: 0;
   margin: 0;
@@ -153,6 +144,13 @@
   margin: 0;
   color: var(--color-text-muted);
   font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.weight-graph-card__meta {
+  margin-top: 4px;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
   font-weight: 700;
 }
 

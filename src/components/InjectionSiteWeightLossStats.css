@@ -15,7 +15,7 @@
 
 .injection-site-stats-card__header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 20px;
   min-width: 0;
@@ -26,29 +26,19 @@
 }
 
 .injection-site-stats-card__title-group h2 {
-  margin: 0;
   color: var(--color-text);
   font-size: 1.35rem;
-  font-weight: 850;
-  line-height: 1.1;
+  font-weight: 800;
   letter-spacing: -0.04em;
 }
 
 .injection-site-stats-card__title-group p {
   max-width: 640px;
-  margin: 9px 0 0;
+  margin-top: 4px;
   color: var(--color-text-muted);
   font-size: 0.95rem;
   font-weight: 650;
   line-height: 1.55;
-}
-
-.injection-site-stats-card__eyebrow {
-  color: var(--color-text-muted);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .injection-site-stats-card__highlight {

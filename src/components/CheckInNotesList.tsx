@@ -22,7 +22,6 @@ export const CheckInNotesList = ({ checkIns, maxVisible = 5 }: CheckInNotesListP
     <section className='check-in-notes-card'>
       <header className='check-in-notes-card__header'>
         <div>
-          <p className='check-in-notes-card__eyebrow'>Notes</p>
           <h2>Recent notes</h2>
           <p>Your latest check-in notes, shown newest first.</p>
         </div>

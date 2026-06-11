@@ -32,6 +32,8 @@ export const ShotsPage = ({ shots, weights, onShotAdded, onDeleteShot }: ShotsPa
 
       <ShotStatsCards shots={shots} />
 
+      <InjectionSiteWeightLossStats shots={shots} weights={weights} />
+
       <ShotTracker
         shots={shots}
         title='All Shots'
@@ -41,8 +43,6 @@ export const ShotsPage = ({ shots, weights, onShotAdded, onDeleteShot }: ShotsPa
         onShotAdded={onShotAdded}
         onDeleteShot={onDeleteShot}
       />
-
-      <InjectionSiteWeightLossStats shots={shots} weights={weights} />
 
       {addShotModal.modal}
     </section>

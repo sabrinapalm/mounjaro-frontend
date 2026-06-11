@@ -175,7 +175,6 @@ export const InjectionSiteWeightLossStats = ({
       <section className='injection-site-stats-card'>
         <div className='injection-site-stats-card__header'>
           <div className='injection-site-stats-card__title-group'>
-            <p className='injection-site-stats-card__eyebrow'>Injection sites</p>
             <h2>Weight change by site</h2>
           </div>
         </div>
@@ -195,14 +194,12 @@ export const InjectionSiteWeightLossStats = ({
     <section className='injection-site-stats-card'>
       <div className='injection-site-stats-card__header'>
         <div className='injection-site-stats-card__title-group'>
-          <p className='injection-site-stats-card__eyebrow'>Injection sites</p>
           <h2>Weight change by site</h2>
           <p>Shows weight-change patterns by injection site.</p>
         </div>
 
         {bestSite && (
           <div className='injection-site-stats-card__highlight'>
-            <span>Highest average</span>
             <strong>{bestSite.label}</strong>
             <small>{formatWeight(bestSite.averageWeightLoss)} per completed period</small>
           </div>
