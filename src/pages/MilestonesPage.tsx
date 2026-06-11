@@ -1,4 +1,5 @@
 import { Milestones } from '../components/Milestones';
+import { PageHeader } from '../components/PageHeader';
 import type { ShotEntry, UserProfile, WeightEntry } from '../types';
 import './MilestonesPage.css';
 
@@ -11,13 +12,10 @@ type MilestonesPageProps = {
 export const MilestonesPage = ({ weights, shots, profile }: MilestonesPageProps) => {
   return (
     <section className='milestones-page'>
-      <header className='milestones-page__header'>
-        <div>
-          <h1>All Milestones</h1>
-          <p>Track your achievements and see what progress milestones are coming next.</p>
-        </div>
-      </header>
-
+      <PageHeader
+        title='All Milestones'
+        description='Track your achievements and see what progress milestones are coming next.'
+      />
       <Milestones
         weights={weights}
         shots={shots}

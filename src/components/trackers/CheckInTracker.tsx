@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { LuHeartPulse, LuPlus } from 'react-icons/lu';
-import './CheckInTracker.css';
+import { useAddCheckInModal } from '../../hooks/useAddCheckInModal';
 import type { CheckInEntry, CheckInLevel, CreateCheckInInput } from '../../types';
 import { formatDateLabel, getTimestamp } from '../../utils/dateHelpers';
 import { Button } from '../general/Button';
 import { ViewAllButton } from '../general/ViewAllButton';
-import { AddCheckInModal } from '../modals/AddCheckInModal';
 import { ConfirmDialog } from '../modals/ConfirmDialog';
+import './CheckInTracker.css';
 
 type CheckInTrackerVariant = 'compact' | 'full';
 
@@ -21,6 +21,7 @@ interface CheckInTrackerProps {
   title?: string;
   summaryLabel?: string;
   variant?: CheckInTrackerVariant;
+  showAddButton?: boolean;
 }
 
 const getAverageLevel = (checkIn: CheckInEntry) => {
@@ -71,10 +72,11 @@ export const CheckInTracker = ({
   title = 'Daily Check-ins',
   summaryLabel = 'Total check-ins',
   variant = 'compact',
+  showAddButton = true,
 }: CheckInTrackerProps) => {
+  const addCheckInModal = useAddCheckInModal({ onCheckInAdded });
+
   const [error, setError] = useState<string | null>(null);
-  const [isAddCheckInModalOpen, setIsAddCheckInModalOpen] = useState(false);
-  const [isAddingCheckIn, setIsAddingCheckIn] = useState(false);
   const [checkInToDelete, setCheckInToDelete] = useState<CheckInEntry | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -102,35 +104,7 @@ export const CheckInTracker = ({
   const totalCheckIns = sortedCheckIns.length;
 
   const shouldShowViewAll =
-    variant === 'compact' && sortedCheckIns.length > COMPACT_LIMIT && onViewAll;
-
-  const handleOpenAddCheckInModal = () => {
-    setError(null);
-    setIsAddCheckInModalOpen(true);
-  };
-
-  const handleCloseAddCheckInModal = () => {
-    if (isAddingCheckIn) {
-      return;
-    }
-
-    setIsAddCheckInModalOpen(false);
-  };
-
-  const handleAddCheckIn = async (newCheckIn: CreateCheckInInput) => {
-    setError(null);
-    setIsAddingCheckIn(true);
-
-    try {
-      await onCheckInAdded(newCheckIn);
-      setIsAddCheckInModalOpen(false);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to add check-in');
-      throw err;
-    } finally {
-      setIsAddingCheckIn(false);
-    }
-  };
+    variant === 'compact' && sortedCheckIns.length > COMPACT_LIMIT && Boolean(onViewAll);
 
   const handleOpenDeleteDialog = (checkIn: CheckInEntry) => {
     setError(null);
@@ -174,17 +148,19 @@ export const CheckInTracker = ({
           </p>
         </div>
 
-        <Button
-          icon={<LuPlus />}
-          variant='outline'
-          color='secondary'
-          onClick={handleOpenAddCheckInModal}
-        >
-          Add check-in
-        </Button>
+        {showAddButton ? (
+          <Button
+            icon={<LuPlus />}
+            variant='outline'
+            color='secondary'
+            onClick={addCheckInModal.openModal}
+          >
+            Add check-in
+          </Button>
+        ) : null}
       </header>
 
-      {error && !isAddCheckInModalOpen && <p className='check-in-tracker-card__error'>{error}</p>}
+      {error ? <p className='check-in-tracker-card__error'>{error}</p> : null}
 
       {visibleCheckIns.length === 0 ? (
         <div className='check-in-tracker-card__empty-state'>
@@ -237,13 +213,7 @@ export const CheckInTracker = ({
         </>
       )}
 
-      <AddCheckInModal
-        open={isAddCheckInModalOpen}
-        isSubmitting={isAddingCheckIn}
-        error={error}
-        onClose={handleCloseAddCheckInModal}
-        onCheckInAdded={handleAddCheckIn}
-      />
+      {addCheckInModal.modal}
 
       <ConfirmDialog
         open={Boolean(checkInToDelete)}

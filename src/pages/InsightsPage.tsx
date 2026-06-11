@@ -18,6 +18,7 @@ import {
 import { type DailyCheckInEntry, formatSideEffectLabel, useInsights } from '../hooks/useInsights';
 import type { ShotEntry, UserProfile, WeightEntry } from '../types';
 import './InsightsPage.css';
+import { PageHeader } from '../components/PageHeader';
 import { useInsightsSummaryCards } from '../hooks/queries/useInsightSummaryCards';
 
 type InsightsPageProps = {
@@ -49,13 +50,10 @@ export const InsightsPage = ({ weights, shots, checkIns, profile }: InsightsPage
 
   return (
     <section className='insights-page'>
-      <header className='insights-page__header'>
-        <div>
-          <h1>Insights</h1>
-          <p>Your shots, check-ins and weight logs turned into personal patterns.</p>
-        </div>
-      </header>
-
+      <PageHeader
+        title='Insights'
+        description='Your shots, check-ins and weight logs turned into personal patterns.'
+      />
       <section className='insights-hero-card'>
         <div className='insights-hero-card__icon'>
           <LuSparkles size={38} aria-hidden='true' />

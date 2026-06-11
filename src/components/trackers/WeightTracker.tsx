@@ -1,16 +1,16 @@
 import { useMemo, useState } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { FiActivity } from 'react-icons/fi';
+import { LuPlus } from 'react-icons/lu';
 import { useProfile } from '../../context/ProfileContext';
+import { useAddWeightModal } from '../../hooks/useAddWeightModal';
 import { useUnitSettings } from '../../hooks/useUnitSettings';
 import type { CreateWeightInput, WeightEntry } from '../../types';
 import { formatDateLabel, getTimestamp } from '../../utils/dateHelpers';
-import { AddWeightModal } from '../modals/AddWeightModal';
-import { ConfirmDialog } from '../modals/ConfirmDialog';
-import './WeightTracker.css';
-import { LuPlus } from 'react-icons/lu';
 import { Button } from '../general/Button';
 import { ViewAllButton } from '../general/ViewAllButton';
+import { ConfirmDialog } from '../modals/ConfirmDialog';
+import './WeightTracker.css';
 
 type WeightTrackerVariant = 'compact' | 'full';
 
@@ -24,6 +24,7 @@ interface WeightTrackerProps {
   title?: string;
   summaryLabel?: string;
   variant?: WeightTrackerVariant;
+  showAddButton?: boolean;
 }
 
 const getWeightDateTime = (entry: WeightEntry) => {
@@ -51,13 +52,14 @@ export const WeightTracker = ({
   title = 'Recent Weights',
   summaryLabel = 'Total weight loss',
   variant = 'compact',
+  showAddButton = true,
 }: WeightTrackerProps) => {
   const { unitSystem } = useProfile();
   const { weightUnit, displayWeightFromKg, convertWeightFromKg } = useUnitSettings(unitSystem);
 
+  const addWeightModal = useAddWeightModal({ onWeightAdded });
+
   const [error, setError] = useState<string | null>(null);
-  const [isAddWeightModalOpen, setIsAddWeightModalOpen] = useState(false);
-  const [isAddingWeight, setIsAddingWeight] = useState(false);
   const [weightToDelete, setWeightToDelete] = useState<WeightEntry | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -90,34 +92,6 @@ export const WeightTracker = ({
 
     return `${weightLoss > 0 ? '-' : '+'}${displayWeightFromKg(Math.abs(weightLoss))} ${weightUnit}`;
   }, [displayWeightFromKg, weightLoss, weightUnit]);
-
-  const handleOpenAddWeightModal = () => {
-    setError(null);
-    setIsAddWeightModalOpen(true);
-  };
-
-  const handleCloseAddWeightModal = () => {
-    if (isAddingWeight) {
-      return;
-    }
-
-    setIsAddWeightModalOpen(false);
-  };
-
-  const handleAddWeight = async (newWeight: CreateWeightInput) => {
-    setError(null);
-    setIsAddingWeight(true);
-
-    try {
-      await onWeightAdded(newWeight);
-      setIsAddWeightModalOpen(false);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to add weight');
-      throw err;
-    } finally {
-      setIsAddingWeight(false);
-    }
-  };
 
   const handleOpenDeleteDialog = (entry: WeightEntry) => {
     setError(null);
@@ -164,19 +138,19 @@ export const WeightTracker = ({
           ) : null}
         </div>
 
-        <Button
-          icon={<LuPlus />}
-          variant='outline'
-          color='secondary'
-          onClick={handleOpenAddWeightModal}
-        >
-          Add Weight
-        </Button>
+        {showAddButton ? (
+          <Button
+            icon={<LuPlus />}
+            variant='outline'
+            color='secondary'
+            onClick={addWeightModal.openModal}
+          >
+            Add Weight
+          </Button>
+        ) : null}
       </header>
 
-      {error && !isAddWeightModalOpen ? (
-        <p className='weight-tracker-card__error'>{error}</p>
-      ) : null}
+      {error ? <p className='weight-tracker-card__error'>{error}</p> : null}
 
       {visibleWeights.length === 0 ? (
         <div className='weight-tracker-card__empty-state'>
@@ -252,13 +226,7 @@ export const WeightTracker = ({
         </footer>
       ) : null}
 
-      <AddWeightModal
-        open={isAddWeightModalOpen}
-        isSubmitting={isAddingWeight}
-        error={error}
-        onClose={handleCloseAddWeightModal}
-        onWeightAdded={handleAddWeight}
-      />
+      {addWeightModal.modal}
 
       <ConfirmDialog
         open={Boolean(weightToDelete)}

@@ -8,6 +8,7 @@ import { cognitoAuth } from '../services/cognitoAuth';
 import type { ProfileFormValues, UnitSystem, UserProfile } from '../types';
 import './ProfileSettingsPage.css';
 import { Button } from '../components/general/Button';
+import { PageHeader } from '../components/PageHeader';
 
 type ProfileSettingsPageProps = {
   profile: UserProfile;
@@ -137,13 +138,10 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
 
   return (
     <section className='profile-settings-page'>
-      <header className='profile-settings-page__header'>
-        <div>
-          <h1>Profile Settings</h1>
-          <p>Manage your personal details, account information and progress targets.</p>
-        </div>
-      </header>
-
+      <PageHeader
+        title='Profile Settings'
+        description='Manage your personal details, account information and progress targets.'
+      />
       <form className='profile-settings-page__grid' onSubmit={handleSubmit}>
         <section className='profile-settings-card'>
           <header className='profile-settings-card__header'>

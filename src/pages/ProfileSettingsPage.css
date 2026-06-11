@@ -4,27 +4,6 @@
   min-width: 0;
 }
 
-.profile-settings-page__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.profile-settings-page__header h1 {
-  margin: 0;
-  color: var(--color-text);
-  font-size: 1.9rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-}
-
-.profile-settings-page__header p {
-  color: var(--color-text-muted);
-  font-size: 1rem;
-  font-weight: 700;
-}
-
 .profile-settings-page__grid {
   display: grid;
   gap: 18px;
@@ -175,10 +154,6 @@
 }
 
 @media (max-width: 760px) {
-  .profile-settings-page__header h1 {
-    font-size: 1.55rem;
-  }
-
   .profile-settings-card__header {
     padding: 20px;
   }
