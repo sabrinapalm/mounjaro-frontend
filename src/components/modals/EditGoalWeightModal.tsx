@@ -171,6 +171,7 @@ const EditGoalWeightModalContent = ({
               fullWidth
               isLoading={isSubmitting}
               icon={<LuGoal size={20} />}
+              type='submit'
             >
               {isSubmitting ? 'Saving...' : 'Save Goal'}
             </Button>
