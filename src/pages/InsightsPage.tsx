@@ -18,6 +18,7 @@ import {
 import { type DailyCheckInEntry, formatSideEffectLabel, useInsights } from '../hooks/useInsights';
 import type { ShotEntry, UserProfile, WeightEntry } from '../types';
 import './InsightsPage.css';
+// import { BmiRangeChart } from '../components/BmiRangeChart';
 import { PageHeader } from '../components/PageHeader';
 import { useInsightsSummaryCards } from '../hooks/queries/useInsightSummaryCards';
 
@@ -91,6 +92,7 @@ export const InsightsPage = ({ weights, shots, checkIns, profile }: InsightsPage
       </section>
 
       <section className='insights-main-grid'>
+        {/* <BmiRangeChart weights={weights} /> */}
         {/* <article className='insights-card insights-card--wide'>
           <div className='insights-card__header'>
             <div>

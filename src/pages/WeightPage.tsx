@@ -6,6 +6,7 @@ import { WeightTracker } from '../components/trackers/WeightTracker';
 import { useAddWeightModal } from '../hooks/useAddWeightModal';
 import type { CreateWeightInput, WeightEntry } from '../types';
 import './WeightPage.css';
+import { BmiRangeChart } from '../components/BmiRangeChart';
 
 interface WeightPageProps {
   weights: WeightEntry[];
@@ -34,6 +35,7 @@ export const WeightPage = ({ weights, onWeightAdded, onDeleteWeight }: WeightPag
       />
 
       <WeightStatsCards weights={weights} />
+      <BmiRangeChart weights={weights} />
 
       <WeightTracker
         weights={weights}
