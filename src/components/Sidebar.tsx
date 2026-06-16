@@ -1,9 +1,7 @@
 import { IoScaleOutline, IoStarOutline } from 'react-icons/io5';
 import {
   LuChartBar,
-  // LuChartNoAxesColumnIncreasing,
   LuCircleHelp,
-  // LuClipboardList,
   LuHeartPulse,
   LuHouse,
   LuSyringe,
@@ -104,9 +102,6 @@ export const Sidebar = ({
         <div className='sidebar__inner'>
           <div className='sidebar__brand'>
             <img key={logoSrc} className='sidebar__logo' src={logoSrc} alt='Tracksy' />
-            {/* <div>
-              <p className='sidebar__brand-subtitle'>Your Mounjaro journey</p>
-            </div> */}
           </div>
 
           <nav className='sidebar__nav' aria-label='Dashboard sections'>
