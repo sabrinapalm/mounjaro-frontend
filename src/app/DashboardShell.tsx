@@ -144,6 +144,10 @@ export const Dashboard = ({
   };
 
   const handleNavigate = (section: SidebarSection) => {
+    if (section !== activeSection) {
+      window.scrollTo(0, 0);
+    }
+
     setActiveSection(section);
     setIsMobileSidebarOpen(false);
     setIsProfileMenuOpen(false);

@@ -1,13 +1,15 @@
 .profile-settings-page {
   display: grid;
-  gap: 24px;
+  gap: 20px;
   min-width: 0;
+  width: min(100%, 1120px);
+  margin-inline: auto;
 }
 
 .profile-settings-page__grid {
   display: grid;
   gap: 18px;
-  max-width: 920px;
+  width: 100%;
 }
 
 .profile-settings-card {
@@ -159,6 +161,10 @@
 }
 
 @media (max-width: 760px) {
+  .profile-settings-page {
+    gap: 16px;
+  }
+
   .profile-settings-card__header {
     padding: 20px;
   }

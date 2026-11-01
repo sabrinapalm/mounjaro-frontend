@@ -19,7 +19,13 @@
   gap: 14px;
 }
 
+.goal-progress-card__header {
+  width: 100%;
+}
+
 .goal-progress-card__heading {
+  min-width: 0;
+  flex: 1 1 auto;
   justify-content: flex-start;
 }
 
@@ -41,6 +47,9 @@
 }
 
 .goal-progress-card__edit {
+  flex: 0 0 auto;
+  margin-left: auto;
+  width: auto;
   min-width: 44px;
   min-height: 44px;
   gap: 4px;
@@ -180,6 +189,29 @@
   .goal-progress-card {
     min-height: 0;
     padding: 20px;
+  }
+
+  .goal-progress-card__header {
+    gap: 10px;
+  }
+
+  .goal-progress-card__heading {
+    min-width: 0;
+    gap: 10px;
+  }
+
+  .goal-progress-card__heading > div {
+    min-width: 0;
+  }
+
+  .goal-progress-card__heading .dashboard-card-label,
+  .goal-progress-card__heading h2,
+  .goal-progress-card__edit {
+    white-space: nowrap;
+  }
+
+  .goal-progress-card__edit {
+    flex-shrink: 0;
   }
 
   .goal-progress-card__body {

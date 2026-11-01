@@ -201,6 +201,7 @@
 
   .dashboard-mobile-menu-button {
     display: grid;
+    margin-right: 0;
   }
 
   .dashboard-topbar__brand {
