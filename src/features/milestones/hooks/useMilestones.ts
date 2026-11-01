@@ -7,6 +7,7 @@ import {
   getTimestamp,
 } from '../../../shared/utils/dateHelpers';
 import { useProfile } from '../../profile/ProfileContext';
+import { generateWeightLossMilestones } from '../utils/weightLossMilestones';
 
 export type MilestoneStatus = 'completed' | 'inProgress' | 'locked';
 
@@ -20,6 +21,8 @@ export type Milestone = {
   progress?: number;
   icon: MilestoneIcon;
   order: number;
+  achievementDate?: string;
+  weightLossStatus?: 'completed' | 'upcoming' | 'locked';
 };
 
 type UseMilestonesParams = {
@@ -76,24 +79,24 @@ const getFirstWeightDateTime = (weights: WeightEntry[]) => {
   return firstWeight ? getWeightDateTime(firstWeight) : undefined;
 };
 
-const getWeightLossMilestoneStatus = (currentLoss: number, targetLoss: number): MilestoneStatus => {
-  if (currentLoss >= targetLoss) {
-    return 'completed';
-  }
-
-  if (currentLoss > 0) {
-    return 'inProgress';
-  }
-
-  return 'locked';
-};
-
 const getProgressMilestoneStatus = (progress: number, targetProgress: number): MilestoneStatus => {
   if (progress >= targetProgress) {
     return 'completed';
   }
 
   if (progress > 0) {
+    return 'inProgress';
+  }
+
+  return 'locked';
+};
+
+const getWeightLossMilestoneStatus = (currentLoss: number, targetLoss: number): MilestoneStatus => {
+  if (currentLoss >= targetLoss) {
+    return 'completed';
+  }
+
+  if (currentLoss > 0) {
     return 'inProgress';
   }
 
@@ -225,6 +228,22 @@ export const useMilestones = ({
     [displayWeightFromKg, weightUnit]
   );
 
+  const formatWeightThreshold = useCallback(
+    (weightInKg: number) => {
+      const displayedWeight = displayWeightFromKg(weightInKg);
+      const amount =
+        Number(displayedWeight) % 1 === 0 ? Number(displayedWeight).toFixed(0) : displayedWeight;
+
+      return `${amount} ${weightUnit}`;
+    },
+    [displayWeightFromKg, weightUnit]
+  );
+
+  const weightLossData = useMemo(
+    () => generateWeightLossMilestones(weights, startWeight),
+    [startWeight, weights]
+  );
+
   const milestones = useMemo<Milestone[]>(() => {
     const latestWeightEntry = getLatestWeight(weights);
     const latestWeight = latestWeightEntry?.weight ?? null;
@@ -319,42 +338,6 @@ export const useMilestones = ({
         order: 7,
       },
       {
-        id: 'five-kg',
-        title: `${formatWeight(5)} lighter`,
-        description: getWeightLossDescription(safeCurrentLoss, 5, formatWeight),
-        status: getWeightLossMilestoneStatus(safeCurrentLoss, 5),
-        progress: clampProgress((safeCurrentLoss / 5) * 100),
-        icon: 'trend',
-        order: 8,
-      },
-      {
-        id: 'ten-kg',
-        title: `${formatWeight(10)} milestone`,
-        description: getWeightLossDescription(safeCurrentLoss, 10, formatWeight),
-        status: getWeightLossMilestoneStatus(safeCurrentLoss, 10),
-        progress: clampProgress((safeCurrentLoss / 10) * 100),
-        icon: 'trend',
-        order: 9,
-      },
-      {
-        id: 'fifteen-kg',
-        title: `${formatWeight(15)} milestone`,
-        description: getWeightLossDescription(safeCurrentLoss, 15, formatWeight),
-        status: getWeightLossMilestoneStatus(safeCurrentLoss, 15),
-        progress: clampProgress((safeCurrentLoss / 15) * 100),
-        icon: 'trend',
-        order: 10,
-      },
-      {
-        id: 'twenty-kg',
-        title: `${formatWeight(20)} milestone`,
-        description: getWeightLossDescription(safeCurrentLoss, 20, formatWeight),
-        status: getWeightLossMilestoneStatus(safeCurrentLoss, 20),
-        progress: clampProgress((safeCurrentLoss / 20) * 100),
-        icon: 'star',
-        order: 11,
-      },
-      {
         id: 'goal-10-percent',
         title: 'First 10% of goal',
         description:
@@ -411,9 +394,45 @@ export const useMilestones = ({
     ];
   }, [formatWeight, goalWeight, shots, startWeight, unitSystem, weights]);
 
+  const weightLossMilestones = useMemo<Milestone[]>(() => {
+    return weightLossData.achievements.map((achievement) => ({
+      id: achievement.id,
+      title: `${formatWeightThreshold(achievement.thresholdKg)} lost`,
+      description:
+        achievement.status === 'completed' && achievement.achievedAt
+          ? `Achieved on ${formatDateLabel(achievement.achievedAt)}`
+          : achievement.status === 'upcoming'
+            ? `${formatWeight(achievement.remainingKg)} to go`
+            : `${formatWeight(achievement.thresholdKg)} to unlock`,
+      status:
+        achievement.status === 'completed'
+          ? 'completed'
+          : achievement.status === 'upcoming' && achievement.progress > 0
+            ? 'inProgress'
+            : 'locked',
+      progress: achievement.progress,
+      icon: 'trend',
+      order: 7 + achievement.thresholdKg / 5,
+      achievementDate: achievement.achievedAt,
+      weightLossStatus: achievement.status,
+    }));
+  }, [formatWeight, formatWeightThreshold, weightLossData.achievements]);
+
+  const nextWeightLossMilestone = useMemo(() => {
+    const achievement = weightLossData.nextAchievement;
+
+    return achievement
+      ? {
+          title: `${formatWeightThreshold(achievement.thresholdKg)} lost`,
+          remaining: `${formatWeight(achievement.remainingKg)} to go`,
+          progress: achievement.progress,
+        }
+      : null;
+  }, [formatWeight, formatWeightThreshold, weightLossData.nextAchievement]);
+
   const sortedMilestones = useMemo(() => {
-    return sortMilestones(milestones);
-  }, [milestones]);
+    return sortMilestones([...milestones, ...weightLossMilestones]);
+  }, [milestones, weightLossMilestones]);
 
   const visibleMilestones = useMemo(() => {
     return typeof maxVisible === 'number'
@@ -424,5 +443,7 @@ export const useMilestones = ({
   return {
     milestones: sortedMilestones,
     visibleMilestones,
+    weightLossMilestones,
+    nextWeightLossMilestone,
   };
 };

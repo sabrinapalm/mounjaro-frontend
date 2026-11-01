@@ -1,18 +1,16 @@
 .shot-tracker-card {
   display: grid;
-  gap: 22px;
+  gap: 20px;
   width: 100%;
-
   min-width: 0;
   padding: 24px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--color-surface-soft) 22%, var(--color-surface) 78%),
-    var(--color-surface)
-  );
-  /* height: 100%; */
+  background: var(--color-surface);
+}
+
+.shot-tracker-card--full {
+  gap: 18px;
 }
 
 .shot-tracker-card__header {
@@ -75,11 +73,34 @@
 
 .shot-tracker-card__list {
   display: grid;
-  gap: 12px;
+  gap: 0;
   min-width: 0;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.shot-tracker-card--compact .shot-tracker-card__list {
+  gap: 12px;
+}
+
+.shot-tracker-card__history {
+  display: grid;
+  gap: 18px;
+}
+
+.shot-tracker-card__month {
+  min-width: 0;
+}
+
+.shot-tracker-card__month-title {
+  margin: 0;
+  padding: 0 0 8px;
+  color: var(--color-text-muted);
+  font-size: 0.79rem;
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
 }
 
 .shot-tracker-card__item {
@@ -99,21 +120,25 @@
     box-shadow 0.2s ease;
 }
 
-.shot-tracker-card__item:hover {
-  transform: translateY(-1px);
-  border-color: color-mix(in srgb, var(--color-primary) 34%, var(--color-border));
-  background: color-mix(in srgb, var(--color-primary-soft) 54%, transparent);
-  box-shadow: 0 12px 28px color-mix(in srgb, var(--color-primary) 8%, transparent);
+.shot-tracker-card__item--full {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
+  transition: background 0.16s ease;
 }
 
-.shot-tracker-card__icon {
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 13px;
-  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
-  color: var(--color-primary);
+.shot-tracker-card__item--full:last-child {
+  border-bottom: 0;
+}
+
+.shot-tracker-card__item--full:hover {
+  transform: none;
+  border-color: var(--color-border);
+  background: color-mix(in srgb, var(--color-primary-soft) 22%, transparent);
+  box-shadow: none;
 }
 
 .shot-tracker-card__date,
@@ -134,6 +159,96 @@
 
 .shot-tracker-card__site {
   color: var(--color-text-muted);
+}
+
+.shot-tracker-card__history-row {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) minmax(110px, 0.7fr) 38px;
+  align-items: center;
+  gap: 12px;
+  min-height: 66px;
+  padding: 8px 10px;
+}
+
+.shot-tracker-card__primary-data {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
+}
+
+.shot-tracker-card__item--full .shot-tracker-card__date {
+  font-weight: 750;
+}
+
+.shot-tracker-card__item--full .shot-tracker-card__dosage {
+  font-weight: 850;
+}
+
+.shot-tracker-card__item--full .shot-tracker-card__site {
+  white-space: normal;
+}
+
+.shot-tracker-card__details {
+  padding: 0 10px 12px 60px;
+  color: var(--color-text-muted);
+  font-size: 0.83rem;
+}
+
+.shot-tracker-card__details summary {
+  width: fit-content;
+  border-radius: 4px;
+  color: var(--color-primary-dark);
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.shot-tracker-card__details summary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.shot-tracker-card__details-content {
+  display: grid;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+.shot-tracker-card__details-content strong {
+  color: var(--color-text);
+  font-size: 0.78rem;
+}
+
+.shot-tracker-card__details-content ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 14px;
+  margin: 3px 0 0;
+  padding-left: 18px;
+}
+
+.shot-tracker-card__details-content p {
+  margin: 3px 0 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.shot-tracker-card__item:not(.shot-tracker-card__item--full):hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--color-primary) 34%, var(--color-border));
+  background: color-mix(in srgb, var(--color-primary-soft) 54%, transparent);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.shot-tracker-card__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  color: var(--color-primary);
 }
 
 .shot-tracker-card__delete-button {
@@ -160,6 +275,15 @@
   opacity: 1;
 }
 
+.shot-tracker-card__item--full .shot-tracker-card__delete-button {
+  opacity: 1;
+}
+
+.shot-tracker-card__delete-button:focus-visible {
+  outline: 2px solid var(--color-danger);
+  outline-offset: 2px;
+}
+
 .shot-tracker-card__delete-button:hover {
   transform: scale(1.04);
   border-color: color-mix(in srgb, var(--color-danger) 34%, transparent);
@@ -174,7 +298,7 @@
 }
 
 @media (max-width: 900px) {
-  .shot-tracker-card__item {
+  .shot-tracker-card__item:not(.shot-tracker-card__item--full) {
     grid-template-columns: 42px minmax(0, 1fr) minmax(76px, auto) 38px;
     grid-template-areas:
       "icon date site delete"
@@ -188,15 +312,15 @@
     grid-area: icon;
   }
 
-  .shot-tracker-card__date {
+  .shot-tracker-card__item:not(.shot-tracker-card__item--full) .shot-tracker-card__date {
     grid-area: date;
   }
 
-  .shot-tracker-card__dosage {
+  .shot-tracker-card__item:not(.shot-tracker-card__item--full) .shot-tracker-card__dosage {
     grid-area: dosage;
   }
 
-  .shot-tracker-card__site {
+  .shot-tracker-card__item:not(.shot-tracker-card__item--full) .shot-tracker-card__site {
     grid-area: site;
     justify-self: end;
   }
@@ -204,6 +328,11 @@
   .shot-tracker-card__delete-button {
     grid-area: delete;
     opacity: 1;
+  }
+
+  .shot-tracker-card__history-row {
+    grid-template-columns: 36px minmax(0, 1fr) minmax(90px, 0.7fr) 38px;
+    gap: 10px;
   }
 }
 
@@ -213,8 +342,7 @@
   }
 
   .shot-tracker-card__header {
-    align-items: stretch;
-    flex-direction: column;
+    align-items: center;
   }
 }
 
@@ -223,7 +351,7 @@
     padding: 16px;
   }
 
-  .shot-tracker-card__item {
+  .shot-tracker-card__item:not(.shot-tracker-card__item--full) {
     grid-template-columns: 38px minmax(0, 1fr) 36px;
     grid-template-areas:
       "icon date delete"
@@ -236,7 +364,40 @@
     height: 36px;
   }
 
-  .shot-tracker-card__site {
+  .shot-tracker-card__item:not(.shot-tracker-card__item--full) .shot-tracker-card__site {
     justify-self: start;
+  }
+
+  .shot-tracker-card__history-row {
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
+    grid-template-areas:
+      "icon data delete"
+      "icon site delete";
+    min-height: 72px;
+    gap: 4px 10px;
+    padding: 10px 4px;
+  }
+
+  .shot-tracker-card__history-row > .shot-tracker-card__icon {
+    grid-area: icon;
+  }
+
+  .shot-tracker-card__primary-data {
+    grid-area: data;
+    justify-content: flex-start;
+  }
+
+  .shot-tracker-card__history-row > .shot-tracker-card__site {
+    grid-area: site;
+    justify-self: start;
+    font-size: 0.84rem;
+  }
+
+  .shot-tracker-card__history-row > .shot-tracker-card__delete-button {
+    grid-area: delete;
+  }
+
+  .shot-tracker-card__details {
+    padding-left: 50px;
   }
 }

@@ -20,8 +20,8 @@ export const WeightPage = ({ weights, onWeightAdded, onDeleteWeight }: WeightPag
   return (
     <section className='weight-page'>
       <PageHeader
-        title='All Weight Entries'
-        description='View your full weight history and add new weight entries when needed.'
+        title='Your weight'
+        description='Track your progress over time.'
         action={
           <Button
             icon={<LuPlus />}
@@ -35,17 +35,17 @@ export const WeightPage = ({ weights, onWeightAdded, onDeleteWeight }: WeightPag
       />
 
       <WeightStatsCards weights={weights} />
-      <BmiRangeChart weights={weights} />
-
       <WeightTracker
         weights={weights}
-        title='All Weight Entries'
+        title='Weight history'
         summaryLabel='Total weight loss'
         variant='full'
         showAddButton={false}
         onWeightAdded={onWeightAdded}
         onDeleteWeight={onDeleteWeight}
       />
+
+      <BmiRangeChart weights={weights} />
 
       {addWeightModal.modal}
     </section>

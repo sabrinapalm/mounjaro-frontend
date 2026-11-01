@@ -1,102 +1,99 @@
-import {
-  LuCalendarHeart,
-  LuClock3,
-  LuMapPin,
-  LuMessageSquareText,
-  LuSyringe,
-} from 'react-icons/lu';
-import { MetricCard } from '../../../../shared/components/MetricCard';
+import { LuCalendarClock, LuMapPin, LuPlus, LuSyringe } from 'react-icons/lu';
+import { useIntl } from 'react-intl';
+import { Button } from '../../../../shared/components/Button';
+import { messages } from '../../../../shared/i18n/messages';
 import type { ShotEntry } from '../../../../shared/types';
+import { formatDateLabel } from '../../../../shared/utils/dateHelpers';
 import { useShotStatsCards } from '../../hooks/useShotStatsCards';
+import { formatInjectionSite } from '../../utils/shotStatsUtils';
 import './ShotStatsCards.css';
 
 type ShotStatsCardsProps = {
   shots: ShotEntry[];
+  onAddShot: () => void;
 };
 
-export const ShotStatsCards = ({ shots }: ShotStatsCardsProps) => {
-  const { hasShots, totalShots, latestDose, nextShot, mostUsedSite, sideEffects, notes } =
-    useShotStatsCards({ shots });
-
-  if (
-    !hasShots ||
-    !totalShots ||
-    !latestDose ||
-    !nextShot ||
-    !mostUsedSite ||
-    !sideEffects ||
-    !notes
-  ) {
-    return (
-      <div className='dashboard-summary-cards shot-summary-cards'>
-        <MetricCard
-          label='Shot Overview'
-          value='No data yet'
-          meta='Log your first shot to see your rhythm'
-          icon={<LuSyringe aria-hidden='true' />}
-          tone='primary'
-          className='shot-summary-card shot-summary-card--empty'
-        />
-      </div>
-    );
-  }
+export const ShotStatsCards = ({ shots, onAddShot }: ShotStatsCardsProps) => {
+  const { formatMessage } = useIntl();
+  const {
+    hasShots,
+    latestShot,
+    latestShotDate,
+    nextShotDate,
+    totalShots,
+    nextShot,
+    sideEffects,
+    notes,
+  } = useShotStatsCards({ shots });
 
   return (
-    <div className='dashboard-summary-cards shot-summary-cards'>
-      <MetricCard
-        label='Total Shots'
-        value={totalShots.value}
-        meta={totalShots.meta}
-        icon={<LuSyringe aria-hidden='true' />}
-        tone='primary'
-        className='shot-summary-card'
-      />
+    <section className='shot-overview'>
+      <div className='shot-overview__primary'>
+        <div className='shot-overview__next'>
+          <div className='shot-overview__eyebrow'>
+            <LuCalendarClock size={17} aria-hidden='true' />
+            <span>Next scheduled injection</span>
+          </div>
+          {nextShotDate ? (
+            <>
+              <p className='shot-overview__date'>{nextShotDate.format('dddd, MMM D')}</p>
+              <p className={`shot-overview__due shot-overview__due--${nextShot?.tone ?? 'info'}`}>
+                {nextShot?.value}
+                {nextShot?.value === 'Overdue' ? ` · ${nextShot.meta}` : ''}
+              </p>
+            </>
+          ) : (
+            <p className='shot-overview__date shot-overview__date--empty'>
+              Add your first injection to see your next date
+            </p>
+          )}
+        </div>
 
-      <MetricCard
-        label='Latest Dose'
-        value={latestDose.value}
-        meta={latestDose.meta}
-        icon={<LuCalendarHeart aria-hidden='true' />}
-        tone='success'
-        className='shot-summary-card'
-      />
+        <div className='shot-overview__latest'>
+          <p className='shot-overview__label'>Latest injection</p>
+          {latestShot && latestShotDate ? (
+            <>
+              <p className='shot-overview__dose'>{latestShot.dosage.toFixed(1)} mg</p>
+              <p className='shot-overview__meta'>{formatDateLabel(latestShotDate.toDate())}</p>
+            </>
+          ) : (
+            <p className='shot-overview__meta'>No injections recorded</p>
+          )}
+        </div>
 
-      <MetricCard
-        label='Next Shot'
-        value={nextShot.value}
-        meta={nextShot.meta}
-        icon={<LuClock3 aria-hidden='true' />}
-        tone={nextShot.tone}
-        highlightValue={nextShot.tone === 'danger' || nextShot.tone === 'warning'}
-        className='shot-summary-card'
-      />
+        <Button icon={<LuPlus size={20} />} onClick={onAddShot}>
+          Add shot
+        </Button>
+      </div>
 
-      <MetricCard
-        label='Most Used Site'
-        value={mostUsedSite.value}
-        meta={mostUsedSite.meta}
-        icon={<LuMapPin aria-hidden='true' />}
-        tone='info'
-        className='shot-summary-card'
-      />
-
-      <MetricCard
-        label='Side Effects'
-        value={sideEffects.value}
-        meta={sideEffects.meta}
-        icon={<LuCalendarHeart aria-hidden='true' />}
-        tone='warning'
-        className='shot-summary-card'
-      />
-
-      <MetricCard
-        label='Notes'
-        value={notes.value}
-        meta={notes.meta}
-        icon={<LuMessageSquareText aria-hidden='true' />}
-        tone='neutral'
-        className='shot-summary-card'
-      />
-    </div>
+      <dl className='shot-overview__supporting'>
+        <div className='shot-overview__supporting-item'>
+          <dt>
+            <LuSyringe size={16} aria-hidden='true' />
+            Injections logged
+          </dt>
+          <dd>{totalShots?.value ?? 0}</dd>
+        </div>
+        <div className='shot-overview__supporting-item'>
+          <dt>
+            <LuMapPin size={16} aria-hidden='true' />
+            Most recent site
+          </dt>
+          <dd>
+            {latestShot?.injectionSite
+              ? formatMessage(messages[latestShot.injectionSite])
+              : formatInjectionSite(null)}
+          </dd>
+        </div>
+        <div className='shot-overview__supporting-item'>
+          <dt>Side effects</dt>
+          <dd>{hasShots ? sideEffects?.meta : 'No records yet'}</dd>
+        </div>
+        <div className='shot-overview__supporting-item'>
+          <dt>Notes</dt>
+          <dd>{hasShots ? notes?.meta : 'No records yet'}</dd>
+        </div>
+      </dl>
+    </section>
   );
 };

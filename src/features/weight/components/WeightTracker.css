@@ -1,17 +1,16 @@
 .weight-tracker-card {
   display: grid;
-  gap: 22px;
+  gap: 18px;
   width: 100%;
   min-width: 0;
   padding: 24px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--color-surface-soft) 22%, var(--color-surface) 78%),
-    var(--color-surface)
-  );
-  height: 100%;
+  background: var(--color-surface);
+}
+
+.weight-tracker-card--full {
+  gap: 16px;
 }
 
 .weight-tracker-card__header {
@@ -77,11 +76,34 @@
 
 .weight-tracker-card__list {
   display: grid;
-  gap: 12px;
+  gap: 0;
   min-width: 0;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.weight-tracker-card--compact .weight-tracker-card__list {
+  gap: 12px;
+}
+
+.weight-tracker-card__history {
+  display: grid;
+  gap: 18px;
+}
+
+.weight-tracker-card__month {
+  min-width: 0;
+}
+
+.weight-tracker-card__month-title {
+  margin: 0;
+  padding: 0 0 8px;
+  color: var(--color-text-muted);
+  font-size: 0.79rem;
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
 }
 
 .weight-tracker-card__item {
@@ -99,6 +121,44 @@
     border-color 0.2s ease,
     background 0.2s ease,
     box-shadow 0.2s ease;
+}
+
+.weight-tracker-card__item--full {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
+  transition: background 0.16s ease;
+}
+
+.weight-tracker-card__item--full:last-child {
+  border-bottom: 0;
+}
+
+.weight-tracker-card__item--full:hover {
+  transform: none;
+  border-color: var(--color-border);
+  background: color-mix(in srgb, var(--color-primary-soft) 22%, transparent);
+  box-shadow: none;
+}
+
+.weight-tracker-card__history-row {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) minmax(100px, 0.45fr) 36px;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  padding: 8px 10px;
+}
+
+.weight-tracker-card__primary-data {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
 }
 
 .weight-tracker-card__item:hover {
@@ -183,6 +243,11 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
   opacity: 1;
 }
 
+.weight-tracker-card__delete-button:focus-visible {
+  outline: 2px solid var(--color-danger);
+  outline-offset: 2px;
+}
+
 .weight-tracker-card__delete-button:hover {
   transform: scale(1.04);
   border-color: color-mix(in srgb, var(--color-danger) 34%, transparent);
@@ -197,7 +262,7 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
 }
 
 @media (max-width: 900px) {
-  .weight-tracker-card__item {
+  .weight-tracker-card__item:not(.weight-tracker-card__item--full) {
     grid-template-columns: 42px minmax(0, 1fr) minmax(82px, auto) 38px;
     grid-template-areas:
       "icon date change delete"
@@ -207,26 +272,32 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
     padding: 14px;
   }
 
-  .weight-tracker-card__icon {
+  .weight-tracker-card__item:not(.weight-tracker-card__item--full) .weight-tracker-card__icon {
     grid-area: icon;
   }
 
-  .weight-tracker-card__date {
+  .weight-tracker-card__item:not(.weight-tracker-card__item--full) .weight-tracker-card__date {
     grid-area: date;
   }
 
-  .weight-tracker-card__weight {
+  .weight-tracker-card__item:not(.weight-tracker-card__item--full) .weight-tracker-card__weight {
     grid-area: weight;
   }
 
-  .weight-tracker-card__change {
+  .weight-tracker-card__item:not(.weight-tracker-card__item--full) .weight-tracker-card__change {
     grid-area: change;
     justify-self: end;
   }
 
-  .weight-tracker-card__delete-button {
+  .weight-tracker-card__item:not(.weight-tracker-card__item--full)
+    .weight-tracker-card__delete-button {
     grid-area: delete;
     opacity: 1;
+  }
+
+  .weight-tracker-card__history-row {
+    grid-template-columns: 36px minmax(0, 1fr) minmax(90px, 0.45fr) 36px;
+    gap: 10px;
   }
 }
 
@@ -246,7 +317,7 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
     padding: 16px;
   }
 
-  .weight-tracker-card__item {
+  .weight-tracker-card__item:not(.weight-tracker-card__item--full) {
     grid-template-columns: 38px minmax(0, 1fr) 36px;
     grid-template-areas:
       "icon date delete"
@@ -254,12 +325,59 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
       "icon change delete";
   }
 
-  .weight-tracker-card__icon {
+  .weight-tracker-card__item:not(.weight-tracker-card__item--full) .weight-tracker-card__icon {
     width: 36px;
     height: 36px;
   }
 
-  .weight-tracker-card__change {
+  .weight-tracker-card__item:not(.weight-tracker-card__item--full) .weight-tracker-card__change {
     justify-self: start;
   }
+
+  .weight-tracker-card__history-row {
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
+    grid-template-areas:
+      "icon data delete"
+      "icon change delete";
+    min-height: 72px;
+    gap: 4px 10px;
+    padding: 10px 4px;
+  }
+
+  .weight-tracker-card__history-row > .weight-tracker-card__icon {
+    grid-area: icon;
+  }
+
+  .weight-tracker-card__primary-data {
+    grid-area: data;
+    justify-content: flex-start;
+  }
+
+  .weight-tracker-card__history-row > .weight-tracker-card__change {
+    grid-area: change;
+  }
+
+  .weight-tracker-card__history-row > .weight-tracker-card__delete-button {
+    grid-area: delete;
+  }
+}
+
+.weight-tracker-card__item--full .weight-tracker-card__date {
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
+.weight-tracker-card__item--full .weight-tracker-card__weight {
+  font-size: 0.96rem;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+
+.weight-tracker-card__item--full .weight-tracker-card__change {
+  justify-content: flex-start;
+  font-size: 0.84rem;
+}
+
+.weight-tracker-card__item--full .weight-tracker-card__delete-button {
+  opacity: 1;
 }

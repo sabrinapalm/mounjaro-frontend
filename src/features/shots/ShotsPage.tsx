@@ -1,10 +1,8 @@
-import { LuPlus } from 'react-icons/lu';
-import { Button } from '../../shared/components/Button';
 import { PageHeader } from '../../shared/components/PageHeader';
 import type { CreateShotInput, ShotEntry, WeightEntry } from '../../shared/types';
 import { ShotStatsCards } from './components/cards/ShotStatsCards';
-import { InjectionSiteWeightLossStats } from './components/InjectionSiteWeightLossStats';
 import { ShotTracker } from './components/ShotTracker';
+import { TreatmentStatistics } from './components/TreatmentStatistics';
 import { useAddShotModal } from './hooks/useAddShotModal';
 import './ShotsPage.css';
 
@@ -21,28 +19,23 @@ export const ShotsPage = ({ shots, weights, onShotAdded, onDeleteShot }: ShotsPa
   return (
     <section className='shots-page'>
       <PageHeader
-        title='All Shots'
-        description='View your full injection history and add new shots when needed.'
-        action={
-          <Button icon={<LuPlus size={22} />} onClick={addShotModal.openModal}>
-            Add shot
-          </Button>
-        }
+        title='Your injections'
+        description='Track your treatment and injection history.'
       />
 
-      <ShotStatsCards shots={shots} />
-
-      <InjectionSiteWeightLossStats shots={shots} weights={weights} />
+      <ShotStatsCards shots={shots} onAddShot={addShotModal.openModal} />
 
       <ShotTracker
         shots={shots}
-        title='All Shots'
+        title='Injection history'
         summaryLabel='Total shots'
         variant='full'
         showAddButton={false}
         onShotAdded={onShotAdded}
         onDeleteShot={onDeleteShot}
       />
+
+      <TreatmentStatistics shots={shots} weights={weights} />
 
       {addShotModal.modal}
     </section>

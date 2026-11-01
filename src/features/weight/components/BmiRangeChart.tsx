@@ -1,3 +1,4 @@
+import { LuChevronDown } from 'react-icons/lu';
 import { Bar, BarChart, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import type { WeightEntry } from '../../../shared/types';
 import { getTimestamp } from '../../../shared/utils/dateHelpers';
@@ -202,157 +203,174 @@ export const BmiRangeChart = ({ weights }: BmiRangeChartProps) => {
   const hasMissingWeights = weights.length === 0;
 
   return (
-    <section className='bmi-range-card' aria-labelledby='bmi-range-chart-title'>
-      <header className='bmi-range-card__header'>
-        <div>
-          <p className='bmi-range-card__eyebrow'>BMI range</p>
+    <details className='weight-page__bmi-details'>
+      <summary className='weight-page__bmi-summary'>
+        <span>
+          <strong>BMI &amp; health metrics</strong>
+          <small>
+            {currentBmi !== null && currentCategory
+              ? `Current BMI ${formatBmi(currentBmi)} · ${currentCategory.label}`
+              : 'Add your height and a weight entry to calculate BMI'}
+          </small>
+        </span>
+        <LuChevronDown size={20} aria-hidden='true' />
+      </summary>
+      <div className='weight-page__bmi-content'>
+        <section className='bmi-range-card' aria-labelledby='bmi-range-chart-title'>
+          <header className='bmi-range-card__header'>
+            <div>
+              <p className='bmi-range-card__eyebrow'>BMI range</p>
 
-          <h2 id='bmi-range-chart-title' className='bmi-range-card__title'>
-            Current BMI
-          </h2>
+              <h2 id='bmi-range-chart-title' className='bmi-range-card__title'>
+                Current BMI
+              </h2>
 
-          <p className='bmi-range-card__description'>
-            Based on your latest weight entry, goal weight and profile height.
-          </p>
-        </div>
+              <p className='bmi-range-card__description'>
+                Based on your latest weight entry, goal weight and profile height.
+              </p>
+            </div>
 
-        {currentBmi !== null && currentCategory && (
-          // biome-ignore lint/a11y/useAriaPropsSupportedByRole: cba
-          <div
-            className='bmi-range-card__summary'
-            aria-label={`Current BMI ${formatBmi(currentBmi)}`}
-          >
-            <span className='bmi-range-card__bmi-value'>{formatBmi(currentBmi)}</span>
-            <span className='bmi-range-card__bmi-label'>{currentCategory.label}</span>
-
-            {goalBmi !== null && goalCategory && (
-              <span className='bmi-range-card__goal-summary'>
-                Goal BMI {formatBmi(goalBmi)} · {goalCategory.label}
-              </span>
-            )}
-          </div>
-        )}
-      </header>
-
-      {hasMissingHeight && (
-        <div className='bmi-range-card__empty'>
-          Add your height in profile settings to calculate your BMI.
-        </div>
-      )}
-
-      {!hasMissingHeight && hasMissingWeights && (
-        <div className='bmi-range-card__empty'>Add a weight entry to see your BMI range.</div>
-      )}
-
-      {!hasMissingHeight && !hasMissingWeights && currentBmi !== null && currentCategory && (
-        <>
-          <div className='bmi-range-card__chart' aria-hidden='true'>
-            <ResponsiveContainer width='100%' height={128}>
-              <BarChart
-                data={chartData}
-                layout='vertical'
-                margin={{
-                  top: 36,
-                  right: 12,
-                  bottom: 8,
-                  left: 12,
-                }}
+            {currentBmi !== null && currentCategory && (
+              // biome-ignore lint/a11y/useAriaPropsSupportedByRole: cba
+              <div
+                className='bmi-range-card__summary'
+                aria-label={`Current BMI ${formatBmi(currentBmi)}`}
               >
-                <XAxis
-                  type='number'
-                  domain={[0, chartMax]}
-                  ticks={bmiTicks}
-                  tickLine={false}
-                  axisLine={false}
-                  tick={{
-                    fontSize: 12,
-                    fill: 'var(--color-text-muted)',
-                  }}
-                />
+                <span className='bmi-range-card__bmi-value'>{formatBmi(currentBmi)}</span>
+                <span className='bmi-range-card__bmi-label'>{currentCategory.label}</span>
 
-                <YAxis type='category' dataKey='name' hide />
+                {goalBmi !== null && goalCategory && (
+                  <span className='bmi-range-card__goal-summary'>
+                    Goal BMI {formatBmi(goalBmi)} · {goalCategory.label}
+                  </span>
+                )}
+              </div>
+            )}
+          </header>
 
-                {BMI_RANGES.map((range) => (
-                  <Bar
-                    key={range.key}
-                    dataKey={range.key}
-                    stackId='bmi'
-                    fill={`var(--bmi-range-${range.key})`}
-                    radius={getBarRadius(range)}
-                    isAnimationActive={false}
-                  />
-                ))}
+          {hasMissingHeight && (
+            <div className='bmi-range-card__empty'>
+              Add your height in profile settings to calculate your BMI.
+            </div>
+          )}
+
+          {!hasMissingHeight && hasMissingWeights && (
+            <div className='bmi-range-card__empty'>Add a weight entry to see your BMI range.</div>
+          )}
+
+          {!hasMissingHeight && !hasMissingWeights && currentBmi !== null && currentCategory && (
+            <>
+              <div className='bmi-range-card__chart' aria-hidden='true'>
+                <ResponsiveContainer width='100%' height={128}>
+                  <BarChart
+                    data={chartData}
+                    layout='vertical'
+                    margin={{
+                      top: 36,
+                      right: 12,
+                      bottom: 8,
+                      left: 12,
+                    }}
+                  >
+                    <XAxis
+                      type='number'
+                      domain={[0, chartMax]}
+                      ticks={bmiTicks}
+                      tickLine={false}
+                      axisLine={false}
+                      tick={{
+                        fontSize: 12,
+                        fill: 'var(--color-text-muted)',
+                      }}
+                    />
+
+                    <YAxis type='category' dataKey='name' hide />
+
+                    {BMI_RANGES.map((range) => (
+                      <Bar
+                        key={range.key}
+                        dataKey={range.key}
+                        stackId='bmi'
+                        fill={`var(--bmi-range-${range.key})`}
+                        radius={getBarRadius(range)}
+                        isAnimationActive={false}
+                      />
+                    ))}
+
+                    {goalBmi !== null && (
+                      <ReferenceLine
+                        x={goalBmi}
+                        stroke='var(--bmi-goal-marker-color)'
+                        strokeWidth={2}
+                        strokeDasharray='5 5'
+                        ifOverflow='extendDomain'
+                        label={{
+                          value: `Goal: ${formatBmi(goalBmi)}`,
+                          position: 'top',
+                          fill: 'var(--bmi-goal-marker-color)',
+                          fontSize: 12,
+                          fontWeight: 800,
+                        }}
+                      />
+                    )}
+
+                    <ReferenceLine
+                      x={currentBmi}
+                      stroke='var(--bmi-marker-color)'
+                      strokeWidth={2}
+                      ifOverflow='extendDomain'
+                      label={{
+                        value: `You: ${formatBmi(currentBmi)}`,
+                        position: 'top',
+                        fill: 'var(--bmi-marker-color)',
+                        fontSize: 12,
+                        fontWeight: 800,
+                      }}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className='bmi-range-card__markers'>
+                <span className='bmi-range-card__marker-item'>
+                  <span className='bmi-range-card__marker-line bmi-range-card__marker-line--current' />
+                  Current BMI
+                </span>
 
                 {goalBmi !== null && (
-                  <ReferenceLine
-                    x={goalBmi}
-                    stroke='var(--bmi-goal-marker-color)'
-                    strokeWidth={2}
-                    strokeDasharray='5 5'
-                    ifOverflow='extendDomain'
-                    label={{
-                      value: `Goal: ${formatBmi(goalBmi)}`,
-                      position: 'top',
-                      fill: 'var(--bmi-goal-marker-color)',
-                      fontSize: 12,
-                      fontWeight: 800,
-                    }}
-                  />
+                  <span className='bmi-range-card__marker-item'>
+                    <span className='bmi-range-card__marker-line bmi-range-card__marker-line--goal' />
+                    Goal BMI
+                  </span>
                 )}
+              </div>
 
-                <ReferenceLine
-                  x={currentBmi}
-                  stroke='var(--bmi-marker-color)'
-                  strokeWidth={2}
-                  ifOverflow='extendDomain'
-                  label={{
-                    value: `You: ${formatBmi(currentBmi)}`,
-                    position: 'top',
-                    fill: 'var(--bmi-marker-color)',
-                    fontSize: 12,
-                    fontWeight: 800,
-                  }}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+              <ul className='bmi-range-card__legend' aria-label='BMI ranges'>
+                {BMI_RANGES.map((range) => (
+                  <li key={range.key} className='bmi-range-card__legend-item'>
+                    <span
+                      className={`bmi-range-card__legend-dot bmi-range-card__legend-dot--${range.key}`}
+                      aria-hidden='true'
+                    />
 
-          <div className='bmi-range-card__markers'>
-            <span className='bmi-range-card__marker-item'>
-              <span className='bmi-range-card__marker-line bmi-range-card__marker-line--current' />
-              Current BMI
-            </span>
+                    <span className='bmi-range-card__legend-text'>
+                      <span className='bmi-range-card__legend-label'>{range.shortLabel}</span>
+                      <span className='bmi-range-card__legend-range'>
+                        {formatRangeLabel(range)}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
 
-            {goalBmi !== null && (
-              <span className='bmi-range-card__marker-item'>
-                <span className='bmi-range-card__marker-line bmi-range-card__marker-line--goal' />
-                Goal BMI
-              </span>
-            )}
-          </div>
-
-          <ul className='bmi-range-card__legend' aria-label='BMI ranges'>
-            {BMI_RANGES.map((range) => (
-              <li key={range.key} className='bmi-range-card__legend-item'>
-                <span
-                  className={`bmi-range-card__legend-dot bmi-range-card__legend-dot--${range.key}`}
-                  aria-hidden='true'
-                />
-
-                <span className='bmi-range-card__legend-text'>
-                  <span className='bmi-range-card__legend-label'>{range.shortLabel}</span>
-                  <span className='bmi-range-card__legend-range'>{formatRangeLabel(range)}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          <p className='bmi-range-card__note'>
-            BMI is a simple range indicator. It does not measure body composition, muscle mass,
-            waist size, or individual health risk.
-          </p>
-        </>
-      )}
-    </section>
+              <p className='bmi-range-card__note'>
+                BMI is a simple range indicator. It does not measure body composition, muscle mass,
+                waist size, or individual health risk.
+              </p>
+            </>
+          )}
+        </section>
+      </div>
+    </details>
   );
 };

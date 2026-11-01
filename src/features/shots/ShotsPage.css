@@ -1,5 +1,13 @@
 .shots-page {
   display: grid;
-  gap: 24px;
+  gap: 20px;
   min-width: 0;
+  width: min(100%, 1120px);
+  margin-inline: auto;
+}
+
+@media (max-width: 760px) {
+  .shots-page {
+    gap: 16px;
+  }
 }

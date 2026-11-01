@@ -42,7 +42,7 @@ export const InjectionSiteWeightLossStats = ({
       <section className='injection-site-stats-card'>
         <div className='injection-site-stats-card__header'>
           <div className='injection-site-stats-card__title-group'>
-            <h2>Weight change by site</h2>
+            <h2>Weight change by injection site</h2>
           </div>
         </div>
 
@@ -61,8 +61,11 @@ export const InjectionSiteWeightLossStats = ({
     <section className='injection-site-stats-card'>
       <div className='injection-site-stats-card__header'>
         <div className='injection-site-stats-card__title-group'>
-          <h2>Weight change by site</h2>
-          <p>Shows weight-change patterns by injection site.</p>
+          <h2>Weight change by injection site</h2>
+          <p>
+            Recorded weight changes by site for each completed period. This descriptive view does
+            not indicate that a site causes weight change.
+          </p>
         </div>
 
         {bestSite && (

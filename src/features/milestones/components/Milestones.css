@@ -172,6 +172,167 @@
   color: var(--color-text-muted);
 }
 
+.milestones-card__next {
+  padding: 20px 22px;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 24%, var(--color-border));
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-primary-soft) 56%, var(--color-surface));
+}
+
+.milestones-card__next-copy {
+  max-width: 560px;
+}
+
+.milestones-card__eyebrow,
+.milestones-card__section-title {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.milestones-card__next-title {
+  margin: 4px 0 0;
+  color: var(--color-text);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.milestones-card__next-remaining {
+  margin: 1px 0 12px;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.milestones-card__next-progress,
+.milestones-card__achievement-progress {
+  position: relative;
+  overflow: hidden;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-border) 72%, var(--color-surface));
+}
+
+.milestones-card__next-progress span,
+.milestones-card__achievement-progress span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: var(--color-primary);
+}
+
+.milestones-card__achievements {
+  display: grid;
+  gap: 14px;
+}
+
+.milestones-card__section-title {
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+.milestones-card__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.milestones-card__achievement {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 8px;
+  min-width: 0;
+  min-height: 158px;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+}
+
+.milestones-card__achievement--completed {
+  border-color: color-mix(in srgb, var(--color-primary) 28%, var(--color-border));
+  background: color-mix(in srgb, var(--color-primary-soft) 72%, var(--color-surface));
+}
+
+.milestones-card__achievement--upcoming {
+  background: var(--color-surface);
+}
+
+.milestones-card__achievement--locked {
+  opacity: 0.72;
+}
+
+.milestones-card__achievement-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-text-muted) 10%, transparent);
+  color: var(--color-text-muted);
+}
+
+.milestones-card__achievement--completed .milestones-card__achievement-icon {
+  background: color-mix(in srgb, var(--color-primary) 16%, transparent);
+  color: var(--color-primary-dark);
+}
+
+.milestones-card__achievement--upcoming .milestones-card__achievement-icon {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+
+.milestones-card__achievement-title,
+.milestones-card__achievement-status,
+.milestones-card__achievement-date,
+.milestones-card__achievement-remaining,
+.milestones-card__empty {
+  margin: 0;
+}
+
+.milestones-card__achievement-title {
+  color: var(--color-text);
+  font-size: 0.98rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.milestones-card__achievement-status {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.milestones-card__achievement--completed .milestones-card__achievement-status {
+  color: var(--color-primary-dark);
+}
+
+.milestones-card__achievement-date,
+.milestones-card__achievement-remaining {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.milestones-card__achievement-progress {
+  width: 100%;
+  height: 6px;
+  margin-top: 2px;
+}
+
+.milestones-card__empty {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
 @media (max-width: 760px) {
   .milestones-card {
     padding: 20px;
@@ -211,5 +372,18 @@
 
   .milestones-card__progress-track {
     width: 100%;
+  }
+
+  .milestones-card__next {
+    padding: 16px;
+  }
+
+  .milestones-card__grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .milestones-card__achievement {
+    min-height: 150px;
+    padding: 14px;
   }
 }

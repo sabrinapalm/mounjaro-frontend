@@ -87,12 +87,12 @@ export const useWeightStatsCards = ({
       },
       averagePerWeek: {
         value: formatSignedWeight(averageChangePerWeekKg),
-        meta: 'Based on full history',
+        meta: 'Weekly average across full history',
         tone: getAverageWeightChangeTone(averageChangePerWeekKg),
       },
       averagePerMonth: {
         value: formatSignedWeight(averageChangePerMonthKg),
-        meta: `Since ${firstDate.format('MMM D')}`,
+        meta: `Monthly average since ${firstDate.format('MMM D')}`,
         tone: getAverageWeightChangeTone(averageChangePerMonthKg),
       },
       journeyWeek: {

@@ -10,6 +10,7 @@ export type ShotStatDisplay = {
 
 export type NextShotStatDisplay = ShotStatDisplay & {
   tone: 'danger' | 'warning' | 'info';
+  date: Dayjs;
 };
 
 type InjectionSite = NonNullable<ShotEntry['injectionSite']>;
@@ -232,6 +233,7 @@ export const getNextShotStats = (
       value: 'Overdue',
       meta: `${overdueDays} ${overdueDays === 1 ? 'day' : 'days'} late`,
       tone: 'danger',
+      date: nextShotDate,
     };
   }
 
@@ -240,6 +242,7 @@ export const getNextShotStats = (
       value: 'Today',
       meta: 'Your next shot is due today',
       tone: 'warning',
+      date: nextShotDate,
     };
   }
 
@@ -248,6 +251,7 @@ export const getNextShotStats = (
       value: 'Tomorrow',
       meta: nextShotDate.format('MMM D'),
       tone: 'info',
+      date: nextShotDate,
     };
   }
 
@@ -255,5 +259,6 @@ export const getNextShotStats = (
     value: `In ${daysUntilNextShot} days`,
     meta: nextShotDate.format('MMM D'),
     tone: 'info',
+    date: nextShotDate,
   };
 };

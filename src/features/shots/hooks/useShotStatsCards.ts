@@ -24,6 +24,8 @@ export const useShotStatsCards = ({ shots }: UseShotStatsCardsParams) => {
       return {
         hasShots: false,
         latestShot: null,
+        latestShotDate: null,
+        nextShotDate: null,
         totalShots: null,
         latestDose: null,
         nextShot: null,
@@ -34,13 +36,16 @@ export const useShotStatsCards = ({ shots }: UseShotStatsCardsParams) => {
     }
 
     const latestShotDate = dayjs(latestShot.dateTime).startOf('day');
+    const nextShot = getNextShotStats(latestShotDate);
 
     return {
       hasShots: true,
       latestShot,
+      latestShotDate,
+      nextShotDate: nextShot.date,
       totalShots: getTotalShotsStats(shots),
       latestDose: getLatestDoseStats(latestShot),
-      nextShot: getNextShotStats(latestShotDate),
+      nextShot,
       mostUsedSite: getMostUsedInjectionSiteStats(shots),
       sideEffects: getSideEffectStats(shots),
       notes: getNotesStats(shots),
