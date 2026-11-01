@@ -11,9 +11,7 @@ src/
   app/                 # App shell, dashboard composition, navigation, providers
   features/
     auth/
-    check-ins/
     dashboard/
-    insights/
     milestones/
     profile/
     shots/

@@ -1,11 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
-import { LuMenu, LuMoon, LuSun } from 'react-icons/lu';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import {
-  CheckInsPage,
-  useCheckIns,
-  useCreateCheckIn,
-  useDeleteCheckIn,
-} from '../features/check-ins';
+  LuHouse,
+  LuMenu,
+  LuMoon,
+  LuScale,
+  LuSun,
+  LuSyringe,
+  LuTrophy,
+  LuUserRound,
+} from 'react-icons/lu';
 import {
   type DashboardNotificationAction,
   DashboardNotifications,
@@ -14,17 +17,11 @@ import {
   useDashboardSummary,
   useDismissedNotifications,
 } from '../features/dashboard';
-import { InsightsPage } from '../features/insights';
 import { MilestonesPage } from '../features/milestones';
 import { ProfileSettingsPage, useUpdateGoalWeight } from '../features/profile';
 import { ShotsPage, useCreateShot, useDeleteShot, useShots } from '../features/shots';
 import { useCreateWeight, useDeleteWeight, useWeights, WeightPage } from '../features/weight';
-import type {
-  CreateCheckInInput,
-  CreateShotInput,
-  CreateWeightInput,
-  UserProfile,
-} from '../shared/types';
+import type { CreateShotInput, CreateWeightInput, UserProfile } from '../shared/types';
 import { getQueryErrorMessage } from '../shared/utils/queryErrorMessage';
 import './DashboardShell.css';
 import { DashboardErrorNotice } from '../shared/components/DashboardErrorNotice';
@@ -37,6 +34,18 @@ type DashboardProps = {
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
 };
+
+const primaryNavigationItems: Array<{
+  section: SidebarSection;
+  label: string;
+  icon: ReactNode;
+}> = [
+  { section: 'dashboard', label: 'Home', icon: <LuHouse aria-hidden='true' /> },
+  { section: 'shots', label: 'Shots', icon: <LuSyringe aria-hidden='true' /> },
+  { section: 'weight', label: 'Weight', icon: <LuScale aria-hidden='true' /> },
+  { section: 'milestones', label: 'Milestones', icon: <LuTrophy aria-hidden='true' /> },
+  { section: 'profile', label: 'Profile', icon: <LuUserRound aria-hidden='true' /> },
+];
 
 export const Dashboard = ({
   profile,
@@ -51,10 +60,10 @@ export const Dashboard = ({
   const [dashboardError, setDashboardError] = useState<string | null>(null);
 
   const profileMenuRef = useRef<HTMLDivElement | null>(null);
+  const compactLogo = theme === 'dark' ? '/tracksy_mark_dark_mode.svg' : '/tracksy_mark.svg';
 
   const shotsQuery = useShots(true);
   const weightsQuery = useWeights(true);
-  const checkInsQuery = useCheckIns(true);
 
   const createShotMutation = useCreateShot();
   const deleteShotMutation = useDeleteShot();
@@ -62,19 +71,14 @@ export const Dashboard = ({
   const createWeightMutation = useCreateWeight();
   const deleteWeightMutation = useDeleteWeight();
 
-  const createCheckInMutation = useCreateCheckIn();
-  const deleteCheckInMutation = useDeleteCheckIn();
-
   const updateGoalWeightMutation = useUpdateGoalWeight();
 
   const { dismissedNotificationIds, dismissNotification } = useDismissedNotifications();
 
   const shots = shotsQuery.data ?? [];
   const weights = weightsQuery.data ?? [];
-  const checkIns = checkInsQuery.data ?? [];
 
-  const isInitialLoading =
-    shotsQuery.isLoading || weightsQuery.isLoading || checkInsQuery.isLoading;
+  const isInitialLoading = shotsQuery.isLoading || weightsQuery.isLoading;
 
   const summary = useDashboardSummary({
     shots,
@@ -85,12 +89,11 @@ export const Dashboard = ({
     profile,
     weights,
     shots,
-    checkIns,
     summary,
     dismissedNotificationIds,
   });
 
-  const hasQueryError = shotsQuery.isError || weightsQuery.isError || checkInsQuery.isError;
+  const hasQueryError = shotsQuery.isError || weightsQuery.isError;
 
   const queryErrorMessage = (() => {
     if (shotsQuery.isError) {
@@ -99,10 +102,6 @@ export const Dashboard = ({
 
     if (weightsQuery.isError) {
       return getQueryErrorMessage(weightsQuery.error, 'Your weight entries could not be loaded.');
-    }
-
-    if (checkInsQuery.isError) {
-      return getQueryErrorMessage(checkInsQuery.error, 'Your check-ins could not be loaded.');
     }
 
     return null;
@@ -142,10 +141,6 @@ export const Dashboard = ({
     if (weightsQuery.isError) {
       void weightsQuery.refetch();
     }
-
-    if (checkInsQuery.isError) {
-      void checkInsQuery.refetch();
-    }
   };
 
   const handleNavigate = (section: SidebarSection) => {
@@ -160,19 +155,7 @@ export const Dashboard = ({
       return;
     }
 
-    if (action === 'view-shots') {
-      handleNavigate('shots');
-      return;
-    }
-
-    if (action === 'add-check-in') {
-      handleNavigate('check-in');
-      return;
-    }
-
-    if (action === 'view-profile') {
-      handleNavigate('profile');
-    }
+    handleNavigate('shots');
   };
 
   const handleSignOut = () => {
@@ -202,17 +185,6 @@ export const Dashboard = ({
     }
   };
 
-  const handleCheckInAdded = async (checkIn: CreateCheckInInput) => {
-    setDashboardError(null);
-
-    try {
-      await createCheckInMutation.mutateAsync(checkIn);
-    } catch (err) {
-      setDashboardError(err instanceof Error ? err.message : 'Unable to save check-in.');
-      throw err;
-    }
-  };
-
   const handleDeleteShot = async (id: string, dateTime: string) => {
     setDashboardError(null);
 
@@ -230,16 +202,6 @@ export const Dashboard = ({
       await deleteWeightMutation.mutateAsync({ id, dateTime });
     } catch (err) {
       setDashboardError(err instanceof Error ? err.message : 'Unable to delete weight.');
-    }
-  };
-
-  const handleDeleteCheckIn = async (id: string, dateTime: string) => {
-    setDashboardError(null);
-
-    try {
-      await deleteCheckInMutation.mutateAsync({ id, dateTime });
-    } catch (err) {
-      setDashboardError(err instanceof Error ? err.message : 'Unable to delete check-in.');
     }
   };
 
@@ -282,39 +244,15 @@ export const Dashboard = ({
       case 'profile':
         return <ProfileSettingsPage profile={profile} onProfileUpdated={onProfileUpdated} />;
 
-      case 'check-in':
-        return (
-          <CheckInsPage
-            checkIns={checkIns}
-            onCheckInAdded={handleCheckInAdded}
-            onDeleteCheckIn={handleDeleteCheckIn}
-          />
-        );
-
-      case 'insights':
-        return (
-          <InsightsPage weights={weights} shots={shots} checkIns={checkIns} profile={profile} />
-        );
-
       default:
         return (
           <DashboardOverview
             profile={profile}
             summary={summary}
-            shots={shots}
             weights={weights}
-            checkIns={checkIns}
-            onShotAdded={handleShotAdded}
             onWeightAdded={handleWeightAdded}
-            onCheckInAdded={handleCheckInAdded}
-            onDeleteShot={handleDeleteShot}
-            onDeleteWeight={handleDeleteWeight}
-            onDeleteCheckIn={handleDeleteCheckIn}
             onGoalWeightUpdated={handleGoalWeightUpdated}
-            onViewAllMilestones={() => handleNavigate('milestones')}
-            onViewAllShots={() => handleNavigate('shots')}
-            onViewAllWeights={() => handleNavigate('weight')}
-            onViewAllCheckIns={() => handleNavigate('check-in')}
+            onNavigate={handleNavigate}
           />
         );
     }
@@ -338,8 +276,10 @@ export const Dashboard = ({
             onClick={() => setIsMobileSidebarOpen(true)}
             aria-label='Open navigation menu'
           >
-            <LuMenu size={22} />
+            <LuMenu size={22} aria-hidden='true' />
           </button>
+
+          <img className='dashboard-topbar__brand' src={compactLogo} alt='Tracksy' />
 
           <div className='dashboard-topbar-actions'>
             <button
@@ -408,6 +348,25 @@ export const Dashboard = ({
 
         {isInitialLoading ? null : renderActiveSection()}
       </main>
+
+      <nav className='dashboard-bottom-nav' aria-label='Primary navigation'>
+        {primaryNavigationItems.map((item) => (
+          <button
+            type='button'
+            className={
+              activeSection === item.section
+                ? 'dashboard-bottom-nav__item is-active'
+                : 'dashboard-bottom-nav__item'
+            }
+            key={item.section}
+            onClick={() => handleNavigate(item.section)}
+            aria-current={activeSection === item.section ? 'page' : undefined}
+          >
+            {item.icon}
+            <span>{item.label}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 };

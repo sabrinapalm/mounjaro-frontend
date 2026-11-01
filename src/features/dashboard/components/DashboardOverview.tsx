@@ -1,188 +1,213 @@
-import { LuCalendarHeart, LuScale, LuSyringe, LuTrendingDown } from 'react-icons/lu';
-import { MetricCard } from '../../../shared/components/MetricCard';
+import { LuArrowDownRight, LuArrowRight, LuScale, LuSyringe, LuTrophy } from 'react-icons/lu';
+import { Button } from '../../../shared/components/Button';
 import { useUnitSettings } from '../../../shared/hooks/useUnitSettings';
-import type {
-  CheckInEntry,
-  CreateCheckInInput,
-  CreateShotInput,
-  CreateWeightInput,
-  ShotEntry,
-  UserProfile,
-  WeightEntry,
-} from '../../../shared/types';
+import type { CreateWeightInput, UserProfile, WeightEntry } from '../../../shared/types';
 import { formatDateLabel } from '../../../shared/utils/dateHelpers';
-import { CheckInTracker } from '../../check-ins';
-import { Milestones } from '../../milestones';
-import { ShotTracker } from '../../shots';
-import { GoalProgress, WeightGraph, WeightTracker } from '../../weight';
+import { GoalProgress, WeightGraph } from '../../weight';
+import { useAddWeightModal } from '../../weight/hooks/useAddWeightModal';
 import type { DashboardSummary } from '../hooks/useDashboardSummary';
+import './DashboardOverview.css';
 
-interface DashboardOverviewProps {
+type DashboardSection = 'dashboard' | 'weight' | 'shots' | 'milestones';
+
+type DashboardOverviewProps = {
   profile: UserProfile;
   summary: DashboardSummary;
-  shots: ShotEntry[];
   weights: WeightEntry[];
-  checkIns: CheckInEntry[];
-  onCheckInAdded: (checkIn: CreateCheckInInput) => Promise<void>;
-  onDeleteCheckIn: (id: string, dateTime: string) => Promise<void>;
-  onShotAdded: (shot: CreateShotInput) => Promise<void>;
   onWeightAdded: (weight: CreateWeightInput) => Promise<void>;
-  onDeleteShot: (id: string, dateTime: string) => Promise<void>;
-  onDeleteWeight: (id: string, dateTime: string) => Promise<void>;
   onGoalWeightUpdated: (goalWeight: number) => Promise<void>;
-  onViewAllMilestones: () => void;
-  onViewAllShots: () => void;
-  onViewAllWeights: () => void;
-  onViewAllCheckIns: () => void;
-}
+  onNavigate: (section: DashboardSection) => void;
+};
+
+const getGreeting = () => {
+  const hour = new Date().getHours();
+
+  if (hour < 12) {
+    return 'Good morning';
+  }
+
+  if (hour < 18) {
+    return 'Good afternoon';
+  }
+
+  return 'Good evening';
+};
 
 export const DashboardOverview = ({
   profile,
   summary,
-  shots,
   weights,
-  checkIns,
-  onShotAdded,
   onWeightAdded,
-  onDeleteCheckIn,
-  onCheckInAdded,
-  onDeleteShot,
-  onDeleteWeight,
   onGoalWeightUpdated,
-  onViewAllMilestones,
-  onViewAllShots,
-  onViewAllWeights,
-  onViewAllCheckIns,
+  onNavigate,
 }: DashboardOverviewProps) => {
   const { weightUnit, displayWeightFromKg } = useUnitSettings(profile.unitSystem ?? 'metric');
+  const addWeightModal = useAddWeightModal({ onWeightAdded });
+  const formatWeight = (weight: number) => `${displayWeightFromKg(weight)} ${weightUnit}`;
 
-  const formatWeight = (value: number) => `${displayWeightFromKg(value)} ${weightUnit}`;
-
-  const currentWeightLabel =
-    summary.currentWeight !== null ? formatWeight(summary.currentWeight) : '—';
-
-  const totalWeightLossLabel =
-    summary.totalWeightLoss !== null
-      ? summary.totalWeightLoss >= 0
-        ? `-${formatWeight(summary.totalWeightLoss)}`
-        : `+${formatWeight(Math.abs(summary.totalWeightLoss))}`
-      : '—';
-
-  const totalWeightLossTone =
-    summary.totalWeightLoss !== null && summary.totalWeightLoss < 0 ? 'danger' : 'accent';
-
-  const currentWeightDateLabel = summary.currentWeightDate
-    ? formatDateLabel(summary.currentWeightDate)
-    : 'No weight recorded';
+  const latestWeight = weights[0];
+  const previousWeight = weights[1];
+  const recentWeightChange =
+    latestWeight && previousWeight ? latestWeight.weight - previousWeight.weight : null;
+  const recentWeightChangeLabel =
+    recentWeightChange === null
+      ? '—'
+      : `${recentWeightChange > 0 ? '+' : recentWeightChange < 0 ? '−' : ''}${formatWeight(
+          Math.abs(recentWeightChange)
+        )}`;
 
   return (
-    <>
-      <div id='dashboard' className='dashboard-header'>
+    <div className='dashboard-overview'>
+      <header className='dashboard-welcome'>
         <div>
-          <h1>Dashboard</h1>
-          <p>Small steps, real progress. You’re doing great, {profile.displayName || ''}!</p>
+          <p className='dashboard-eyebrow'>YOUR WELLNESS, AT YOUR PACE</p>
+          <h1>
+            {getGreeting()}, {profile.displayName || 'there'}
+          </h1>
+          <p className='dashboard-welcome__copy'>
+            A clear view of your weight and treatment, all in one place.
+          </p>
         </div>
+        <div className='dashboard-welcome__actions'>
+          <span className='dashboard-today'>Today · {summary.todayLabel}</span>
+          <Button
+            className='dashboard-log-button'
+            variant='solid'
+            color='primary'
+            icon={<LuArrowDownRight aria-hidden='true' />}
+            onClick={addWeightModal.openModal}
+          >
+            Log weight
+          </Button>
+        </div>
+      </header>
 
-        <div className='dashboard-header-date'>Today, {summary.todayLabel}</div>
-      </div>
+      <div className='dashboard-hero-grid'>
+        <section className='dashboard-weight-card' aria-labelledby='current-weight-heading'>
+          <div className='dashboard-weight-card__top'>
+            <div>
+              <p className='dashboard-card-label' id='current-weight-heading'>
+                CURRENT WEIGHT
+              </p>
+              <p className='dashboard-weight-card__date'>
+                {summary.currentWeightDate
+                  ? `Last measured ${formatDateLabel(summary.currentWeightDate)}`
+                  : 'Add your first weight entry'}
+              </p>
+            </div>
+            <span className='dashboard-weight-card__icon' aria-hidden='true'>
+              <LuScale />
+            </span>
+          </div>
 
-      {/* <ButtonShowcase /> */}
+          <div className='dashboard-weight-card__value-row'>
+            <p className='dashboard-weight-card__value' aria-live='polite'>
+              {summary.currentWeight === null ? '—' : displayWeightFromKg(summary.currentWeight)}
+            </p>
+            {summary.currentWeight !== null && (
+              <span className='dashboard-weight-card__unit'>{weightUnit}</span>
+            )}
+          </div>
 
-      <div className='dashboard-summary-cards'>
-        <MetricCard
-          label='Current Weight'
-          value={currentWeightLabel}
-          meta={currentWeightDateLabel}
-          icon={<LuScale aria-hidden='true' />}
-          tone='primary'
+          <div className='dashboard-weight-card__footer'>
+            {summary.totalWeightLoss !== null ? (
+              <span
+                className={`dashboard-change ${
+                  summary.totalWeightLoss >= 0 ? 'dashboard-change--down' : 'dashboard-change--up'
+                }`}
+              >
+                {summary.totalWeightLoss >= 0 ? '−' : '+'}
+                {formatWeight(Math.abs(summary.totalWeightLoss))}
+                <span>since first entry</span>
+              </span>
+            ) : (
+              <span className='dashboard-weight-card__hint'>Your progress starts here</span>
+            )}
+            <button
+              className='dashboard-text-action'
+              type='button'
+              onClick={() => onNavigate('weight')}
+            >
+              Weight history <LuArrowRight aria-hidden='true' />
+            </button>
+          </div>
+        </section>
+
+        <GoalProgress
+          weights={weights}
+          profile={profile}
+          onGoalWeightUpdated={onGoalWeightUpdated}
         />
-
-        <MetricCard
-          label='Total Weight Loss'
-          value={totalWeightLossLabel}
-          meta='Since first entry'
-          icon={<LuTrendingDown aria-hidden='true' />}
-          tone={totalWeightLossTone}
-          highlightValue
-        />
-
-        <MetricCard
-          label='Next Shot'
-          value={summary.nextShotLabel}
-          meta={summary.nextShotMeta}
-          icon={<LuCalendarHeart aria-hidden='true' />}
-          tone='info'
-        />
-
-        <MetricCard
-          label='Current Dose'
-          value={summary.currentDose}
-          meta={summary.currentDoseMeta}
-          icon={<LuSyringe aria-hidden='true' />}
-          tone='success'
-        />
       </div>
 
-      <div className='dashboard-progress-grid'>
-        <section id='progress' className='dashboard-progress-grid__goal'>
-          <GoalProgress
-            weights={weights}
-            profile={profile}
-            onGoalWeightUpdated={onGoalWeightUpdated}
-          />
-        </section>
+      <div className='dashboard-details-grid'>
+        <WeightGraph weights={weights} />
 
-        <section id='dose-history' className='dashboard-progress-grid__graph'>
-          <WeightGraph weights={weights} />
+        <section className='dashboard-week-card' aria-labelledby='this-week-heading'>
+          <div className='dashboard-section-heading'>
+            <div>
+              <p className='dashboard-card-label'>AT A GLANCE</p>
+              <h2 id='this-week-heading'>This week</h2>
+            </div>
+          </div>
+
+          <div className='dashboard-week-stat'>
+            <span>Recent weight change</span>
+            <strong>{recentWeightChangeLabel}</strong>
+            <small>
+              {previousWeight ? 'Since your previous measurement' : 'Log another weight to compare'}
+            </small>
+          </div>
+
+          <div className='dashboard-week-stat'>
+            <span>Current injection dose</span>
+            <strong>{summary.currentDose}</strong>
+            <small>{summary.currentDoseMeta}</small>
+          </div>
+
+          <div className='dashboard-week-stat'>
+            <span>Next scheduled injection</span>
+            <strong>{summary.nextShotLabel}</strong>
+            <small>{summary.nextShotMeta}</small>
+          </div>
         </section>
       </div>
 
-      <div className='dashboard-grid'>
-        <section id='checkins' className='checkin-section'>
-          <CheckInTracker
-            checkIns={checkIns}
-            onCheckInAdded={onCheckInAdded}
-            onDeleteCheckIn={onDeleteCheckIn}
-            onViewAll={onViewAllCheckIns}
-          />
-        </section>
-
-        <section id='weight' className='tracker-section'>
-          <WeightTracker
-            weights={weights}
-            title='Recent Weights'
-            summaryLabel='Total weight loss'
-            variant='compact'
-            onWeightAdded={onWeightAdded}
-            onDeleteWeight={onDeleteWeight}
-            onViewAll={onViewAllWeights}
-          />
-        </section>
-      </div>
-
-      <div className='dashboard-grid'>
-        <section id='shots' className='tracker-section'>
-          <ShotTracker
-            title='Recent Shots'
-            summaryLabel='Total shots'
-            variant='compact'
-            shots={shots}
-            onShotAdded={onShotAdded}
-            onDeleteShot={onDeleteShot}
-            onViewAll={onViewAllShots}
-          />
-        </section>
-
-        <section id='milestones' className='tracker-section'>
-          <Milestones
-            weights={weights}
-            shots={shots}
-            startWeight={profile.startWeight ?? null}
-            goalWeight={profile.goalWeight ?? null}
-            onViewAll={onViewAllMilestones}
-          />
-        </section>
-      </div>
-    </>
+      <section className='dashboard-shortcuts' aria-labelledby='trackers-heading'>
+        <div className='dashboard-section-heading'>
+          <div>
+            <p className='dashboard-card-label'>YOUR TRACKERS</p>
+            <h2 id='trackers-heading'>Keep your progress moving</h2>
+          </div>
+        </div>
+        <div className='dashboard-shortcuts__grid'>
+          <button type='button' onClick={() => onNavigate('shots')}>
+            <LuSyringe aria-hidden='true' />
+            <span>
+              <strong>Shots</strong>
+              <small>Dosage and injection history</small>
+            </span>
+            <LuArrowRight aria-hidden='true' />
+          </button>
+          <button type='button' onClick={() => onNavigate('weight')}>
+            <LuScale aria-hidden='true' />
+            <span>
+              <strong>Weight</strong>
+              <small>Measurements and trends</small>
+            </span>
+            <LuArrowRight aria-hidden='true' />
+          </button>
+          <button type='button' onClick={() => onNavigate('milestones')}>
+            <LuTrophy aria-hidden='true' />
+            <span>
+              <strong>Milestones</strong>
+              <small>Celebrate every achievement</small>
+            </span>
+            <LuArrowRight aria-hidden='true' />
+          </button>
+        </div>
+      </section>
+      {addWeightModal.modal}
+    </div>
   );
 };

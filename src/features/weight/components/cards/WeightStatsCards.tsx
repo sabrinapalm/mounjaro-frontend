@@ -22,9 +22,9 @@ export const WeightStatsCards = ({ weights }: WeightStatsCardsProps) => {
     return (
       <div className='dashboard-summary-cards weight-summary-cards'>
         <MetricCard
-          label='Weight Insights'
+          label='Weight Overview'
           value='No data yet'
-          meta='Add your first check-in to see trends'
+          meta='Add your first weight entry to see trends'
           icon={<LuScale aria-hidden='true' />}
           tone='primary'
           className='weight-summary-card weight-summary-card--empty'
@@ -90,9 +90,9 @@ export const WeightStatsCards = ({ weights }: WeightStatsCardsProps) => {
       />
 
       <MetricCard
-        label='Check-ins'
-        value={stats.checkIns.value}
-        meta={stats.checkIns.meta}
+        label='Weight Entries'
+        value={stats.weightEntries.value}
+        meta={stats.weightEntries.meta}
         icon={<LuClipboardList aria-hidden='true' />}
         tone='neutral'
         className='weight-summary-card'

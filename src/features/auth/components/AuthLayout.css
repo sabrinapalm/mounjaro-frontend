@@ -72,11 +72,11 @@
 }
 
 html[data-theme="dark"] .auth-hero-badge {
-  color: #ddd6fe;
+  color: var(--color-primary);
 }
 
 html[data-theme="dark"] .auth-hero-pills li {
-  color: #d7fff6;
+  color: var(--color-accent-dark);
 }
 
 @media (max-width: 900px) {

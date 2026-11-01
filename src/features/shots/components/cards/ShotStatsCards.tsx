@@ -30,7 +30,7 @@ export const ShotStatsCards = ({ shots }: ShotStatsCardsProps) => {
     return (
       <div className='dashboard-summary-cards shot-summary-cards'>
         <MetricCard
-          label='Shot Insights'
+          label='Shot Overview'
           value='No data yet'
           meta='Log your first shot to see your rhythm'
           icon={<LuSyringe aria-hidden='true' />}

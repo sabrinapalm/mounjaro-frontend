@@ -5,8 +5,8 @@ type Theme = 'light' | 'dark';
 const themeStorageKey = 'mounjaro-theme';
 
 const themeColors: Record<Theme, string> = {
-  light: '#6f4df6',
-  dark: '#050813',
+  light: '#F7F7F2',
+  dark: '#0C1513',
 };
 
 const getInitialTheme = (): Theme => {

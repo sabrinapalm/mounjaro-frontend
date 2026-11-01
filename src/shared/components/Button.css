@@ -84,8 +84,8 @@
 
 .button--solid {
   border: 1px solid color-mix(in srgb, var(--button-color) 50%, transparent);
-  background: linear-gradient(135deg, var(--button-color-dark), var(--button-color));
-  color: #ffffff;
+  background: var(--button-color);
+  color: var(--button-solid-text);
   box-shadow: var(--button-shadow);
   transition:
     transform 0.2s ease,
@@ -227,5 +227,11 @@
 @media (max-width: 680px) {
   .button {
     width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
   }
 }

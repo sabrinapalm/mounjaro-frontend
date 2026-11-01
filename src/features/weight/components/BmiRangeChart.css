@@ -5,7 +5,7 @@
   --bmi-range-obesityClass1: #fb923c;
   --bmi-range-obesityClass2: #ef4444;
   --bmi-range-obesityClass3: #be123c;
-  --bmi-marker-color: var(--color-text, #f8fafc);
+  --bmi-marker-color: var(--color-text);
 
   display: flex;
   flex-direction: column;
@@ -179,7 +179,7 @@
 }
 
 .bmi-range-card {
-  --bmi-goal-marker-color: var(--color-secondary, #a78bfa);
+  --bmi-goal-marker-color: var(--color-primary);
 }
 
 .bmi-range-card__goal-summary {

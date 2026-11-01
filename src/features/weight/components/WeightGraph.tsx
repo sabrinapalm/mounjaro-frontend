@@ -1,7 +1,8 @@
 import {
-  Area,
-  AreaChart,
   CartesianGrid,
+  Label,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -10,11 +11,7 @@ import {
 import type { WeightEntry } from '../../../shared/types';
 import { formatShortDateLabel } from '../../../shared/utils/dateHelpers';
 import { useWeightGraphData } from '../hooks/useWeightGraphData';
-import {
-  type WeightGraphChartData,
-  type WeightGraphPeriod,
-  weightGraphPeriodOptions,
-} from '../utils/weightGraphUtils';
+import { type WeightGraphChartData, weightGraphPeriodOptions } from '../utils/weightGraphUtils';
 import './WeightGraph.css';
 
 interface WeightGraphProps {
@@ -43,22 +40,23 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
           </p>
         </div>
 
-        <label className='weight-graph-card__period'>
-          <span className='weight-graph-card__period-label'>Period</span>
-
-          <select
-            className='weight-graph-card__select'
-            value={period}
-            onChange={(event) => setPeriod(event.target.value as WeightGraphPeriod)}
-            aria-label='Select weight graph period'
-          >
-            {weightGraphPeriodOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        <fieldset className='weight-graph-card__period'>
+          <legend className='weight-graph-card__period-legend'>Weight history range</legend>
+          {weightGraphPeriodOptions.map((option) => (
+            <button
+              className={`weight-graph-card__range ${
+                period === option.value ? 'weight-graph-card__range--active' : ''
+              }`}
+              type='button'
+              key={option.value}
+              aria-label={option.label}
+              aria-pressed={period === option.value}
+              onClick={() => setPeriod(option.value)}
+            >
+              {option.value === 'all' ? 'All' : option.value}
+            </button>
+          ))}
+        </fieldset>
       </header>
 
       {chartData.length === 0 ? (
@@ -68,7 +66,7 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
       ) : (
         <div className='weight-graph-card__chart'>
           <ResponsiveContainer width='100%' height='100%'>
-            <AreaChart
+            <LineChart
               data={chartData}
               margin={{
                 top: 14,
@@ -77,14 +75,6 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
                 bottom: 4,
               }}
             >
-              <defs>
-                <linearGradient id='weightGraphArea' x1='0' y1='0' x2='0' y2='1'>
-                  <stop offset='0%' stopColor='var(--color-primary)' stopOpacity={0.42} />
-                  <stop offset='55%' stopColor='var(--color-primary)' stopOpacity={0.18} />
-                  <stop offset='100%' stopColor='var(--color-primary)' stopOpacity={0.04} />
-                </linearGradient>
-              </defs>
-
               <CartesianGrid vertical={false} stroke='var(--color-border)' strokeOpacity={0.36} />
 
               <XAxis
@@ -113,9 +103,16 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
                 tick={{
                   fill: 'var(--color-text-muted)',
                   fontSize: 13,
-                  fontWeight: 800,
+                  fontWeight: 600,
                 }}
-              />
+              >
+                <Label
+                  value={weightUnit}
+                  angle={-90}
+                  position='insideLeft'
+                  style={{ fill: 'var(--color-text-muted)', fontSize: 11 }}
+                />
+              </YAxis>
 
               <Tooltip
                 cursor={{
@@ -146,12 +143,11 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
                 }}
               />
 
-              <Area
+              <Line
                 type='monotone'
                 dataKey='weight'
                 stroke='var(--color-primary)'
-                strokeWidth={3}
-                fill='url(#weightGraphArea)'
+                strokeWidth={2.5}
                 dot={{
                   r: 4,
                   fill: 'var(--color-primary)',
@@ -164,9 +160,9 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
                   stroke: 'var(--color-surface)',
                   strokeWidth: 3,
                 }}
-                isAnimationActive
+                isAnimationActive={!window.matchMedia('(prefers-reduced-motion: reduce)').matches}
               />
-            </AreaChart>
+            </LineChart>
           </ResponsiveContainer>
         </div>
       )}

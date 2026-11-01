@@ -28,12 +28,13 @@ export const useGoalProgress = ({
   const [isSavingGoal, setIsSavingGoal] = useState(false);
   const [goalError, setGoalError] = useState<string | null>(null);
 
-  const hasGoalWeight = typeof goalWeight === 'number';
-  const hasWeights = weights.length > 0;
+  const hasGoalWeight =
+    typeof goalWeight === 'number' && Number.isFinite(goalWeight) && goalWeight > 0;
+  const hasWeights = weights.some((weight) => Number.isFinite(weight.weight) && weight.weight > 0);
 
   const formatWeight = useCallback(
     (weightInKg: number | null | undefined) => {
-      if (typeof weightInKg !== 'number') {
+      if (typeof weightInKg !== 'number' || !Number.isFinite(weightInKg) || weightInKg < 0) {
         return '—';
       }
 

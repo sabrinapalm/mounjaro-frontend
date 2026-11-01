@@ -117,6 +117,6 @@ export const getTotalWeightLossTrendDirection = (totalLossKg: number): WeightTre
   return totalLossKg >= 0 ? 'down' : 'up';
 };
 
-export const getCheckInMeta = (checkInCount: number) => {
-  return checkInCount === 1 ? '1 check-in logged' : `${checkInCount} check-ins logged`;
+export const getWeightEntryMeta = (entryCount: number) => {
+  return entryCount === 1 ? '1 weight entry logged' : `${entryCount} weight entries logged`;
 };

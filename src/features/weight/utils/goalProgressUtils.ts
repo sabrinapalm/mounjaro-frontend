@@ -36,6 +36,9 @@ interface GoalWeightModalValueParams {
   currentWeight: number | null;
 }
 
+const isValidWeight = (weight: unknown): weight is number =>
+  typeof weight === 'number' && Number.isFinite(weight) && weight > 0;
+
 export const getWeightTimestamp = (entry: WeightEntry) => {
   const timestamp = getTimestamp(entry.dateTime);
 
@@ -60,15 +63,19 @@ export const calculateGoalProgressData = ({
   startWeight,
   goalWeight,
 }: CalculateGoalProgressDataParams): GoalProgressData => {
-  const sortedWeights = sortWeightsByDateTimeAscending(weights);
+  const sortedWeights = sortWeightsByDateTimeAscending(weights).filter((entry) =>
+    isValidWeight(entry.weight)
+  );
 
   const firstWeightEntry = sortedWeights[0] ?? null;
   const latestWeightEntry = sortedWeights[sortedWeights.length - 1] ?? null;
 
-  const resolvedStartWeight = startWeight ?? firstWeightEntry?.weight ?? null;
+  const resolvedStartWeight = isValidWeight(startWeight)
+    ? startWeight
+    : (firstWeightEntry?.weight ?? null);
   const currentWeight = latestWeightEntry?.weight ?? null;
 
-  if (typeof goalWeight !== 'number') {
+  if (!isValidWeight(goalWeight)) {
     return {
       startWeight: resolvedStartWeight,
       currentWeight,
@@ -79,7 +86,7 @@ export const calculateGoalProgressData = ({
     };
   }
 
-  if (typeof resolvedStartWeight !== 'number') {
+  if (resolvedStartWeight === null) {
     return {
       startWeight: null,
       currentWeight,
@@ -95,7 +102,12 @@ export const calculateGoalProgressData = ({
   const weightLost = resolvedStartWeight - weightForProgress;
   const weightToGo = Math.max(0, weightForProgress - goalWeight);
 
-  const rawProgress = totalToLose > 0 ? (weightLost / totalToLose) * 100 : 0;
+  const rawProgress =
+    totalToLose > 0
+      ? (weightLost / totalToLose) * 100
+      : totalToLose === 0 && weightForProgress <= goalWeight
+        ? 100
+        : 0;
   const progress = Math.round(Math.min(100, Math.max(0, rawProgress)));
 
   return {
@@ -121,11 +133,11 @@ export const getGoalProgressSubtitle = ({
   }
 
   if (!hasWeights) {
-    return 'Add your first weight check-in to start seeing your goal progress.';
+    return 'Add your first weight measurement to start seeing your goal progress.';
   }
 
   if (typeof weightLost === 'number' && weightLost < 0) {
-    return 'A little bump up is okay. Progress is not always linear — your next check-in is a fresh start.';
+    return 'A little bump up is okay. Progress is not always linear — your next measurement is a fresh start.';
   }
 
   if (progress <= 0) {
@@ -184,15 +196,15 @@ export const getGoalWeightModalValue = ({
   startWeight,
   currentWeight,
 }: GoalWeightModalValueParams) => {
-  if (typeof goalWeight === 'number') {
+  if (isValidWeight(goalWeight)) {
     return goalWeight;
   }
 
-  if (typeof currentWeight === 'number') {
+  if (isValidWeight(currentWeight)) {
     return currentWeight;
   }
 
-  if (typeof startWeight === 'number') {
+  if (isValidWeight(startWeight)) {
     return startWeight;
   }
 

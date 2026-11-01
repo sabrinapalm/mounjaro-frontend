@@ -140,16 +140,16 @@ const getGoalProgressDescription = (progress: number, targetProgress: number) =>
   return `Reach ${targetProgress}% of your goal`;
 };
 
-const getCheckInDescription = (count: number, target: number) => {
+const getWeightEntryDescription = (count: number, target: number) => {
   if (count >= target) {
     return 'Unlocked';
   }
 
   if (count > 0) {
-    return `${Math.max(target - count, 0)} check-ins left`;
+    return `${Math.max(target - count, 0)} weight entries left`;
   }
 
-  return `Log ${target} weight check-ins`;
+  return `Log ${target} weight entries`;
 };
 
 const getTrendWinDescription = (trendWins: number, target: number) => {
@@ -264,8 +264,8 @@ export const useMilestones = ({
         order: 1,
       },
       {
-        id: 'first-check-in',
-        title: 'First check-in',
+        id: 'first-weight-entry',
+        title: 'First weight entry',
         description: firstWeightDateTime
           ? `First weight logged on ${formatDateLabel(firstWeightDateTime)}`
           : 'Log your first weight',
@@ -276,7 +276,7 @@ export const useMilestones = ({
       {
         id: 'getting-consistent',
         title: 'Getting consistent',
-        description: getCheckInDescription(uniqueWeightDays, 3),
+        description: getWeightEntryDescription(uniqueWeightDays, 3),
         status: getCountMilestoneStatus(uniqueWeightDays, 3),
         progress: clampProgress((uniqueWeightDays / 3) * 100),
         icon: 'star',
@@ -285,7 +285,7 @@ export const useMilestones = ({
       {
         id: 'data-bestie',
         title: 'Data bestie',
-        description: getCheckInDescription(uniqueWeightDays, 7),
+        description: getWeightEntryDescription(uniqueWeightDays, 7),
         status: getCountMilestoneStatus(uniqueWeightDays, 7),
         progress: clampProgress((uniqueWeightDays / 7) * 100),
         icon: 'star',

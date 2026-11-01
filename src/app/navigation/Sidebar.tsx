@@ -1,27 +1,9 @@
-import { IoScaleOutline, IoStarOutline } from 'react-icons/io5';
-import {
-  LuChartBar,
-  LuCircleHelp,
-  LuHeartPulse,
-  LuHouse,
-  LuSyringe,
-  LuUserRound,
-} from 'react-icons/lu';
+import { LuCircleHelp, LuHouse, LuScale, LuSyringe, LuTrophy, LuUserRound } from 'react-icons/lu';
 import TracksyLogoWhite from '/tracksy_logo.svg';
 import TracksyLogoDark from '/tracksy_logo_dark_mode.svg';
 import './Sidebar.css';
 
-export type SidebarSection =
-  | 'dashboard'
-  | 'shots'
-  | 'weight'
-  | 'progress'
-  | 'dose-history'
-  | 'side-effects'
-  | 'milestones'
-  | 'profile'
-  | 'check-in'
-  | 'insights';
+export type SidebarSection = 'dashboard' | 'shots' | 'weight' | 'milestones' | 'profile';
 
 type SidebarProps = {
   activeSection?: SidebarSection;
@@ -42,11 +24,6 @@ const navItems: Array<{
     icon: <LuHouse size={22} />,
   },
   {
-    id: 'check-in',
-    label: 'Check-in',
-    icon: <LuHeartPulse size={22} />,
-  },
-  {
     id: 'shots',
     label: 'Shots',
     icon: <LuSyringe size={22} />,
@@ -54,17 +31,12 @@ const navItems: Array<{
   {
     id: 'weight',
     label: 'Weight',
-    icon: <IoScaleOutline size={22} />,
-  },
-  {
-    id: 'insights',
-    label: 'Insights',
-    icon: <LuChartBar size={22} />,
+    icon: <LuScale size={22} />,
   },
   {
     id: 'milestones',
     label: 'Milestones',
-    icon: <IoStarOutline size={22} />,
+    icon: <LuTrophy size={22} />,
   },
   {
     id: 'profile',

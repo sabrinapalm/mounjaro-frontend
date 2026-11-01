@@ -1,13 +1,19 @@
 {
   "name": "Tracksy",
   "short_name": "Tracksy",
-  "description": "A simple shot and weight tracker for following your dose schedule, progress, and goals.",
+  "description": "A calm place to track weight, injections, progress, and goals.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fbfaff",
-  "theme_color": "#8b5cf6",
+  "background_color": "#F7F7F2",
+  "theme_color": "#547D63",
   "orientation": "portrait-primary",
   "icons": [
+    {
+      "src": "/tracksy_app_icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
     {
       "src": "/pwa-192x192.png",
       "sizes": "192x192",
@@ -21,7 +27,7 @@
       "purpose": "any"
     },
     {
-      "src": "/pwa-maskable-512x512.png",
+      "src": "/tracksy-pwa-maskable-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

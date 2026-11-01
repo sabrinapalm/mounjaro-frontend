@@ -1,58 +1,67 @@
 :root {
   --font-family-base:
-    "Nunito Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    "Nunito Sans", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
-  --color-bg: #fbfaff;
+  --color-bg: #f7f7f2;
   --color-surface: #ffffff;
-  --color-surface-soft: #f4f0ff;
+  --color-surface-soft: #edf2ea;
+  --color-surface-elevated: #ffffff;
 
-  --color-primary: #6f4df6;
-  --color-primary-dark: #4f35d8;
-  --color-primary-soft: #ebe4ff;
+  --color-primary: #547d63;
+  --color-primary-dark: #3d624b;
+  --color-primary-soft: #dce9d7;
 
-  --color-accent: #24c7a5;
-  --color-accent-dark: #12a88a;
-  --color-accent-soft: #dcfbf3;
+  --color-accent: #267c70;
+  --color-accent-dark: #1d645a;
+  --color-accent-soft: #dcefeb;
 
-  --color-text: #232c44;
-  --color-text-muted: #6b7280;
-  --color-border: #e8e2f7;
-  --color-border-green: #12a88a61;
+  --color-text: #1a2823;
+  --color-text-muted: #68776f;
+  --color-border: #e3e9e1;
+  --color-border-green: #547d6361;
 
-  --color-success: #22c55e;
+  --color-success: #35775a;
 
-  --color-warning: #f59e0b;
-  --color-warning-soft: #fff7dc;
-  --color-warning-border: #f59e0b66;
+  --color-warning: #9a6a17;
+  --color-warning-soft: #f6edd8;
+  --color-warning-border: #c4933c66;
 
   --color-info: var(--color-primary);
   --color-info-soft: var(--color-primary-soft);
   --color-info-border: color-mix(in srgb, var(--color-primary) 34%, var(--color-border));
 
-  --color-danger: #ef4444;
-  --color-danger-hover: #dc2626;
+  --color-danger: #b34e47;
+  --color-danger-hover: #973d38;
 
-  --shadow-soft: 0 12px 32px rgba(79, 53, 216, 0.12);
-  --shadow-lg: 0 20px 50px rgba(111, 77, 246, 0.12);
+  --shadow-soft: 0 8px 26px rgba(28, 48, 37, 0.06);
+  --shadow-card: 0 10px 32px rgba(28, 48, 37, 0.07);
+  --shadow-lg: 0 20px 50px rgba(28, 48, 37, 0.12);
 
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
   --radius-pill: 999px;
 
   --sans: var(--font-family-base);
   --heading: var(--font-family-base);
   --mono: ui-monospace, Consolas, monospace;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
 
-  --button-shadow-primary: 0 12px 24px color-mix(in srgb, var(--color-primary) 16%, transparent);
-  --button-shadow-accent: 0 12px 24px color-mix(in srgb, var(--color-accent) 18%, transparent);
-  --button-shadow-neutral: 0 8px 24px color-mix(in srgb, var(--color-primary) 10%, transparent);
+  --button-shadow-primary: 0 6px 16px color-mix(in srgb, var(--color-primary) 16%, transparent);
+  --button-shadow-accent: 0 6px 16px color-mix(in srgb, var(--color-accent) 14%, transparent);
+  --button-shadow-neutral: 0 4px 14px rgba(28, 48, 37, 0.06);
+  --button-solid-text: #ffffff;
 
   --button-neutral-bg: var(--color-surface);
   --button-neutral-color: var(--color-text);
   --button-neutral-border: var(--color-border);
 
-  --button-neutral-hover-bg: var(--color-primary-soft);
+  --button-neutral-hover-bg: var(--color-surface-soft);
   --button-neutral-hover-color: var(--color-primary-dark);
   --button-neutral-hover-border: var(--color-primary);
 
@@ -73,8 +82,8 @@
   --message-error-hover-bg: color-mix(in srgb, var(--color-danger) 14%, var(--color-surface));
   --message-error-hover-border: color-mix(in srgb, var(--color-danger) 55%, var(--color-border));
 
-  font: 18px / 1.6 var(--font-family-base);
-  letter-spacing: 0.02em;
+  font: 16px / 1.55 var(--font-family-base);
+  letter-spacing: 0;
   color-scheme: light;
   color: var(--color-text);
   background: var(--color-bg);
@@ -85,42 +94,45 @@
 }
 
 html[data-theme="dark"] {
-  --color-bg: #050813;
-  --color-surface: #0c101c;
-  --color-surface-soft: #14182a;
+  --color-bg: #0c1513;
+  --color-surface: #172320;
+  --color-surface-soft: #1e2d29;
+  --color-surface-elevated: #22322d;
 
-  --color-primary: #8b5cf6;
-  --color-primary-dark: #7c3aed;
-  --color-primary-soft: #20153f;
+  --color-primary: #b9d8ae;
+  --color-primary-dark: #a5c99a;
+  --color-primary-soft: #283d32;
 
-  --color-accent: #22d3a6;
-  --color-accent-dark: #10b981;
-  --color-accent-soft: #0d2f2b;
+  --color-accent: #a4ddd3;
+  --color-accent-dark: #b7e5dc;
+  --color-accent-soft: #203a35;
 
-  --color-text: #f8fafc;
-  --color-text-muted: #a7adbd;
-  --color-border: #202638;
-  --color-border-green: #10b98166;
+  --color-text: #f4f7f4;
+  --color-text-muted: #a2b4ac;
+  --color-border: #2c3b35;
+  --color-border-green: #a4ddd366;
 
-  --color-success: #22c55e;
+  --color-success: #a4d5b3;
 
-  --color-warning: #fbbf24;
-  --color-warning-soft: #33240a;
-  --color-warning-border: #fbbf2466;
+  --color-warning: #e3bf77;
+  --color-warning-soft: #3c3320;
+  --color-warning-border: #e3bf7766;
 
   --color-info: var(--color-primary);
   --color-info-soft: var(--color-primary-soft);
   --color-info-border: color-mix(in srgb, var(--color-primary) 34%, var(--color-border));
 
-  --color-danger: #f87171;
-  --color-danger-hover: #ef4444;
+  --color-danger: #f09489;
+  --color-danger-hover: #f5a59b;
 
-  --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.38);
-  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.46);
+  --shadow-soft: 0 8px 26px rgba(0, 0, 0, 0.2);
+  --shadow-card: 0 12px 34px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.34);
 
   --button-neutral-bg: var(--color-surface);
   --button-neutral-color: var(--color-text);
   --button-neutral-border: var(--color-border);
+  --button-solid-text: #1a2823;
 
   --button-neutral-hover-bg: var(--color-primary-soft);
   --button-neutral-hover-color: var(--color-primary);
@@ -168,9 +180,7 @@ body {
 }
 
 html[data-theme="dark"] body {
-  background:
-    radial-gradient(circle at top left, rgba(139, 92, 246, 0.14), transparent 34%),
-    radial-gradient(circle at top right, rgba(34, 211, 166, 0.08), transparent 30%), var(--color-bg);
+  background: var(--color-bg);
 }
 
 html,
@@ -236,15 +246,15 @@ h6 {
 }
 
 h1 {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.9rem, 3vw, 2.5rem);
   font-weight: 700;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.045em;
 }
 
 h2 {
-  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
 }
 
 p {
@@ -303,19 +313,12 @@ body::before {
   background: var(--color-bg);
 }
 
-html[data-theme="dark"] body::before {
-  background:
-    radial-gradient(circle at top left, rgba(139, 92, 246, 0.14), transparent 34%),
-    radial-gradient(circle at top right, rgba(34, 211, 166, 0.08), transparent 30%), var(--color-bg);
-}
-
 /* =========================
    Modal scroll lock
    ========================= */
 
 body:has(.add-shot-modal-backdrop),
 body:has(.add-weight-modal-backdrop),
-body:has(.add-check-in-modal-backdrop),
 body:has(.edit-goal-modal-backdrop),
 body:has(.confirm-dialog-backdrop) {
   overflow: hidden;
@@ -324,7 +327,6 @@ body:has(.confirm-dialog-backdrop) {
 
 body:has(.add-shot-modal-backdrop) .app,
 body:has(.add-weight-modal-backdrop) .app,
-body:has(.add-check-in-modal-backdrop) .app,
 body:has(.edit-goal-modal-backdrop) .app,
 body:has(.confirm-dialog-backdrop) .app {
   overflow: hidden;
@@ -332,7 +334,6 @@ body:has(.confirm-dialog-backdrop) .app {
 
 .add-shot-modal-backdrop,
 .add-weight-modal-backdrop,
-.add-check-in-modal-backdrop,
 .edit-goal-modal-backdrop,
 .confirm-dialog-backdrop {
   overscroll-behavior: none;
@@ -341,7 +342,6 @@ body:has(.confirm-dialog-backdrop) .app {
 
 .add-shot-modal,
 .add-weight-modal,
-.add-check-in-modal,
 .edit-goal-modal,
 .confirm-dialog {
   min-width: 0;
@@ -355,17 +355,14 @@ body:has(.confirm-dialog-backdrop) .app {
 
 .add-shot-modal__form,
 .add-weight-modal__form,
-.add-check-in-modal__form,
 .edit-goal-modal__form,
 .add-shot-modal__row,
-.add-weight-modal__row,
-.add-check-in-modal__row {
+.add-weight-modal__row {
   min-width: 0;
 }
 
 .add-shot-modal__field,
 .add-weight-modal__field,
-.add-check-in-modal__field,
 .edit-goal-modal__field,
 .add-shot-modal__input-icon-wrapper,
 .add-shot-modal__select-with-unit,
@@ -376,15 +373,11 @@ body:has(.confirm-dialog-backdrop) .app {
   min-width: 0;
 }
 
-.add-shot-modal__fieldset,
-.add-check-in-modal__fieldset,
-.add-check-in-modal__level-fieldset {
+.add-shot-modal__fieldset {
   min-width: 0;
 }
 
-.add-shot-modal__chips,
-.add-check-in-modal__chips,
-.add-check-in-modal__level-options {
+.add-shot-modal__chips {
   min-width: 0;
 }
 
@@ -393,7 +386,6 @@ body:has(.confirm-dialog-backdrop) .app {
 .add-shot-modal__textarea,
 .add-weight-modal__input,
 .add-weight-modal__textarea,
-.add-check-in-modal__textarea,
 .edit-goal-modal__input {
   min-width: 0;
 }

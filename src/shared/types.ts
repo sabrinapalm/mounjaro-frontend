@@ -27,8 +27,6 @@ export type SideEffect =
  */
 export type ShotSideEffect = SideEffect;
 
-export type CheckInLevel = 1 | 2 | 3 | 4 | 5;
-
 export type ShotEntry = {
   id: string;
   dateTime: string;
@@ -56,35 +54,6 @@ export type CreateWeightInput = {
   dateTime: string;
   weight: number;
 };
-
-export type CheckInEntry = {
-  id: string;
-  dateTime: string;
-  appetiteLevel?: CheckInLevel;
-  hungerLevel?: CheckInLevel;
-  energyLevel?: CheckInLevel;
-  nauseaLevel?: CheckInLevel;
-  moodLevel?: CheckInLevel;
-  sideEffects?: SideEffect[];
-  notes?: string;
-};
-
-export type CreateCheckInInput = {
-  dateTime: string;
-  appetiteLevel?: CheckInLevel;
-  hungerLevel?: CheckInLevel;
-  energyLevel?: CheckInLevel;
-  nauseaLevel?: CheckInLevel;
-  moodLevel?: CheckInLevel;
-  sideEffects?: SideEffect[];
-  notes?: string;
-};
-
-export interface AppData {
-  shots: ShotEntry[];
-  weights: WeightEntry[];
-  checkIns: CheckInEntry[];
-}
 
 /**
  * Derived frontend view model.

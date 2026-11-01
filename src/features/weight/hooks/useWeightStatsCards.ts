@@ -5,9 +5,9 @@ import { useProfile } from '../../profile/ProfileContext';
 import {
   formatSignedWeightFromKg,
   getAverageWeightChangeTone,
-  getCheckInMeta,
   getTotalWeightLossTone,
   getTotalWeightLossTrendDirection,
+  getWeightEntryMeta,
   getWeightStatsData,
   type WeightAverageStatDisplay,
   type WeightStatDisplay,
@@ -29,7 +29,7 @@ type WeightStatsCardsData =
       averagePerWeek: WeightAverageStatDisplay;
       averagePerMonth: WeightAverageStatDisplay;
       journeyWeek: WeightStatDisplay;
-      checkIns: WeightStatDisplay;
+      weightEntries: WeightStatDisplay;
     };
 
 export const useWeightStatsCards = ({
@@ -77,7 +77,7 @@ export const useWeightStatsCards = ({
       hasWeights: true,
       currentWeight: {
         value: formatWeight(latestWeight.weight),
-        meta: `Latest check-in ${latestDate.format('MMM D')}`,
+        meta: `Latest measurement ${latestDate.format('MMM D')}`,
       },
       totalWeightLoss: {
         value: totalWeightLossValue,
@@ -99,9 +99,9 @@ export const useWeightStatsCards = ({
         value: `Week ${trackingWeeks}`,
         meta: 'Your current journey week',
       },
-      checkIns: {
+      weightEntries: {
         value: weights.length,
-        meta: getCheckInMeta(weights.length),
+        meta: getWeightEntryMeta(weights.length),
       },
     };
   }, [weights, displayWeightFromKg, weightUnit]);
