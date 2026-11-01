@@ -26,6 +26,19 @@ Tracksy helps you keep an eye on your weekly dose schedule, weight changes, and 
 - 📱 **Mobile-friendly PWA setup**  
   Includes manifest, app icons, and mobile meta tags.
 
+## Development
+
+Install the pinned pnpm version directly (Corepack is not required):
+
+```sh
+npm install --global pnpm@10.28.2
+pnpm install
+pnpm run dev
+```
+
+Run the available project checks with `pnpm run build`, `pnpm run lint`, and
+`pnpm run check`.
+
 ---
 
 ## 🖼️ Preview

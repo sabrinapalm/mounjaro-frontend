@@ -11,10 +11,10 @@ import '@fontsource/nunito-sans/700.css';
 import '@fontsource/nunito-sans/800.css';
 import '@fontsource/nunito-sans/900.css';
 
-import App from './App.tsx';
-import './index.css';
-import { queryPersister } from './query/persister';
-import { queryClient } from './query/queryClient';
+import { App } from './app/App.tsx';
+import './shared/styles/global.css';
+import { queryClient } from './app/providers/queryClient';
+import { queryPersister } from './app/providers/queryPersister';
 
 const locale = 'en';
 
