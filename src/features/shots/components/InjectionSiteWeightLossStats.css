@@ -28,7 +28,7 @@
 .injection-site-stats-card__title-group h2 {
   color: var(--color-text);
   font-size: 1.35rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
 }
 
@@ -54,7 +54,7 @@
 .injection-site-stats-card__highlight span {
   color: var(--color-text-muted);
   font-size: 0.74rem;
-  font-weight: 850;
+  font-weight: 700;
   line-height: 1;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -63,7 +63,7 @@
 .injection-site-stats-card__highlight strong {
   color: var(--color-text);
   font-size: 1.05rem;
-  font-weight: 850;
+  font-weight: 700;
   line-height: 1.2;
 }
 
@@ -117,7 +117,7 @@
   overflow: hidden;
   color: var(--color-text);
   font-size: 1rem;
-  font-weight: 850;
+  font-weight: 700;
   line-height: 1.2;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -135,7 +135,7 @@
   flex: 0 0 auto;
   color: var(--color-accent-dark);
   font-size: 1rem;
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1.2;
 }
 
@@ -156,14 +156,14 @@
 .injection-site-stat dt {
   color: var(--color-text-muted);
   font-size: 0.84rem;
-  font-weight: 750;
+  font-weight: 700;
 }
 
 .injection-site-stat dd {
   margin: 0;
   color: var(--color-text);
   font-size: 0.92rem;
-  font-weight: 850;
+  font-weight: 700;
   text-align: right;
   white-space: nowrap;
 }
@@ -181,7 +181,7 @@
 .injection-site-stats-card__empty strong {
   color: var(--color-text);
   font-size: 1rem;
-  font-weight: 850;
+  font-weight: 700;
 }
 
 .injection-site-stats-card__empty p {

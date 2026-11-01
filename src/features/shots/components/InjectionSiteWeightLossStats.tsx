@@ -119,11 +119,11 @@ export const InjectionSiteWeightLossStats = ({
               }}
               labelStyle={{
                 color: 'var(--color-text)',
-                fontWeight: 850,
+                fontWeight: 700,
               }}
               itemStyle={{
                 color: 'var(--color-text)',
-                fontWeight: 750,
+                fontWeight: 700,
               }}
               formatter={(value, name) => {
                 if (name === 'averageWeightLoss') {

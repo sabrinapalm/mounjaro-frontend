@@ -340,6 +340,11 @@
     gap: 14px;
   }
 
+  .dashboard-welcome > div:first-child {
+    width: 100%;
+    text-align: left;
+  }
+
   .dashboard-welcome__actions {
     width: 100%;
     justify-content: space-between;

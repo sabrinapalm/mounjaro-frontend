@@ -89,7 +89,7 @@ export const WeightGraph = ({ weights }: WeightGraphProps) => {
                 tick={{
                   fill: 'var(--color-text-muted)',
                   fontSize: 13,
-                  fontWeight: 800,
+                  fontWeight: 700,
                 }}
               />
 

@@ -15,7 +15,7 @@
   margin: 0;
   color: var(--color-text);
   font-size: 1.9rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
 }
 
@@ -35,8 +35,14 @@
 
 @media (max-width: 760px) {
   .page-header {
+    align-items: flex-start;
     flex-direction: column;
     gap: 16px;
+  }
+
+  .page-header__copy {
+    width: 100%;
+    text-align: left;
   }
 
   .page-header h1 {

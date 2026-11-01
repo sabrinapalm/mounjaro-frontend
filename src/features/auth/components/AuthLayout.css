@@ -24,7 +24,7 @@
   background: color-mix(in srgb, var(--color-primary) 12%, transparent);
   color: var(--color-primary);
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .auth-hero h1 {
@@ -34,7 +34,7 @@
   font-size: clamp(3rem, 7vw, 5.8rem);
   line-height: 0.95;
   letter-spacing: -0.065em;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .auth-hero p {
@@ -64,7 +64,7 @@
   background: color-mix(in srgb, var(--color-accent) 10%, transparent);
   color: var(--color-accent-dark);
   font-size: 0.95rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .auth-form-panel {

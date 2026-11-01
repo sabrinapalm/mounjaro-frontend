@@ -39,7 +39,7 @@
 .confirm-signup-card__title {
   color: var(--color-text);
   font-size: 1.6rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
 }
 
@@ -65,7 +65,7 @@
 .confirm-signup-form__label {
   color: var(--color-text);
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .confirm-signup-form__input-wrapper {
@@ -93,7 +93,7 @@
   color: var(--color-text);
   font: inherit;
   font-size: 0.95rem;
-  font-weight: 800;
+  font-weight: 700;
   outline: none;
   transition:
     border-color 0.2s ease,
@@ -126,7 +126,7 @@
   background: color-mix(in srgb, var(--color-danger) 12%, transparent);
   color: var(--color-danger);
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .confirm-signup-card__actions {

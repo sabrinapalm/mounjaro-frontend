@@ -309,7 +309,7 @@ export const BmiRangeChart = ({ weights }: BmiRangeChartProps) => {
                           position: 'top',
                           fill: 'var(--bmi-goal-marker-color)',
                           fontSize: 12,
-                          fontWeight: 800,
+                          fontWeight: 700,
                         }}
                       />
                     )}
@@ -324,7 +324,7 @@ export const BmiRangeChart = ({ weights }: BmiRangeChartProps) => {
                         position: 'top',
                         fill: 'var(--bmi-marker-color)',
                         fontSize: 12,
-                        fontWeight: 800,
+                        fontWeight: 700,
                       }}
                     />
                   </BarChart>

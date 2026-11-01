@@ -24,7 +24,7 @@
 .milestones-card__title {
   color: var(--color-text);
   font-size: 1.35rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
 }
 
@@ -113,7 +113,7 @@
   margin: 0;
   color: var(--color-text);
   font-size: 0.98rem;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.25;
 }
 
@@ -148,7 +148,7 @@
   flex: 0 0 auto;
   color: var(--color-text);
   font-size: 1.05rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .milestones-card__progress-track {
@@ -188,7 +188,7 @@
   margin: 0;
   color: var(--color-text-muted);
   font-size: 0.82rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -197,7 +197,7 @@
   margin: 4px 0 0;
   color: var(--color-text);
   font-size: 1.35rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
 }
 
@@ -301,14 +301,14 @@
 .milestones-card__achievement-title {
   color: var(--color-text);
   font-size: 0.98rem;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.25;
 }
 
 .milestones-card__achievement-status {
   color: var(--color-text-muted);
   font-size: 0.82rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .milestones-card__achievement--completed .milestones-card__achievement-status {

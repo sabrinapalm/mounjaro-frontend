@@ -24,7 +24,7 @@
 .weight-tracker-card__title {
   color: var(--color-text);
   font-size: 1.35rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
 }
 
@@ -50,7 +50,7 @@
   background: color-mix(in srgb, var(--color-danger) 12%, transparent);
   color: var(--color-danger);
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .weight-tracker-card__empty-state {
@@ -101,7 +101,7 @@
   padding: 0 0 8px;
   color: var(--color-text-muted);
   font-size: 0.79rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.055em;
   text-transform: uppercase;
 }
@@ -364,12 +364,12 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
 
 .weight-tracker-card__item--full .weight-tracker-card__date {
   font-size: 0.9rem;
-  font-weight: 750;
+  font-weight: 700;
 }
 
 .weight-tracker-card__item--full .weight-tracker-card__weight {
   font-size: 0.96rem;
-  font-weight: 850;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 

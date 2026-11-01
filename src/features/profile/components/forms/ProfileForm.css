@@ -50,7 +50,7 @@
   margin: 0;
   color: var(--color-primary);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -59,7 +59,7 @@
   margin: 0;
   color: var(--color-text);
   font-size: 1.65rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
 }
 
@@ -90,7 +90,7 @@
   color: var(--color-text-muted);
   text-align: center;
   font-size: 0.82rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .profile-form-card__highlight svg {
@@ -124,7 +124,7 @@
 .profile-form__label {
   color: var(--color-text);
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .profile-form__input {
@@ -138,7 +138,7 @@
   color: var(--color-text);
   font: inherit;
   font-size: 0.95rem;
-  font-weight: 800;
+  font-weight: 700;
   outline: none;
   transition:
     border-color 0.2s ease,
@@ -175,7 +175,7 @@
   right: 16px;
   color: var(--color-text-muted);
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 700;
   transform: translateY(-50%);
   pointer-events: none;
 }
@@ -196,7 +196,7 @@
   background: color-mix(in srgb, var(--color-danger) 12%, transparent);
   color: var(--color-danger);
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .profile-form__actions {
@@ -215,7 +215,7 @@
   width: 100%;
   border-radius: 18px;
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 700;
   cursor: pointer;
   transition:
     transform 0.2s ease,

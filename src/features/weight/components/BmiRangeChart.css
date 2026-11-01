@@ -33,7 +33,7 @@
   margin: 0 0 8px;
   color: var(--color-text-muted);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -41,7 +41,7 @@
 .bmi-range-card__title {
   color: var(--color-text);
   font-size: 1.55rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.045em;
 }
 
@@ -67,14 +67,14 @@
 .bmi-range-card__bmi-value {
   color: var(--color-text);
   font-size: 2rem;
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1;
 }
 
 .bmi-range-card__bmi-label {
   color: var(--color-text-muted);
   font-size: 0.82rem;
-  font-weight: 800;
+  font-weight: 700;
   text-align: right;
 }
 
@@ -145,7 +145,7 @@
   overflow: hidden;
   color: var(--color-text);
   font-size: 0.82rem;
-  font-weight: 850;
+  font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -187,7 +187,7 @@
   margin-top: 8px;
   color: var(--color-text-muted);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.4;
 }
 
@@ -204,7 +204,7 @@
   gap: 8px;
   color: var(--color-text-muted);
   font-size: 0.8rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .bmi-range-card__marker-line {

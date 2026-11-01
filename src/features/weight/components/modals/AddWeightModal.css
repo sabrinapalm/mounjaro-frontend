@@ -78,7 +78,7 @@
 
 .add-weight-modal__title {
   font-size: 1.55rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
 }
 
@@ -108,7 +108,7 @@
 .add-weight-modal__label {
   color: var(--color-text);
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .add-weight-modal__input,
@@ -120,7 +120,7 @@
   color: var(--color-text);
   font: inherit;
   font-size: 0.95rem;
-  font-weight: 800;
+  font-weight: 700;
   outline: none;
   transition:
     border-color 0.2s ease,
@@ -148,7 +148,7 @@
   transform: translateY(-50%);
   color: var(--color-text-muted);
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 700;
   pointer-events: none;
 }
 
@@ -185,7 +185,7 @@
   bottom: 14px;
   color: var(--color-text-muted);
   font-size: 0.8rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .add-weight-modal__error {
@@ -195,7 +195,7 @@
   background: color-mix(in srgb, var(--color-danger) 12%, transparent);
   color: var(--color-danger);
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .add-weight-modal__footer {

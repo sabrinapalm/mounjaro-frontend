@@ -7,7 +7,7 @@
 .time-field__label {
   color: var(--color-text);
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .time-field__control {
@@ -25,7 +25,7 @@
   color: var(--color-text);
   font: inherit;
   font-size: 0.95rem;
-  font-weight: 800;
+  font-weight: 700;
   outline: none;
   cursor: text;
   transition:
@@ -78,7 +78,7 @@
     color: var(--color-text);
     font: inherit;
     font-size: 0.95rem;
-    font-weight: 800;
+    font-weight: 700;
     pointer-events: none;
     transition:
       border-color 0.2s ease,
