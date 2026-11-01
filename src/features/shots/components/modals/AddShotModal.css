@@ -1,22 +1,18 @@
+@reference "../../../../shared/styles/tailwind.css";
+
 .add-shot-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: grid;
-  place-items: center;
-  padding: 24px;
+  @apply fixed inset-0 z-[1000] grid place-items-center p-[24px];
   background: rgba(5, 8, 19, 0.76);
   backdrop-filter: blur(14px);
 }
 
 .add-shot-modal {
-  position: relative;
+  @apply relative;
   width: min(100%, 560px);
   max-height: calc(100dvh - 48px);
-  overflow: auto;
-  padding: 34px;
+  @apply overflow-auto p-[34px];
   border: 1px solid var(--color-border);
-  border-radius: 28px;
+  @apply rounded-[28px];
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--color-surface-soft) 32%, var(--color-surface) 68%),
@@ -26,19 +22,11 @@
 }
 
 .add-shot-modal__close {
-  position: absolute;
-  top: 18px;
-  right: 20px;
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
+  @apply absolute top-[18px] right-[20px] grid place-items-center w-[38px] h-[38px];
   border: 0;
-  border-radius: var(--radius-pill);
+  @apply rounded-[var(--radius-pill)];
   background: transparent;
-  color: var(--color-text-muted);
-  font-size: 2rem;
-  line-height: 1;
+  @apply text-muted-foreground text-[2rem] leading-[1];
   transition:
     background 0.2s ease,
     color 0.2s ease,
@@ -47,81 +35,57 @@
 
 .add-shot-modal__close:hover:not(:disabled) {
   background: var(--color-surface-soft);
-  color: var(--color-text);
+  @apply text-foreground;
   transform: scale(1.04);
 }
 
 .add-shot-modal__close:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
+  @apply cursor-not-allowed opacity-[0.5];
 }
 
 .add-shot-modal__header {
-  display: grid;
-  justify-items: center;
-  gap: 14px;
+  @apply grid justify-items-center gap-[14px];
   padding: 6px 32px 10px;
-  text-align: center;
+  @apply text-center;
 }
 
 .add-shot-modal__icon {
-  display: grid;
-  place-items: center;
-  width: 74px;
-  height: 74px;
-  border-radius: var(--radius-pill);
+  @apply grid place-items-center w-[74px] h-[74px] rounded-[var(--radius-pill)];
   background: color-mix(in srgb, var(--color-primary) 18%, transparent);
-  color: var(--color-primary);
+  @apply text-primary;
   box-shadow: 0 0 36px color-mix(in srgb, var(--color-primary) 18%, transparent);
 }
 
 .add-shot-modal__title {
-  font-size: 1.55rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
+  @apply text-[1.55rem] font-bold tracking-[-0.04em];
 }
 
 .add-shot-modal__description {
-  color: var(--color-text-muted);
-  font-size: 0.95rem;
-  font-weight: 700;
+  @apply text-muted-foreground text-[0.95rem] font-bold;
 }
 
 .add-shot-modal__form {
-  display: grid;
-  gap: 28px;
-  margin-top: 28px;
+  @apply grid gap-[28px] mt-[28px];
 }
 
 .add-shot-modal__row {
-  display: grid;
+  @apply grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 20px;
+  @apply gap-[20px];
 }
 
 .add-shot-modal__field {
-  display: grid;
-  gap: 10px;
+  @apply grid gap-[10px];
 }
 
 .add-shot-modal__label {
-  color: var(--color-text);
-  font-size: 0.9rem;
-  font-weight: 700;
+  @apply text-foreground text-[0.9rem] font-bold;
 }
 
 .add-shot-modal__input,
 .add-shot-modal__select,
 .add-shot-modal__textarea {
-  width: 100%;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  background: var(--color-surface-soft);
-  color: var(--color-text);
-  font: inherit;
-  font-size: 0.95rem;
-  font-weight: 700;
-  outline: none;
+  @apply rounded-[12px] text-[0.95rem];
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -130,7 +94,7 @@
 
 .add-shot-modal__input,
 .add-shot-modal__select {
-  min-height: 58px;
+  @apply min-h-[58px];
   padding: 0 16px;
 }
 
@@ -150,50 +114,42 @@
 
 .add-shot-modal__input-icon-wrapper,
 .add-shot-modal__select-with-unit {
-  position: relative;
+  @apply relative;
 }
 
 .add-shot-modal__field-icon {
-  position: absolute;
-  top: 50%;
-  left: 16px;
-  color: var(--color-text-muted);
+  @apply absolute top-[50%] left-[16px] text-muted-foreground;
   transform: translateY(-50%);
-  pointer-events: none;
+  @apply pointer-events-none;
 }
 
 .add-shot-modal__input--with-icon {
-  padding-left: 48px;
+  @apply pl-[48px];
 }
 
 .add-shot-modal__select--with-unit {
-  padding-right: 72px;
+  @apply pr-[72px];
 }
 
 .add-shot-modal__unit {
-  position: absolute;
-  top: 50%;
-  right: 42px;
+  @apply absolute top-[50%] right-[42px];
   transform: translateY(-50%);
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  font-weight: 700;
-  pointer-events: none;
+  @apply text-muted-foreground text-[0.9rem] font-bold pointer-events-none;
 }
 
 .add-shot-modal__textarea-wrapper {
-  position: relative;
+  @apply relative;
 }
 
 .add-shot-modal__textarea {
-  min-height: 136px;
+  @apply min-h-[136px];
   resize: vertical;
   padding: 16px 16px 42px;
 }
 
 .add-shot-modal__input::placeholder,
 .add-shot-modal__textarea::placeholder {
-  color: var(--color-text-muted);
+  @apply text-muted-foreground;
 }
 
 .add-shot-modal__input:focus,
@@ -206,105 +162,79 @@
 .add-shot-modal__input:disabled,
 .add-shot-modal__select:disabled,
 .add-shot-modal__textarea:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
+  @apply cursor-not-allowed opacity-[0.7];
 }
 
 .add-shot-modal__character-count {
-  position: absolute;
-  right: 16px;
-  bottom: 14px;
-  color: var(--color-text-muted);
-  font-size: 0.8rem;
-  font-weight: 700;
+  @apply absolute right-[16px] bottom-[14px] text-muted-foreground text-[0.8rem] font-bold;
 }
 
 .add-shot-modal__error {
   padding: 12px 14px;
   border: 1px solid color-mix(in srgb, var(--color-danger) 36%, transparent);
-  border-radius: var(--radius-sm);
+  @apply rounded-[var(--radius-sm)];
   background: color-mix(in srgb, var(--color-danger) 12%, transparent);
-  color: var(--color-danger);
-  font-size: 0.9rem;
-  font-weight: 700;
+  @apply text-destructive text-[0.9rem] font-bold;
 }
 
 .add-shot-modal__footer {
-  display: grid;
-  gap: 16px;
+  @apply grid gap-[16px];
 }
 
 .add-shot-modal__cancel {
   justify-self: center;
   border: 0;
   background: transparent;
-  color: var(--color-text-muted);
-  font-size: 0.95rem;
-  font-weight: 700;
+  @apply text-muted-foreground text-[0.95rem] font-bold;
   transition:
     color 0.2s ease,
     transform 0.2s ease;
 }
 
 .add-shot-modal__cancel:hover:not(:disabled) {
-  color: var(--color-text);
+  @apply text-foreground;
   transform: translateY(-1px);
 }
 
 .add-shot-modal__cancel:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
+  @apply cursor-not-allowed opacity-[0.65];
 }
 
 .add-shot-modal__input,
 .add-shot-modal__textarea {
-  width: 100%;
-  min-width: 0;
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
+  @apply min-w-0 rounded-[16px];
   background: var(--color-surface);
-  color: var(--color-text);
   font: inherit;
 }
 
 .add-shot-modal__input {
-  height: 52px;
+  @apply h-[52px];
   padding: 0 16px;
 }
 
 .add-shot-modal__textarea {
   resize: vertical;
-  min-height: 92px;
+  @apply min-h-[92px];
   padding: 14px 16px;
-  line-height: 1.5;
+  @apply leading-[1.5];
 }
 
 .add-shot-modal__fieldset {
-  min-width: 0;
-  margin: 0;
-  padding: 0;
+  @apply min-w-0 m-0 p-0;
   border: 0;
 }
 
 .add-shot-modal__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  @apply flex flex-wrap gap-[10px];
 }
 
 .add-shot-modal__chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 40px;
+  @apply inline-flex items-center gap-[8px] min-h-[40px];
   padding: 9px 12px;
   border: 1px solid var(--color-border);
-  border-radius: 999px;
+  @apply rounded-[999px];
   background: var(--color-surface);
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
+  @apply text-muted-foreground text-[0.9rem] font-bold cursor-pointer;
   transition:
     border-color 160ms ease,
     background 160ms ease,
@@ -315,12 +245,11 @@
 .add-shot-modal__chip:hover {
   transform: translateY(-1px);
   border-color: var(--color-primary);
-  color: var(--color-text);
+  @apply text-foreground;
 }
 
 .add-shot-modal__chip input {
-  width: 16px;
-  height: 16px;
+  @apply w-[16px] h-[16px];
   accent-color: var(--color-primary);
 }
 
@@ -332,38 +261,27 @@
 
 .add-shot-modal__hint {
   align-self: flex-end;
-  color: var(--color-text-muted);
-  font-size: 0.8rem;
-  font-weight: 700;
+  @apply text-muted-foreground text-[0.8rem] font-bold;
 }
 
 .add-shot-modal__fieldset {
-  min-width: 0;
-  margin: 0;
-  padding: 0;
+  @apply min-w-0 m-0 p-0;
   border: 0;
 }
 
 .add-shot-modal__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  @apply flex flex-wrap gap-[10px];
 }
 
 .add-shot-modal__chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 40px;
+  @apply inline-flex items-center justify-center min-h-[40px];
   padding: 9px 14px;
   border: 1px solid var(--color-border);
-  border-radius: 999px;
+  @apply rounded-[999px];
   background: var(--color-surface);
-  color: var(--color-text-muted);
+  @apply text-muted-foreground;
   font: inherit;
-  font-size: 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
+  @apply text-[0.9rem] font-bold cursor-pointer;
   transition:
     border-color 160ms ease,
     background 160ms ease,
@@ -375,13 +293,12 @@
 .add-shot-modal__chip:hover:not(:disabled) {
   transform: translateY(-1px);
   border-color: var(--color-primary);
-  color: var(--color-text);
+  @apply text-foreground;
   box-shadow: var(--shadow-soft);
 }
 
 .add-shot-modal__chip:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
+  @apply cursor-not-allowed opacity-[0.6];
 }
 
 .add-shot-modal__chip--selected {
@@ -396,30 +313,23 @@
 
 .add-shot-modal__helper-text {
   margin: -2px 0 16px;
-  color: var(--color-text-muted);
-  font-size: 0.86rem;
-  font-weight: 700;
-  line-height: 1.45;
+  @apply text-muted-foreground text-[0.86rem] font-bold leading-[1.45];
 }
 
 @media (max-width: 640px) {
   .add-shot-modal-backdrop {
-    display: block;
-    height: 100dvh;
-    padding: 0;
-    overflow: hidden;
+    @apply block h-dvh p-0 overflow-hidden;
   }
 
   .add-shot-modal {
-    width: 100%;
-    height: 100dvh;
+    @apply w-full h-dvh;
     max-height: none;
-    overflow-y: auto;
+    @apply overflow-y-auto;
 
     padding: calc(24px + env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom));
 
     border: 0;
-    border-radius: 0;
+    @apply rounded-none;
     box-shadow: none;
 
     -webkit-overflow-scrolling: touch;
@@ -435,12 +345,11 @@
   }
 
   .add-shot-modal__row {
-    grid-template-columns: 1fr;
+    @apply grid-cols-[1fr];
   }
 
   .add-shot-modal__form {
-    gap: 24px;
-    margin-top: 24px;
+    @apply gap-[24px] mt-[24px];
     padding-bottom: env(safe-area-inset-bottom);
   }
 }

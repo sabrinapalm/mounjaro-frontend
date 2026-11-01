@@ -1,44 +1,34 @@
+@reference "../styles/tailwind.css";
+
 .header {
   background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-surface-soft) 100%);
   border-bottom: 1px solid var(--color-border);
-  position: sticky;
+  @apply sticky;
   padding-top: env(safe-area-inset-top);
-  top: 0;
-  z-index: 1000;
+  @apply top-0 z-[1000];
 }
 
 .header-logo-container {
-  width: 180px;
-  height: 50px;
+  @apply w-[180px] h-[50px];
 }
 
 .header-logo-container img {
-  width: 100%;
-  height: auto;
-  display: flex;
+  @apply w-full h-auto flex;
 }
 
 .header-container {
-  max-width: 1200px;
+  @apply max-w-[1200px];
   margin: 0 auto;
   padding: 16px max(20px, env(safe-area-inset-right)) 16px max(20px, env(safe-area-inset-left));
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @apply flex justify-between items-center;
 }
 
 .header-brand {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  text-align: left;
+  @apply flex items-start flex-col text-left;
 }
 
 .header-logo {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  @apply m-0 text-[1.5rem] font-bold tracking-[-0.5px];
   background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
   -webkit-background-clip: text;
   background-clip: text;
@@ -46,35 +36,27 @@
 }
 
 .header-nav {
-  display: flex;
-  gap: 16px;
-  align-items: center;
+  @apply flex gap-[16px] items-center;
 }
 
 .header-signout {
   padding: 10px 20px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  color: var(--color-text);
-  border-radius: var(--radius-pill);
-  font-weight: 600;
-  cursor: pointer;
+  @apply text-foreground rounded-[var(--radius-pill)] font-semibold cursor-pointer;
   transition:
     background 0.25s ease,
     border-color 0.25s ease,
     color 0.25s ease,
     transform 0.25s ease,
     box-shadow 0.25s ease;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  @apply text-[14px] flex items-center gap-[8px];
 }
 
 .header-signout:hover {
   background: var(--color-primary-soft);
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  @apply text-primary;
   transform: translateY(-1px);
 }
 
@@ -87,19 +69,15 @@
 }
 
 .nav-button {
-  position: relative;
+  @apply relative;
   display: inline-grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  min-width: 42px;
-  padding: 0;
+  @apply place-items-center w-[42px] h-[42px] min-w-[42px] p-0;
   border: 1px solid color-mix(in srgb, var(--color-border) 86%, transparent);
-  border-radius: var(--radius-pill);
+  @apply rounded-[var(--radius-pill)];
   background: color-mix(in srgb, var(--color-surface-soft) 42%, var(--color-surface));
-  color: var(--color-text-muted);
+  @apply text-muted-foreground;
   box-shadow: var(--button-shadow-neutral);
-  cursor: pointer;
+  @apply cursor-pointer;
   outline: none;
   transition:
     transform 0.2s ease,
@@ -113,7 +91,7 @@
   transform: translateY(-1px);
   border-color: color-mix(in srgb, var(--color-primary) 42%, var(--color-border));
   background: var(--color-primary-soft);
-  color: var(--color-primary);
+  @apply text-primary;
   box-shadow: 0 12px 26px color-mix(in srgb, var(--color-primary) 14%, transparent);
 }
 
@@ -127,8 +105,7 @@
 }
 
 .nav-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
+  @apply cursor-not-allowed opacity-[0.55];
   transform: none;
   box-shadow: none;
 }
@@ -141,7 +118,7 @@
 .nav-button--theme:hover {
   border-color: color-mix(in srgb, var(--color-primary) 48%, var(--color-border));
   background: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface));
-  color: var(--color-primary);
+  @apply text-primary;
 }
 
 /* Profile button */
@@ -155,7 +132,7 @@
 .nav-button--signout:hover {
   border-color: color-mix(in srgb, var(--color-danger) 42%, var(--color-border));
   background: color-mix(in srgb, var(--color-danger) 12%, var(--color-surface));
-  color: var(--color-danger);
+  @apply text-destructive;
 }
 
 html[data-theme="dark"] .nav-button {
@@ -173,25 +150,23 @@ html[data-theme="dark"] .nav-button:hover {
   }
 
   .header-logo-container {
-    width: 150px;
-    height: auto;
+    @apply w-[150px] h-auto;
   }
 
   .header-logo {
-    font-size: 1.25rem;
+    @apply text-[1.25rem];
   }
 
   .header-nav {
-    gap: 10px;
+    @apply gap-[10px];
   }
 
   .header-signout {
     padding: 8px 16px;
-    font-size: 13px;
+    @apply text-[13px];
   }
 
   .nav-button {
-    width: 38px;
-    height: 38px;
+    @apply w-[38px] h-[38px];
   }
 }

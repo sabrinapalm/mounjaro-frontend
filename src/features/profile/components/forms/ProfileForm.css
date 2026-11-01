@@ -1,19 +1,14 @@
+@reference "../../../../shared/styles/tailwind.css";
+
 .profile-form-page {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  min-height: 100dvh;
+  @apply grid place-items-center w-full min-h-dvh;
   padding: 32px 16px;
 }
 
 .profile-form-card {
-  display: grid;
-  gap: 26px;
+  @apply grid gap-[26px];
   width: min(100%, 640px);
-  min-width: 0;
-  padding: 34px;
-  border: 1px solid var(--color-border);
-  border-radius: 28px;
+  @apply min-w-0 p-[34px] rounded-[28px];
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--color-surface-soft) 28%, var(--color-surface) 72%),
@@ -23,123 +18,79 @@
 }
 
 .profile-form-card__header {
-  display: grid;
-  justify-items: center;
-  gap: 16px;
-  text-align: center;
+  @apply grid justify-items-center gap-[16px] text-center;
 }
 
 .profile-form-card__icon {
-  display: grid;
-  place-items: center;
-  width: 74px;
-  height: 74px;
-  border-radius: var(--radius-pill);
+  @apply grid place-items-center w-[74px] h-[74px] rounded-[var(--radius-pill)];
   background: color-mix(in srgb, var(--color-primary) 18%, transparent);
-  color: var(--color-primary);
+  @apply text-primary;
   box-shadow: 0 0 36px color-mix(in srgb, var(--color-primary) 18%, transparent);
 }
 
 .profile-form-card__heading {
-  display: grid;
-  justify-items: center;
-  gap: 10px;
+  @apply grid justify-items-center gap-[10px];
 }
 
 .profile-form-card__eyebrow {
-  margin: 0;
-  color: var(--color-primary);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  @apply m-0 text-primary text-[0.78rem] font-bold tracking-[0.1em] uppercase;
 }
 
 .profile-form-card__title {
-  margin: 0;
-  color: var(--color-text);
-  font-size: 1.65rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
+  @apply m-0 text-foreground text-[1.65rem] font-bold tracking-[-0.04em];
 }
 
 .profile-form-card__description {
-  max-width: 500px;
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: 0.95rem;
-  font-weight: 700;
-  line-height: 1.6;
+  @apply max-w-[500px] m-0 text-muted-foreground text-[0.95rem] font-bold leading-[1.6];
 }
 
 .profile-form-card__highlights {
-  display: grid;
+  @apply grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  @apply gap-[12px];
 }
 
 .profile-form-card__highlight {
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-  min-width: 0;
+  @apply grid justify-items-center gap-[8px] min-w-0;
   padding: 14px 10px;
   border: 1px solid var(--color-border);
-  border-radius: 18px;
+  @apply rounded-[18px];
   background: color-mix(in srgb, var(--color-surface-soft) 72%, transparent);
-  color: var(--color-text-muted);
-  text-align: center;
-  font-size: 0.82rem;
-  font-weight: 700;
+  @apply text-muted-foreground text-center text-[0.82rem] font-bold;
 }
 
 .profile-form-card__highlight svg {
-  color: var(--color-primary);
+  @apply text-primary;
 }
 
 .profile-form-card__highlight span {
-  min-width: 0;
-  overflow: hidden;
+  @apply min-w-0 overflow-hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  @apply whitespace-nowrap;
 }
 
 .profile-form {
-  display: grid;
-  gap: 24px;
+  @apply grid gap-[24px];
 }
 
 .profile-form__grid {
-  display: grid;
+  @apply grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
+  @apply gap-[20px];
 }
 
 .profile-form__field {
-  display: grid;
-  gap: 10px;
-  min-width: 0;
+  @apply grid gap-[10px] min-w-0;
 }
 
 .profile-form__label {
-  color: var(--color-text);
-  font-size: 0.9rem;
-  font-weight: 700;
+  @apply text-foreground text-[0.9rem] font-bold;
 }
 
 .profile-form__input {
-  width: 100%;
-  min-width: 0;
-  min-height: 58px;
+  @apply min-w-0 min-h-[58px];
   padding: 0 16px;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  background: var(--color-surface-soft);
-  color: var(--color-text);
-  font: inherit;
-  font-size: 0.95rem;
-  font-weight: 700;
-  outline: none;
+  @apply rounded-[12px] text-[0.95rem];
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -147,7 +98,7 @@
 }
 
 .profile-form__input::placeholder {
-  color: var(--color-text-muted);
+  @apply text-muted-foreground;
 }
 
 .profile-form__input:focus {
@@ -156,67 +107,42 @@
 }
 
 .profile-form__input:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
+  @apply cursor-not-allowed opacity-[0.7];
 }
 
 .profile-form__input-with-unit {
-  position: relative;
-  min-width: 0;
+  @apply relative min-w-0;
 }
 
 .profile-form__input--with-unit {
-  padding-right: 58px;
+  @apply pr-[58px];
 }
 
 .profile-form__unit {
-  position: absolute;
-  top: 50%;
-  right: 16px;
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  font-weight: 700;
+  @apply absolute top-[50%] right-[16px] text-muted-foreground text-[0.9rem] font-bold;
   transform: translateY(-50%);
-  pointer-events: none;
+  @apply pointer-events-none;
 }
 
 .profile-form__hint {
   margin: -6px 0 0;
-  color: var(--color-text-muted);
-  font-size: 0.86rem;
-  font-weight: 700;
-  line-height: 1.5;
-  text-align: center;
+  @apply text-muted-foreground text-[0.86rem] font-bold leading-[1.5] text-center;
 }
 
 .profile-form__error {
   padding: 12px 14px;
   border: 1px solid color-mix(in srgb, var(--color-danger) 36%, transparent);
-  border-radius: var(--radius-sm);
+  @apply rounded-[var(--radius-sm)];
   background: color-mix(in srgb, var(--color-danger) 12%, transparent);
-  color: var(--color-danger);
-  font-size: 0.9rem;
-  font-weight: 700;
+  @apply text-destructive text-[0.9rem] font-bold;
 }
 
 .profile-form__actions {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-  margin-top: 4px;
+  @apply grid grid-cols-[1fr] gap-[14px] mt-[4px];
 }
 
 .profile-form__button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-height: 58px;
-  width: 100%;
-  border-radius: 18px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
+  @apply inline-flex items-center justify-center gap-[10px] min-h-[58px] w-full rounded-[18px] text-[1rem] font-bold cursor-pointer;
   transition:
     transform 0.2s ease,
     opacity 0.2s ease,
@@ -235,8 +161,7 @@
 }
 
 .profile-form__button:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
+  @apply cursor-not-allowed opacity-[0.65];
   transform: none;
   box-shadow: none;
 }
@@ -259,36 +184,35 @@
   }
 
   .profile-form-card {
-    gap: 22px;
+    @apply gap-[22px];
     padding: 30px 20px 24px;
-    border-radius: 26px;
+    @apply rounded-[26px];
   }
 
   .profile-form-card__title {
-    font-size: 1.45rem;
+    @apply text-[1.45rem];
   }
 
   .profile-form-card__description {
-    font-size: 0.9rem;
+    @apply text-[0.9rem];
   }
 
   .profile-form-card__highlights {
-    grid-template-columns: 1fr;
+    @apply grid-cols-[1fr];
   }
 
   .profile-form-card__highlight {
-    display: flex;
-    justify-content: center;
+    @apply flex justify-center;
   }
 
   .profile-form__grid {
-    grid-template-columns: 1fr;
+    @apply grid-cols-[1fr];
   }
 }
 
 @media (max-width: 420px) {
   .profile-form-page {
-    padding-inline: 12px;
+    @apply px-[12px];
   }
 
   .profile-form-card {

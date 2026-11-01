@@ -1,6 +1,6 @@
 import { LuPlus } from 'react-icons/lu';
-import { Button } from '../../shared/components/Button';
 import { PageHeader } from '../../shared/components/PageHeader';
+import { PageActionButton } from '../../shared/components/pageActionButton';
 import type { CreateWeightInput, WeightEntry } from '../../shared/types';
 import { WeightStatsCards } from './components/cards/WeightStatsCards';
 import { WeightTracker } from './components/WeightTracker';
@@ -23,14 +23,9 @@ export const WeightPage = ({ weights, onWeightAdded, onDeleteWeight }: WeightPag
         title='Your weight'
         description='Track your progress over time.'
         action={
-          <Button
-            icon={<LuPlus />}
-            variant='outline'
-            color='secondary'
-            onClick={addWeightModal.openModal}
-          >
+          <PageActionButton icon={<LuPlus />} onClick={addWeightModal.openModal}>
             Add Weight
-          </Button>
+          </PageActionButton>
         }
       />
 

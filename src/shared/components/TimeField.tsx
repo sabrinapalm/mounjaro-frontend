@@ -1,4 +1,5 @@
 import { FiClock } from 'react-icons/fi';
+import { Label } from './ui/label';
 import './TimeField.css';
 
 interface TimeFieldProps {
@@ -28,9 +29,9 @@ export const TimeField = ({
 }: TimeFieldProps) => {
   return (
     <div className='time-field'>
-      <label className='time-field__label' htmlFor={id}>
+      <Label className='time-field__label' htmlFor={id}>
         {label}
-      </label>
+      </Label>
 
       <div className='time-field__control'>
         <div className='time-field__mobile-display' aria-hidden='true'>

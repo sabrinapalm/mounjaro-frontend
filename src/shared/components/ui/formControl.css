@@ -1,0 +1,10 @@
+@reference "../../styles/tailwind.css";
+
+/* Shared native-control surface; dimensions and focus treatments stay feature-owned. */
+.tracksy-form-control {
+  font: inherit;
+  @apply w-full font-bold text-foreground;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-soft);
+  outline: none;
+}

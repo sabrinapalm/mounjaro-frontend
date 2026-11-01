@@ -1,6 +1,9 @@
 import { type FormEvent, useState } from 'react';
 import { FiArrowLeft, FiMail, FiUserPlus } from 'react-icons/fi';
 import { RiLockPasswordLine } from 'react-icons/ri';
+import { Card } from '../../../../shared/components/ui/card';
+import { Input } from '../../../../shared/components/ui/input';
+import { Label } from '../../../../shared/components/ui/label';
 import './SignUpForm.css';
 import { cognitoAuth } from '../../../../shared/auth/cognitoAuth';
 import { Button } from '../../../../shared/components/Button';
@@ -45,92 +48,94 @@ export const SignUpForm = ({ onSignedUp, onSwitchToLogin }: SignUpFormProps) => 
   };
 
   return (
-    <section className='signup-card'>
-      <header className='signup-card__header'>
-        <div className='signup-card__icon' aria-hidden='true'>
-          <FiUserPlus size={30} />
-        </div>
-
-        <div className='signup-card__heading'>
-          <h2 className='signup-card__title'>Create Account</h2>
-
-          <p className='signup-card__description'>
-            Create your Tracksy account to start tracking your shots and progress.
-          </p>
-        </div>
-      </header>
-
-      <form onSubmit={handleSubmit} className='signup-form'>
-        <label className='signup-form__field' htmlFor='signup-email'>
-          <span className='signup-form__label'>Email</span>
-
-          <div className='signup-form__input-wrapper'>
-            <FiMail className='signup-form__input-icon' size={20} />
-
-            <input
-              id='signup-email'
-              className='signup-form__input signup-form__input--with-icon'
-              type='email'
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-                setError(null);
-              }}
-              placeholder='you@example.com'
-              autoComplete='email'
-              disabled={loading}
-              required
-            />
+    <Card asChild appearance='custom'>
+      <section className='signup-card'>
+        <header className='signup-card__header'>
+          <div className='signup-card__icon' aria-hidden='true'>
+            <FiUserPlus size={30} />
           </div>
-        </label>
 
-        <label className='signup-form__field' htmlFor='signup-password'>
-          <span className='signup-form__label'>Password</span>
+          <div className='signup-card__heading'>
+            <h2 className='signup-card__title'>Create Account</h2>
 
-          <div className='signup-form__input-wrapper'>
-            <RiLockPasswordLine className='signup-form__input-icon' size={20} />
-
-            <input
-              id='signup-password'
-              className='signup-form__input signup-form__input--with-icon'
-              type='password'
-              value={password}
-              onChange={(event) => {
-                setPassword(event.target.value);
-                setError(null);
-              }}
-              placeholder='Choose a secure password'
-              autoComplete='new-password'
-              disabled={loading}
-              required
-            />
+            <p className='signup-card__description'>
+              Create your Tracksy account to start tracking your shots and progress.
+            </p>
           </div>
-        </label>
+        </header>
 
-        {error ? <p className='signup-form__error'>{error}</p> : null}
+        <form onSubmit={handleSubmit} className='signup-form'>
+          <Label className='signup-form__field' htmlFor='signup-email'>
+            <span className='signup-form__label'>Email</span>
 
-        <Button
-          size='lg'
-          variant='solid'
-          type='submit'
-          disabled={loading}
-          icon={<FiUserPlus size={20} />}
-        >
-          {loading ? 'Creating account…' : 'Sign Up'}
-        </Button>
-      </form>
+            <div className='signup-form__input-wrapper'>
+              <FiMail className='signup-form__input-icon' size={20} />
 
-      <footer className='signup-card__actions'>
-        <Button
-          variant='text'
-          color='muted'
-          onClick={onSwitchToLogin}
-          disabled={loading}
-          icon={<FiArrowLeft size={18} />}
-        >
-          Back to sign in
-        </Button>
-      </footer>
-    </section>
+              <Input
+                id='signup-email'
+                className='signup-form__input signup-form__input--with-icon'
+                type='email'
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  setError(null);
+                }}
+                placeholder='you@example.com'
+                autoComplete='email'
+                disabled={loading}
+                required
+              />
+            </div>
+          </Label>
+
+          <Label className='signup-form__field' htmlFor='signup-password'>
+            <span className='signup-form__label'>Password</span>
+
+            <div className='signup-form__input-wrapper'>
+              <RiLockPasswordLine className='signup-form__input-icon' size={20} />
+
+              <Input
+                id='signup-password'
+                className='signup-form__input signup-form__input--with-icon'
+                type='password'
+                value={password}
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                  setError(null);
+                }}
+                placeholder='Choose a secure password'
+                autoComplete='new-password'
+                disabled={loading}
+                required
+              />
+            </div>
+          </Label>
+
+          {error ? <p className='signup-form__error'>{error}</p> : null}
+
+          <Button
+            size='lg'
+            variant='solid'
+            type='submit'
+            disabled={loading}
+            icon={<FiUserPlus size={20} />}
+          >
+            {loading ? 'Creating account…' : 'Sign Up'}
+          </Button>
+        </form>
+
+        <footer className='signup-card__actions'>
+          <Button
+            variant='text'
+            color='muted'
+            onClick={onSwitchToLogin}
+            disabled={loading}
+            icon={<FiArrowLeft size={18} />}
+          >
+            Back to sign in
+          </Button>
+        </footer>
+      </section>
+    </Card>
   );
 };

@@ -1,6 +1,5 @@
-import { LuCalendarClock, LuMapPin, LuPlus, LuSyringe } from 'react-icons/lu';
+import { LuCalendarClock, LuMapPin, LuSyringe } from 'react-icons/lu';
 import { useIntl } from 'react-intl';
-import { Button } from '../../../../shared/components/Button';
 import { messages } from '../../../../shared/i18n/messages';
 import type { ShotEntry } from '../../../../shared/types';
 import { formatDateLabel } from '../../../../shared/utils/dateHelpers';
@@ -10,10 +9,9 @@ import './ShotStatsCards.css';
 
 type ShotStatsCardsProps = {
   shots: ShotEntry[];
-  onAddShot: () => void;
 };
 
-export const ShotStatsCards = ({ shots, onAddShot }: ShotStatsCardsProps) => {
+export const ShotStatsCards = ({ shots }: ShotStatsCardsProps) => {
   const { formatMessage } = useIntl();
   const {
     hasShots,
@@ -60,10 +58,6 @@ export const ShotStatsCards = ({ shots, onAddShot }: ShotStatsCardsProps) => {
             <p className='shot-overview__meta'>No injections recorded</p>
           )}
         </div>
-
-        <Button icon={<LuPlus size={20} />} onClick={onAddShot}>
-          Add shot
-        </Button>
       </div>
 
       <dl className='shot-overview__supporting'>

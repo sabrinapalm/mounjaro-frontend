@@ -1,31 +1,26 @@
+@reference "../styles/tailwind.css";
+
 .time-field {
-  display: grid;
-  gap: 10px;
-  min-width: 0;
+  @apply grid gap-[10px] min-w-0;
 }
 
 .time-field__label {
-  color: var(--color-text);
-  font-size: 0.9rem;
-  font-weight: 700;
+  @apply text-foreground text-[0.9rem] font-bold;
 }
 
 .time-field__control {
-  position: relative;
-  min-width: 0;
+  @apply relative min-w-0;
 }
 
 .time-field__native-input {
-  width: 100%;
-  min-height: 58px;
+  @apply w-full min-h-[58px];
   padding: 0 16px;
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  @apply rounded-[12px];
   background: var(--color-surface-soft);
-  color: var(--color-text);
+  @apply text-foreground;
   font: inherit;
-  font-size: 0.95rem;
-  font-weight: 700;
+  @apply text-[0.95rem] font-bold;
   outline: none;
   cursor: text;
   transition:
@@ -44,42 +39,31 @@
 }
 
 .time-field__native-input:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
+  @apply cursor-not-allowed opacity-[0.7];
 }
 
 .time-field__mobile-display {
-  display: none;
+  @apply hidden;
 }
 
 .time-field__icon {
-  flex: 0 0 auto;
-  color: var(--color-text-muted);
+  @apply flex-none text-muted-foreground;
 }
 
 @media (hover: none), (pointer: coarse) {
   .time-field__control {
-    min-height: 58px;
+    @apply min-h-[58px];
   }
 
   .time-field__mobile-display {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    width: 100%;
-    min-height: 58px;
+    @apply absolute inset-0 z-[1] inline-flex items-center gap-[14px] w-full min-h-[58px];
     padding: 0 16px;
     border: 1px solid var(--color-border);
-    border-radius: 12px;
+    @apply rounded-[12px];
     background: var(--color-surface-soft);
-    color: var(--color-text);
+    @apply text-foreground;
     font: inherit;
-    font-size: 0.95rem;
-    font-weight: 700;
-    pointer-events: none;
+    @apply text-[0.95rem] font-bold pointer-events-none;
     transition:
       border-color 0.2s ease,
       box-shadow 0.2s ease,
@@ -87,16 +71,9 @@
   }
 
   .time-field__native-input {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    width: 100%;
-    height: 100%;
-    min-height: 58px;
-    padding: 0;
+    @apply absolute inset-0 z-[2] w-full h-full min-h-[58px] p-0;
     border: 0;
-    opacity: 0;
-    cursor: pointer;
+    @apply opacity-0 cursor-pointer;
   }
 
   .time-field__control:has(.time-field__native-input:focus-visible) .time-field__mobile-display {
@@ -105,7 +82,6 @@
   }
 
   .time-field__control:has(.time-field__native-input:disabled) .time-field__mobile-display {
-    cursor: not-allowed;
-    opacity: 0.7;
+    @apply cursor-not-allowed opacity-[0.7];
   }
 }

@@ -1,5 +1,7 @@
 import { type FormEvent, useEffect, useState } from 'react';
 import { LuGoal } from 'react-icons/lu';
+import { Input } from '../../../../shared/components/ui/input';
+import { Label } from '../../../../shared/components/ui/label';
 import { useUnitSettings } from '../../../../shared/hooks/useUnitSettings';
 import { useProfileContext } from '../../../profile';
 import './EditGoalWeightModal.css';
@@ -137,11 +139,11 @@ const EditGoalWeightModalContent = ({
         </header>
 
         <form className='edit-goal-modal__form' onSubmit={handleSubmit}>
-          <label className='edit-goal-modal__field' htmlFor='goal-weight'>
+          <Label className='edit-goal-modal__field' htmlFor='goal-weight'>
             <span className='edit-goal-modal__label'>Goal weight</span>
 
             <div className='edit-goal-modal__input-with-unit'>
-              <input
+              <Input
                 id='goal-weight'
                 className='edit-goal-modal__input edit-goal-modal__input--with-unit'
                 type='number'
@@ -159,7 +161,7 @@ const EditGoalWeightModalContent = ({
 
               <span className='edit-goal-modal__unit'>{weightUnit}</span>
             </div>
-          </label>
+          </Label>
 
           {(localError || error) && <p className='edit-goal-modal__error'>{localError || error}</p>}
 

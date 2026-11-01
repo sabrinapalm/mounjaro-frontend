@@ -2,6 +2,10 @@ import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { FiMail, FiSave, FiSettings, FiTarget, FiUser } from 'react-icons/fi';
 import { cognitoAuth } from '../../shared/auth/cognitoAuth';
+import { Card } from '../../shared/components/ui/card';
+import { Input } from '../../shared/components/ui/input';
+import { Label } from '../../shared/components/ui/label';
+import { NativeSelect } from '../../shared/components/ui/nativeSelect';
 import { useUnitSettings } from '../../shared/hooks/useUnitSettings';
 import type { ProfileFormValues, UnitSystem, UserProfile } from '../../shared/types';
 import { useUpdateProfile } from './hooks/useProfileQuery';
@@ -143,187 +147,193 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
         description='Manage your personal details, account information and progress targets.'
       />
       <form className='profile-settings-page__grid' onSubmit={handleSubmit}>
-        <section className='profile-settings-card'>
-          <header className='profile-settings-card__header'>
-            <div className='profile-settings-card__icon' aria-hidden='true'>
-              <FiUser size={22} />
-            </div>
-
-            <div>
-              <h2>Personal details</h2>
-              <p>Used to personalize your dashboard.</p>
-            </div>
-          </header>
-
-          <div className='profile-settings-card__content'>
-            <label className='profile-settings-field' htmlFor='profile-settings-display-name'>
-              <span className='profile-settings-field__label'>Display name</span>
-
-              <input
-                id='profile-settings-display-name'
-                className='profile-settings-field__input'
-                value={displayName}
-                onChange={(event) => {
-                  setDisplayName(event.target.value);
-                  setError(null);
-                  setSuccessMessage(null);
-                }}
-                placeholder='John Doe'
-                autoComplete='name'
-                disabled={isSaving}
-                required
-              />
-            </label>
-
-            <label className='profile-settings-field' htmlFor='profile-settings-unit-system'>
-              <span className='profile-settings-field__label'>Unit system</span>
-
-              <div className='profile-settings-field__select-wrapper'>
-                <FiSettings className='profile-settings-field__select-icon' size={18} />
-
-                <select
-                  id='profile-settings-unit-system'
-                  className='profile-settings-field__input profile-settings-field__input--with-icon'
-                  value={unitSystem}
-                  onChange={(event) => {
-                    handleUnitSystemChange(event.target.value as UnitSystem);
-                    setError(null);
-                    setSuccessMessage(null);
-                  }}
-                  disabled={isSaving}
-                >
-                  <option value='metric'>Metric — kg, cm</option>
-                  <option value='imperial'>Imperial — lb, in</option>
-                </select>
+        <Card asChild appearance='custom'>
+          <section className='profile-settings-card'>
+            <header className='profile-settings-card__header'>
+              <div className='profile-settings-card__icon' aria-hidden='true'>
+                <FiUser size={22} />
               </div>
-            </label>
 
-            <label className='profile-settings-field' htmlFor='profile-settings-height'>
-              <span className='profile-settings-field__label'>Height</span>
+              <div>
+                <h2>Personal details</h2>
+                <p>Used to personalize your dashboard.</p>
+              </div>
+            </header>
 
-              <div className='profile-settings-field__input-with-unit'>
-                <input
-                  id='profile-settings-height'
-                  className='profile-settings-field__input profile-settings-field__input--with-unit'
-                  type='number'
-                  step='1'
-                  min='1'
-                  value={height}
+            <div className='profile-settings-card__content'>
+              <Label className='profile-settings-field' htmlFor='profile-settings-display-name'>
+                <span className='profile-settings-field__label'>Display name</span>
+
+                <Input
+                  id='profile-settings-display-name'
+                  className='profile-settings-field__input'
+                  value={displayName}
                   onChange={(event) => {
-                    setHeight(event.target.value);
+                    setDisplayName(event.target.value);
                     setError(null);
                     setSuccessMessage(null);
                   }}
-                  placeholder={unitSystem === 'metric' ? '165' : '65'}
+                  placeholder='John Doe'
+                  autoComplete='name'
                   disabled={isSaving}
                   required
                 />
+              </Label>
 
-                <span className='profile-settings-field__unit'>{heightUnit}</span>
-              </div>
-            </label>
-          </div>
-        </section>
+              <Label className='profile-settings-field' htmlFor='profile-settings-unit-system'>
+                <span className='profile-settings-field__label'>Unit system</span>
 
-        <section className='profile-settings-card'>
-          <header className='profile-settings-card__header'>
-            <div
-              className='profile-settings-card__icon profile-settings-card__icon--target'
-              aria-hidden='true'
-            >
-              <FiTarget size={22} />
-            </div>
+                <div className='profile-settings-field__select-wrapper'>
+                  <FiSettings className='profile-settings-field__select-icon' size={18} />
 
-            <div>
-              <h2>Weight goals</h2>
-              <p>These values power your progress and milestones.</p>
-            </div>
-          </header>
-
-          <div className='profile-settings-card__content'>
-            <div className='profile-settings-card__two-column'>
-              <label className='profile-settings-field' htmlFor='profile-settings-start-weight'>
-                <span className='profile-settings-field__label'>Start weight</span>
-
-                <div className='profile-settings-field__input-with-unit'>
-                  <input
-                    id='profile-settings-start-weight'
-                    className='profile-settings-field__input profile-settings-field__input--with-unit'
-                    type='number'
-                    step='0.1'
-                    min='1'
-                    value={startWeight}
+                  <NativeSelect
+                    id='profile-settings-unit-system'
+                    className='profile-settings-field__input profile-settings-field__input--with-icon'
+                    value={unitSystem}
                     onChange={(event) => {
-                      setStartWeight(event.target.value);
+                      handleUnitSystemChange(event.target.value as UnitSystem);
                       setError(null);
                       setSuccessMessage(null);
                     }}
-                    placeholder={unitSystem === 'metric' ? '100' : '220'}
+                    disabled={isSaving}
+                  >
+                    <option value='metric'>Metric — kg, cm</option>
+                    <option value='imperial'>Imperial — lb, in</option>
+                  </NativeSelect>
+                </div>
+              </Label>
+
+              <Label className='profile-settings-field' htmlFor='profile-settings-height'>
+                <span className='profile-settings-field__label'>Height</span>
+
+                <div className='profile-settings-field__input-with-unit'>
+                  <Input
+                    id='profile-settings-height'
+                    className='profile-settings-field__input profile-settings-field__input--with-unit'
+                    type='number'
+                    step='1'
+                    min='1'
+                    value={height}
+                    onChange={(event) => {
+                      setHeight(event.target.value);
+                      setError(null);
+                      setSuccessMessage(null);
+                    }}
+                    placeholder={unitSystem === 'metric' ? '165' : '65'}
                     disabled={isSaving}
                     required
                   />
 
-                  <span className='profile-settings-field__unit'>{weightUnit}</span>
+                  <span className='profile-settings-field__unit'>{heightUnit}</span>
                 </div>
-              </label>
-
-              <label className='profile-settings-field' htmlFor='profile-settings-goal-weight'>
-                <span className='profile-settings-field__label'>Goal weight</span>
-
-                <div className='profile-settings-field__input-with-unit'>
-                  <input
-                    id='profile-settings-goal-weight'
-                    className='profile-settings-field__input profile-settings-field__input--with-unit'
-                    type='number'
-                    step='0.1'
-                    min='1'
-                    value={goalWeight}
-                    onChange={(event) => {
-                      setGoalWeight(event.target.value);
-                      setError(null);
-                      setSuccessMessage(null);
-                    }}
-                    placeholder={unitSystem === 'metric' ? '65' : '143'}
-                    disabled={isSaving}
-                    required
-                  />
-
-                  <span className='profile-settings-field__unit'>{weightUnit}</span>
-                </div>
-              </label>
+              </Label>
             </div>
-          </div>
-        </section>
+          </section>
+        </Card>
 
-        <section className='profile-settings-card'>
-          <header className='profile-settings-card__header'>
-            <div
-              className='profile-settings-card__icon profile-settings-card__icon--account'
-              aria-hidden='true'
-            >
-              <FiMail size={22} />
-            </div>
-
-            <div>
-              <h2>Account</h2>
-              <p>Your login details are managed separately from your profile.</p>
-            </div>
-          </header>
-
-          <div className='profile-settings-card__content'>
-            <div className='profile-settings-readonly-field'>
-              <span className='profile-settings-field__label'>Email address</span>
-
-              <div className='profile-settings-readonly-field__value'>
-                {isAccountEmailLoading ? 'Loading email…' : accountEmail || 'Email unavailable'}
+        <Card asChild appearance='custom'>
+          <section className='profile-settings-card'>
+            <header className='profile-settings-card__header'>
+              <div
+                className='profile-settings-card__icon profile-settings-card__icon--target'
+                aria-hidden='true'
+              >
+                <FiTarget size={22} />
               </div>
 
-              <p className='profile-settings-readonly-field__hint'>
-                Email changes are not available. This address is used for signing in to Tracksy.
-              </p>
+              <div>
+                <h2>Weight goals</h2>
+                <p>These values power your progress and milestones.</p>
+              </div>
+            </header>
+
+            <div className='profile-settings-card__content'>
+              <div className='profile-settings-card__two-column'>
+                <Label className='profile-settings-field' htmlFor='profile-settings-start-weight'>
+                  <span className='profile-settings-field__label'>Start weight</span>
+
+                  <div className='profile-settings-field__input-with-unit'>
+                    <Input
+                      id='profile-settings-start-weight'
+                      className='profile-settings-field__input profile-settings-field__input--with-unit'
+                      type='number'
+                      step='0.1'
+                      min='1'
+                      value={startWeight}
+                      onChange={(event) => {
+                        setStartWeight(event.target.value);
+                        setError(null);
+                        setSuccessMessage(null);
+                      }}
+                      placeholder={unitSystem === 'metric' ? '100' : '220'}
+                      disabled={isSaving}
+                      required
+                    />
+
+                    <span className='profile-settings-field__unit'>{weightUnit}</span>
+                  </div>
+                </Label>
+
+                <Label className='profile-settings-field' htmlFor='profile-settings-goal-weight'>
+                  <span className='profile-settings-field__label'>Goal weight</span>
+
+                  <div className='profile-settings-field__input-with-unit'>
+                    <Input
+                      id='profile-settings-goal-weight'
+                      className='profile-settings-field__input profile-settings-field__input--with-unit'
+                      type='number'
+                      step='0.1'
+                      min='1'
+                      value={goalWeight}
+                      onChange={(event) => {
+                        setGoalWeight(event.target.value);
+                        setError(null);
+                        setSuccessMessage(null);
+                      }}
+                      placeholder={unitSystem === 'metric' ? '65' : '143'}
+                      disabled={isSaving}
+                      required
+                    />
+
+                    <span className='profile-settings-field__unit'>{weightUnit}</span>
+                  </div>
+                </Label>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </Card>
+
+        <Card asChild appearance='custom'>
+          <section className='profile-settings-card'>
+            <header className='profile-settings-card__header'>
+              <div
+                className='profile-settings-card__icon profile-settings-card__icon--account'
+                aria-hidden='true'
+              >
+                <FiMail size={22} />
+              </div>
+
+              <div>
+                <h2>Account</h2>
+                <p>Your login details are managed separately from your profile.</p>
+              </div>
+            </header>
+
+            <div className='profile-settings-card__content'>
+              <div className='profile-settings-readonly-field'>
+                <span className='profile-settings-field__label'>Email address</span>
+
+                <div className='profile-settings-readonly-field__value'>
+                  {isAccountEmailLoading ? 'Loading email…' : accountEmail || 'Email unavailable'}
+                </div>
+
+                <p className='profile-settings-readonly-field__hint'>
+                  Email changes are not available. This address is used for signing in to Tracksy.
+                </p>
+              </div>
+            </div>
+          </section>
+        </Card>
 
         {(error || successMessage) && (
           <div

@@ -1,22 +1,16 @@
+@reference "../../styles/tailwind.css";
+
 .button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: auto;
+  @apply inline-flex items-center justify-center gap-[10px] w-auto;
   border: 0;
-  border-radius: 14px;
+  @apply rounded-[14px];
   font-family: inherit;
-  font-weight: 700;
-  line-height: 1;
-  white-space: nowrap;
-  text-decoration: none;
-  cursor: pointer;
+  @apply font-bold leading-[1] whitespace-nowrap no-underline cursor-pointer;
   outline: none;
-  user-select: none;
+  @apply select-none;
   -webkit-tap-highlight-color: transparent;
   padding: 10px 18px;
-  font-size: 1rem;
+  @apply text-[1rem];
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
@@ -26,7 +20,7 @@
 }
 
 .button:disabled {
-  opacity: 0.62;
+  @apply opacity-[0.62];
   transform: none;
   box-shadow: none;
 }
@@ -36,46 +30,37 @@
 }
 
 .button--full-width {
-  width: 100%;
+  @apply w-full;
 }
 
 .button--sm {
-  min-height: 38px;
+  @apply min-h-[38px];
   padding: 0 16px;
-  font-size: 0.875rem;
+  @apply text-[0.875rem];
 }
 
 .button--md {
-  min-height: 46px;
+  @apply min-h-[46px];
   padding: 0 22px;
-  font-size: 0.95rem;
+  @apply text-[0.95rem];
 }
 
 .button--lg {
-  min-height: 60px;
+  @apply min-h-[60px];
   padding: 0 26px;
-  border-radius: 18px;
-  font-size: 1rem;
+  @apply rounded-[18px] text-[1rem];
 }
 
 .button__content {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
+  @apply inline-flex items-center justify-center min-w-0;
 }
 
 .button__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: 1.1em;
+  @apply inline-flex items-center justify-center shrink-0 text-[1.1em];
 }
 
 .button__icon svg {
-  width: 1.15em;
-  height: 1.15em;
+  @apply w-[1.15em] h-[1.15em];
 }
 
 /* =========================
@@ -95,7 +80,7 @@
 
 .button--solid:hover:not(:disabled) {
   transform: translateY(-1px);
-  opacity: 0.96;
+  @apply opacity-[0.96];
   box-shadow: var(--button-shadow-hover);
 }
 
@@ -206,15 +191,14 @@
    ========================= */
 
 .button--loading {
-  pointer-events: none;
+  @apply pointer-events-none;
 }
 
 .button__spinner {
-  width: 1.1em;
-  height: 1.1em;
+  @apply w-[1.1em] h-[1.1em];
   border: 2px solid currentColor;
   border-right-color: transparent;
-  border-radius: 999px;
+  @apply rounded-[999px];
   animation: button-spinner 0.7s linear infinite;
 }
 
@@ -226,7 +210,7 @@
 
 @media (max-width: 680px) {
   .button {
-    width: 100%;
+    @apply w-full;
   }
 }
 

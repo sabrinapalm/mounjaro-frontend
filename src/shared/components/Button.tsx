@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
-import './Button.css';
+import { Button as ButtonPrimitive } from './ui/button';
 
 type ButtonVariant = 'solid' | 'outline' | 'text';
 type ButtonColor = 'primary' | 'secondary' | 'muted' | 'danger';
@@ -29,22 +29,20 @@ export const Button = ({
   type = 'button',
   ...props
 }: ButtonProps) => {
-  const classNames = [
-    'button',
-    `button--${variant}`,
-    `button--${color}`,
-    `button--${size}`,
-    fullWidth ? 'button--full-width' : '',
-    isLoading ? 'button--loading' : '',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
-
   const isDisabled = disabled || isLoading;
 
   return (
-    <button className={classNames} type={type} disabled={isDisabled} {...props}>
+    <ButtonPrimitive
+      className={className}
+      variant={variant}
+      color={color}
+      size={size}
+      fullWidth={fullWidth}
+      isLoading={isLoading}
+      type={type}
+      disabled={isDisabled}
+      {...props}
+    >
       {isLoading ? (
         <span className='button__spinner' aria-hidden='true' />
       ) : (
@@ -63,6 +61,6 @@ export const Button = ({
           {icon}
         </span>
       )}
-    </button>
+    </ButtonPrimitive>
   );
 };

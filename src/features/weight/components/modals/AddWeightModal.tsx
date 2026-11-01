@@ -1,5 +1,7 @@
 import { type FormEvent, useState } from 'react';
 import { FiActivity } from 'react-icons/fi';
+import { Input } from '../../../../shared/components/ui/input';
+import { Label } from '../../../../shared/components/ui/label';
 import { useUnitSettings } from '../../../../shared/hooks/useUnitSettings';
 import type { CreateWeightInput } from '../../../../shared/types';
 import {
@@ -143,11 +145,11 @@ export const AddWeightModal = ({
             />
           </div>
 
-          <label className='add-weight-modal__field' htmlFor='weight-input'>
+          <Label className='add-weight-modal__field' htmlFor='weight-input'>
             <span className='add-weight-modal__label'>Weight</span>
 
             <div className='add-weight-modal__input-with-unit'>
-              <input
+              <Input
                 id='weight-input'
                 className='add-weight-modal__input add-weight-modal__input--with-unit'
                 type='number'
@@ -162,7 +164,7 @@ export const AddWeightModal = ({
 
               <span className='add-weight-modal__unit'>{weightUnit}</span>
             </div>
-          </label>
+          </Label>
 
           {(localError || error) && (
             <p className='add-weight-modal__error'>{localError || error}</p>

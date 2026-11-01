@@ -1,5 +1,6 @@
 import { LuArrowDownRight, LuArrowRight, LuScale, LuSyringe, LuTrophy } from 'react-icons/lu';
-import { Button } from '../../../shared/components/Button';
+import { PageActionButton } from '../../../shared/components/pageActionButton';
+import { Card } from '../../../shared/components/ui/card';
 import { useUnitSettings } from '../../../shared/hooks/useUnitSettings';
 import type { CreateWeightInput, UserProfile, WeightEntry } from '../../../shared/types';
 import { formatDateLabel } from '../../../shared/utils/dateHelpers';
@@ -70,68 +71,67 @@ export const DashboardOverview = ({
         </div>
         <div className='dashboard-welcome__actions'>
           <span className='dashboard-today'>Today · {summary.todayLabel}</span>
-          <Button
-            className='dashboard-log-button'
-            variant='solid'
-            color='primary'
+          <PageActionButton
             icon={<LuArrowDownRight aria-hidden='true' />}
             onClick={addWeightModal.openModal}
           >
             Log weight
-          </Button>
+          </PageActionButton>
         </div>
       </header>
 
       <div className='dashboard-hero-grid'>
-        <section className='dashboard-weight-card' aria-labelledby='current-weight-heading'>
-          <div className='dashboard-weight-card__top'>
-            <div>
-              <p className='dashboard-card-label' id='current-weight-heading'>
-                CURRENT WEIGHT
-              </p>
-              <p className='dashboard-weight-card__date'>
-                {summary.currentWeightDate
-                  ? `Last measured ${formatDateLabel(summary.currentWeightDate)}`
-                  : 'Add your first weight entry'}
-              </p>
-            </div>
-            <span className='dashboard-weight-card__icon' aria-hidden='true'>
-              <LuScale />
-            </span>
-          </div>
-
-          <div className='dashboard-weight-card__value-row'>
-            <p className='dashboard-weight-card__value' aria-live='polite'>
-              {summary.currentWeight === null ? '—' : displayWeightFromKg(summary.currentWeight)}
-            </p>
-            {summary.currentWeight !== null && (
-              <span className='dashboard-weight-card__unit'>{weightUnit}</span>
-            )}
-          </div>
-
-          <div className='dashboard-weight-card__footer'>
-            {summary.totalWeightLoss !== null ? (
-              <span
-                className={`dashboard-change ${
-                  summary.totalWeightLoss >= 0 ? 'dashboard-change--down' : 'dashboard-change--up'
-                }`}
-              >
-                {summary.totalWeightLoss >= 0 ? '−' : '+'}
-                {formatWeight(Math.abs(summary.totalWeightLoss))}
-                <span>since first entry</span>
+        <Card asChild>
+          <section className='dashboard-weight-card' aria-labelledby='current-weight-heading'>
+            <div className='dashboard-weight-card__top'>
+              <div>
+                <p className='dashboard-card-label' id='current-weight-heading'>
+                  CURRENT WEIGHT
+                </p>
+                <p className='dashboard-weight-card__date'>
+                  {summary.currentWeightDate
+                    ? `Last measured ${formatDateLabel(summary.currentWeightDate)}`
+                    : 'Add your first weight entry'}
+                </p>
+              </div>
+              <span className='dashboard-weight-card__icon' aria-hidden='true'>
+                <LuScale />
               </span>
-            ) : (
-              <span className='dashboard-weight-card__hint'>Your progress starts here</span>
-            )}
-            <button
-              className='dashboard-text-action'
-              type='button'
-              onClick={() => onNavigate('weight')}
-            >
-              Weight history <LuArrowRight aria-hidden='true' />
-            </button>
-          </div>
-        </section>
+            </div>
+
+            <div className='dashboard-weight-card__value-row'>
+              <p className='dashboard-weight-card__value' aria-live='polite'>
+                {summary.currentWeight === null ? '—' : displayWeightFromKg(summary.currentWeight)}
+              </p>
+              {summary.currentWeight !== null && (
+                <span className='dashboard-weight-card__unit'>{weightUnit}</span>
+              )}
+            </div>
+
+            <div className='dashboard-weight-card__footer'>
+              {summary.totalWeightLoss !== null ? (
+                <span
+                  className={`dashboard-change ${
+                    summary.totalWeightLoss >= 0 ? 'dashboard-change--down' : 'dashboard-change--up'
+                  }`}
+                >
+                  {summary.totalWeightLoss >= 0 ? '−' : '+'}
+                  {formatWeight(Math.abs(summary.totalWeightLoss))}
+                  <span>since first entry</span>
+                </span>
+              ) : (
+                <span className='dashboard-weight-card__hint'>Your progress starts here</span>
+              )}
+              <button
+                className='dashboard-text-action'
+                type='button'
+                onClick={() => onNavigate('weight')}
+              >
+                Weight history <LuArrowRight aria-hidden='true' />
+              </button>
+            </div>
+          </section>
+        </Card>
 
         <GoalProgress
           weights={weights}
@@ -143,70 +143,76 @@ export const DashboardOverview = ({
       <div className='dashboard-details-grid'>
         <WeightGraph weights={weights} />
 
-        <section className='dashboard-week-card' aria-labelledby='this-week-heading'>
-          <div className='dashboard-section-heading'>
-            <div>
-              <p className='dashboard-card-label'>AT A GLANCE</p>
-              <h2 id='this-week-heading'>This week</h2>
+        <Card asChild>
+          <section className='dashboard-week-card' aria-labelledby='this-week-heading'>
+            <div className='dashboard-section-heading'>
+              <div>
+                <p className='dashboard-card-label'>AT A GLANCE</p>
+                <h2 id='this-week-heading'>This week</h2>
+              </div>
             </div>
-          </div>
 
-          <div className='dashboard-week-stat'>
-            <span>Recent weight change</span>
-            <strong>{recentWeightChangeLabel}</strong>
-            <small>
-              {previousWeight ? 'Since your previous measurement' : 'Log another weight to compare'}
-            </small>
-          </div>
+            <div className='dashboard-week-stat'>
+              <span>Recent weight change</span>
+              <strong>{recentWeightChangeLabel}</strong>
+              <small>
+                {previousWeight
+                  ? 'Since your previous measurement'
+                  : 'Log another weight to compare'}
+              </small>
+            </div>
 
-          <div className='dashboard-week-stat'>
-            <span>Current injection dose</span>
-            <strong>{summary.currentDose}</strong>
-            <small>{summary.currentDoseMeta}</small>
-          </div>
+            <div className='dashboard-week-stat'>
+              <span>Current injection dose</span>
+              <strong>{summary.currentDose}</strong>
+              <small>{summary.currentDoseMeta}</small>
+            </div>
 
-          <div className='dashboard-week-stat'>
-            <span>Next scheduled injection</span>
-            <strong>{summary.nextShotLabel}</strong>
-            <small>{summary.nextShotMeta}</small>
-          </div>
-        </section>
+            <div className='dashboard-week-stat'>
+              <span>Next scheduled injection</span>
+              <strong>{summary.nextShotLabel}</strong>
+              <small>{summary.nextShotMeta}</small>
+            </div>
+          </section>
+        </Card>
       </div>
 
-      <section className='dashboard-shortcuts' aria-labelledby='trackers-heading'>
-        <div className='dashboard-section-heading'>
-          <div>
-            <p className='dashboard-card-label'>YOUR TRACKERS</p>
-            <h2 id='trackers-heading'>Keep your progress moving</h2>
+      <Card asChild>
+        <section className='dashboard-shortcuts' aria-labelledby='trackers-heading'>
+          <div className='dashboard-section-heading'>
+            <div>
+              <p className='dashboard-card-label'>YOUR TRACKERS</p>
+              <h2 id='trackers-heading'>Keep your progress moving</h2>
+            </div>
           </div>
-        </div>
-        <div className='dashboard-shortcuts__grid'>
-          <button type='button' onClick={() => onNavigate('shots')}>
-            <LuSyringe aria-hidden='true' />
-            <span>
-              <strong>Shots</strong>
-              <small>Dosage and injection history</small>
-            </span>
-            <LuArrowRight aria-hidden='true' />
-          </button>
-          <button type='button' onClick={() => onNavigate('weight')}>
-            <LuScale aria-hidden='true' />
-            <span>
-              <strong>Weight</strong>
-              <small>Measurements and trends</small>
-            </span>
-            <LuArrowRight aria-hidden='true' />
-          </button>
-          <button type='button' onClick={() => onNavigate('milestones')}>
-            <LuTrophy aria-hidden='true' />
-            <span>
-              <strong>Milestones</strong>
-              <small>Celebrate every achievement</small>
-            </span>
-            <LuArrowRight aria-hidden='true' />
-          </button>
-        </div>
-      </section>
+          <div className='dashboard-shortcuts__grid'>
+            <button type='button' onClick={() => onNavigate('shots')}>
+              <LuSyringe aria-hidden='true' />
+              <span>
+                <strong>Shots</strong>
+                <small>Dosage and injection history</small>
+              </span>
+              <LuArrowRight aria-hidden='true' />
+            </button>
+            <button type='button' onClick={() => onNavigate('weight')}>
+              <LuScale aria-hidden='true' />
+              <span>
+                <strong>Weight</strong>
+                <small>Measurements and trends</small>
+              </span>
+              <LuArrowRight aria-hidden='true' />
+            </button>
+            <button type='button' onClick={() => onNavigate('milestones')}>
+              <LuTrophy aria-hidden='true' />
+              <span>
+                <strong>Milestones</strong>
+                <small>Celebrate every achievement</small>
+              </span>
+              <LuArrowRight aria-hidden='true' />
+            </button>
+          </div>
+        </section>
+      </Card>
       {addWeightModal.modal}
     </div>
   );

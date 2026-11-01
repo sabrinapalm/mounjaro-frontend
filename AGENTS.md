@@ -26,7 +26,9 @@ src/
   it. Do not reach into another feature's private files or create barrel files without a consumer.
 - `DashboardShell` owns the existing in-app section navigation; do not add or change URL routing
   without a product requirement.
-- Keep each component's CSS beside it. Global styles belong in `shared/styles/global.css`.
+- Keep necessary component CSS beside its owner. Shared UI primitives belong in
+  `shared/components/ui/`; global tokens and resets belong in `shared/styles/global.css`, and
+  Tailwind's CSS-first theme configuration belongs in `shared/styles/tailwind.css`.
 
 ## TypeScript and React
 
@@ -40,7 +42,7 @@ src/
 - Keep components focused. Keep server state in TanStack Query and local UI state local; avoid
   duplicated state and unnecessary effects, memoization, and callback wrappers.
 - Preserve existing accessibility, responsive behavior, forms, validation, loading/error/empty
-  states, and styling. Do not replace the UI or CSS approach during structural work.
+  states, and styling. Structural work must not redesign the UI.
 
 ## Data and API
 
@@ -56,7 +58,34 @@ src/
 
 ## Styling and dependencies
 
-- Follow the existing CSS files, class naming, responsive patterns, and Biome/ESLint configuration.
+- Use Tailwind CSS v4 through `@tailwindcss/vite`; there is no Tailwind v3 JavaScript config or
+  PostCSS integration. Preflight is intentionally omitted to preserve Tracksy's existing reset,
+  typography, and native form controls.
+- Use semantic utilities (`bg-card`, `text-foreground`, `text-muted-foreground`, `border-border`)
+  backed by Tracksy's existing CSS variables. Keep the forest-green palette, dimensions,
+  typography, shadows, radii, and `html[data-theme="dark"]` theme behavior unchanged. Do not
+  introduce shadcn's default palette, a second theme provider, or a `.dark` toggle.
+- Prefer utility classes for new simple layouts. Existing component CSS may use `@apply` to keep
+  selector specificity, cascade order, and responsive behavior stable. Such files must
+  `@reference` `shared/styles/tailwind.css` using a relative path. Keep gradients, chart/SVG rules,
+  native picker pseudo-elements, safe-area expressions, and custom animations in CSS when useful.
+  Do not retain a CSS declaration after replacing it with an equivalent utility.
+- Preserve exact existing breakpoint values and inclusive `max-width` behavior; do not substitute
+  Tailwind's default breakpoints. Preserve reduced-motion and pointer/hover media queries.
+- `components.json` configures shadcn/ui's manual existing-project setup. Own and customize the
+  source under `shared/components/ui/`; add only primitives with real consumers. Use `cn` from
+  `shared/utils/cn.ts` to merge utility classes, arrow functions, named exports, and explicit prop
+  types. Retain semantic elements with `asChild` where needed. Do not add unused primitives,
+  another icon library, Zod, or new form/state infrastructure.
+- The existing public `shared/components/Button.tsx` owns loading and icon behavior; the UI
+  primitive owns variants. Form controls share their surface while feature styles own dimensions
+  and focus treatments. Native selects, date/time pickers, custom dialogs/navigation, and Recharts
+  retain their current behavior; do not replace them merely because shadcn offers an alternative.
+- Before a styling migration, capture real rendered baselines with sanitized data. Compare each
+  category at identical desktop/mobile widths, both themes, and matching UI states, including
+  dialogs and forms. Resolve visual regressions before proceeding. Report coverage and any
+  unavailable visual testing honestly. See `docs/styling-migration.md` for the migration audit.
+- Follow the Biome/ESLint configuration; Biome's CSS parser enables Tailwind directives.
 - Use **pnpm 10.28.2** directly; Corepack is not required. Keep `package.json` and
   `pnpm-lock.yaml` synchronized, use `pnpm install --frozen-lockfile` for verification, and do not
   add npm or Yarn lockfiles.
@@ -65,9 +94,9 @@ src/
 
 ## Tests and backend boundaries
 
-- There is currently no configured test runner or test script. Do not install one just for a
-  refactor. If tests are introduced in a separately scoped change, put them in nearby `__tests__/`
-  folders and use behavior-focused tests with the chosen existing project tooling.
+- There is no test script or third-party test runner. Existing nearby `__tests__/*.test.mjs` files
+  use Node's built-in runner; run them with `pnpm exec node --test src/features/*/__tests__/*.test.mjs`.
+  Do not install another runner just for a refactor. Keep new tests behavior-focused and nearby.
 - This checkout contains the frontend only; it has no SST, Lambda, API Gateway, DynamoDB, or
   Cognito infrastructure definitions. Do not infer or change deployed infrastructure. Preserve
   the frontend's existing API/auth contract; any backend or SST work requires its own source,

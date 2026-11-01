@@ -1,59 +1,43 @@
+@reference "../styles/tailwind.css";
+
 .page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  min-width: 0;
+  @apply flex justify-between items-center gap-[20px] min-w-0;
 }
 
 .page-header__copy {
-  display: grid;
-  min-width: 0;
+  @apply grid min-w-0;
+}
+
+.page-header--with-action {
+  @apply items-end px-[2px];
 }
 
 .page-header h1 {
-  margin: 0;
-  color: var(--color-text);
-  font-size: 1.9rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
+  @apply m-0 text-foreground text-[1.9rem] font-bold tracking-[-0.04em];
 }
 
 .page-header p {
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: 1rem;
-  font-weight: 700;
+  @apply m-0 text-muted-foreground text-[1rem] font-bold;
 }
 
 .page-header__action {
-  display: flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: flex-end;
+  @apply flex flex-none items-center justify-end;
 }
 
 @media (max-width: 760px) {
   .page-header {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 16px;
+    @apply items-start flex-col gap-[16px];
   }
 
   .page-header__copy {
-    width: 100%;
-    text-align: left;
+    @apply w-full text-left;
   }
 
   .page-header h1 {
-    font-size: 1.55rem;
+    @apply text-[1.55rem];
   }
 
   .page-header__action {
-    width: 100%;
-  }
-
-  .page-header__action .button {
-    width: 100%;
+    @apply w-full;
   }
 }

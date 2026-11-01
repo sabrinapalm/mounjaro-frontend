@@ -1,11 +1,11 @@
+@reference "../../../../shared/styles/tailwind.css";
+
 .login-card {
-  display: grid;
-  gap: 30px;
+  @apply grid gap-[30px];
   width: min(100%, 520px);
-  min-width: 0;
-  padding: 34px;
+  @apply min-w-0 p-[34px];
   border: 1px solid var(--color-border);
-  border-radius: 28px;
+  @apply rounded-[28px];
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--color-surface-soft) 28%, var(--color-surface) 72%),
@@ -14,87 +14,54 @@
 }
 
 .login-card__header {
-  display: grid;
-  justify-items: center;
-  gap: 16px;
-  text-align: center;
+  @apply grid justify-items-center gap-[16px] text-center;
 }
 
 .login-card__icon {
-  display: grid;
-  place-items: center;
-  width: 74px;
-  height: 74px;
-  border-radius: var(--radius-pill);
+  @apply grid place-items-center w-[74px] h-[74px] rounded-[var(--radius-pill)];
   background: color-mix(in srgb, var(--color-accent) 18%, transparent);
   color: var(--color-accent);
   box-shadow: 0 0 36px color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
 .login-card__heading {
-  display: grid;
-  gap: 10px;
+  @apply grid gap-[10px];
 }
 
 .login-card__title {
-  color: var(--color-text);
-  font-size: 1.6rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
+  @apply text-foreground text-[1.6rem] font-bold tracking-[-0.04em];
 }
 
 .login-card__description {
-  max-width: 390px;
-  color: var(--color-text-muted);
-  font-size: 0.95rem;
-  font-weight: 700;
-  line-height: 1.6;
+  @apply max-w-[390px] text-muted-foreground text-[0.95rem] font-bold leading-[1.6];
 }
 
 .login-form {
-  display: grid;
-  gap: 22px;
+  @apply grid gap-[22px];
 }
 
 .login-form__field {
-  display: grid;
-  gap: 10px;
-  min-width: 0;
+  @apply grid gap-[10px] min-w-0;
 }
 
 .login-form__label {
-  color: var(--color-text);
-  font-size: 0.9rem;
-  font-weight: 700;
+  @apply text-foreground text-[0.9rem] font-bold;
 }
 
 .login-form__input-wrapper {
-  position: relative;
-  min-width: 0;
+  @apply relative min-w-0;
 }
 
 .login-form__input-icon {
-  position: absolute;
-  top: 50%;
-  left: 16px;
-  color: var(--color-text-muted);
+  @apply absolute top-[50%] left-[16px] text-muted-foreground;
   transform: translateY(-50%);
-  pointer-events: none;
+  @apply pointer-events-none;
 }
 
 .login-form__input {
-  width: 100%;
-  min-height: 58px;
-  min-width: 0;
+  @apply min-h-[58px] min-w-0;
   padding: 0 16px;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  background: var(--color-surface-soft);
-  color: var(--color-text);
-  font: inherit;
-  font-size: 0.95rem;
-  font-weight: 700;
-  outline: none;
+  @apply rounded-[12px] text-[0.95rem];
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -102,11 +69,11 @@
 }
 
 .login-form__input--with-icon {
-  padding-left: 48px;
+  @apply pl-[48px];
 }
 
 .login-form__input::placeholder {
-  color: var(--color-text-muted);
+  @apply text-muted-foreground;
 }
 
 .login-form__input:focus {
@@ -115,36 +82,26 @@
 }
 
 .login-form__input:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
+  @apply cursor-not-allowed opacity-[0.7];
 }
 
 .login-form__error {
   padding: 12px 14px;
   border: 1px solid color-mix(in srgb, var(--color-danger) 36%, transparent);
-  border-radius: var(--radius-sm);
+  @apply rounded-[var(--radius-sm)];
   background: color-mix(in srgb, var(--color-danger) 12%, transparent);
-  color: var(--color-danger);
-  font-size: 0.9rem;
-  font-weight: 700;
+  @apply text-destructive text-[0.9rem] font-bold;
 }
 
 .login-card__actions {
-  display: grid;
-  justify-items: center;
-  gap: 12px;
+  @apply grid justify-items-center gap-[12px];
 }
 
 .login-card__link-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  @apply inline-flex items-center justify-center gap-[8px];
   border: 0;
   background: transparent;
-  color: var(--color-text-muted);
-  font-size: 0.95rem;
-  font-weight: 700;
+  @apply text-muted-foreground text-[0.95rem] font-bold;
   transition:
     color 0.2s ease,
     transform 0.2s ease;
@@ -156,14 +113,13 @@
 }
 
 .login-card__link-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
+  @apply cursor-not-allowed opacity-[0.65];
 }
 
 @media (max-width: 640px) {
   .login-card {
     padding: 30px 20px 24px;
-    border-radius: 26px;
+    @apply rounded-[26px];
   }
 }
 
@@ -173,13 +129,10 @@
   }
 
   .login-card__title {
-    font-size: 1.4rem;
+    @apply text-[1.4rem];
   }
 }
 
 .login-card__actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
+  @apply flex items-center justify-center gap-[14px];
 }

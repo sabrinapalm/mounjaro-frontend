@@ -1,57 +1,37 @@
+@reference "../shared/styles/tailwind.css";
+
 .dashboard-shell {
-  display: flex;
-  min-height: 100dvh;
+  @apply flex min-h-dvh;
   background: var(--color-bg);
 }
 
 .dashboard-shell .dashboard {
-  display: flex;
-  flex: 1;
-  min-width: 0;
-  flex-direction: column;
-  gap: 22px;
-  min-height: 100dvh;
+  @apply flex flex-1 min-w-0 flex-col gap-[22px] min-h-dvh;
   padding: clamp(20px, 3vw, 38px) clamp(20px, 4vw, 56px) 40px;
-  overflow: visible;
+  @apply overflow-visible;
 }
 
 .dashboard-topbar {
-  position: relative;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  align-self: stretch;
-  gap: 16px;
+  @apply relative z-[50] flex items-center justify-end self-stretch gap-[16px];
 }
 
 .dashboard-topbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  @apply flex items-center gap-[10px];
 }
 
 .dashboard-topbar__brand {
-  display: none;
-  width: 40px;
-  height: 40px;
-  margin-right: auto;
-  object-fit: contain;
+  @apply hidden w-[40px] h-[40px] mr-[auto] object-contain;
 }
 
 .dashboard-mobile-menu-button,
 .dashboard-topbar-button {
-  position: relative;
-  display: grid;
-  width: 44px;
-  height: 44px;
+  @apply relative grid w-[44px] h-[44px];
   flex: 0 0 44px;
-  place-items: center;
+  @apply place-items-center;
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  @apply rounded-[12px];
   background: var(--color-surface);
-  color: var(--color-text);
-  cursor: pointer;
+  @apply text-foreground cursor-pointer;
   transition:
     border-color 150ms ease,
     background 150ms ease,
@@ -59,8 +39,7 @@
 }
 
 .dashboard-mobile-menu-button {
-  display: none;
-  margin-right: auto;
+  @apply hidden mr-[auto];
 }
 
 .dashboard-topbar-button:hover,
@@ -78,89 +57,69 @@
 }
 
 .dashboard-topbar-badge {
-  position: absolute;
-  top: -4px;
-  right: -3px;
-  display: grid;
-  min-width: 18px;
-  height: 18px;
+  @apply absolute top-[-4px] right-[-3px] grid min-w-[18px] h-[18px];
   padding: 0 4px;
-  place-items: center;
+  @apply place-items-center;
   border: 2px solid var(--color-bg);
-  border-radius: var(--radius-pill);
+  @apply rounded-[var(--radius-pill)];
   background: var(--color-primary-dark);
   color: var(--color-surface);
-  font-size: 0.62rem;
+  @apply text-[0.62rem];
   font-variant-numeric: tabular-nums;
-  font-weight: 700;
+  @apply font-bold;
 }
 
 .dashboard-profile-menu-wrapper {
-  position: relative;
+  @apply relative;
 }
 
 .dashboard-profile-button {
-  display: inline-flex;
-  min-height: 44px;
-  max-width: 220px;
-  align-items: center;
-  gap: 9px;
+  @apply inline-flex min-h-[44px] max-w-[220px] items-center gap-[9px];
   padding: 4px 11px 4px 5px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
+  @apply rounded-[var(--radius-pill)];
   background: var(--color-surface);
-  color: var(--color-text);
+  @apply text-foreground;
   font: inherit;
-  font-size: 0.82rem;
+  @apply text-[0.82rem];
   font-weight: 650;
-  cursor: pointer;
+  @apply cursor-pointer;
 }
 
 .dashboard-profile-avatar {
-  display: grid;
-  width: 34px;
-  height: 34px;
+  @apply grid w-[34px] h-[34px];
   flex: 0 0 34px;
-  place-items: center;
-  border-radius: var(--radius-pill);
+  @apply place-items-center rounded-[var(--radius-pill)];
   background: var(--color-primary-soft);
   color: var(--color-primary-dark);
-  font-size: 0.9rem;
-  font-weight: 700;
+  @apply text-[0.9rem] font-bold;
 }
 
 .dashboard-profile-name {
-  overflow: hidden;
+  @apply overflow-hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  @apply whitespace-nowrap;
 }
 
 .dashboard-profile-menu {
-  position: absolute;
+  @apply absolute;
   top: calc(100% + 8px);
-  right: 0;
-  z-index: 60;
-  display: grid;
-  min-width: 190px;
-  gap: 3px;
-  padding: 6px;
+  @apply right-0 z-[60] grid min-w-[190px] gap-[3px] p-[6px];
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  @apply rounded-[var(--radius-md)];
   background: var(--color-surface);
   box-shadow: var(--shadow-card);
 }
 
 .dashboard-profile-menu__item {
-  min-height: 44px;
+  @apply min-h-[44px];
   padding: 0 11px;
   border: 0;
-  border-radius: 8px;
+  @apply rounded-[8px];
   background: transparent;
-  color: var(--color-text);
+  @apply text-foreground;
   font: inherit;
-  font-size: 0.82rem;
-  text-align: left;
-  cursor: pointer;
+  @apply text-[0.82rem] text-left cursor-pointer;
 }
 
 .dashboard-profile-menu__item:hover {
@@ -173,21 +132,21 @@
 }
 
 .dashboard-profile-menu__item--danger {
-  color: var(--color-danger);
+  @apply text-destructive;
 }
 
 .dashboard-error {
   padding: 13px 15px;
   border: 1px solid var(--message-error-border);
-  border-radius: var(--radius-md);
+  @apply rounded-[var(--radius-md)];
   background: var(--message-error-bg);
   color: var(--message-error-color);
-  font-size: 0.9rem;
+  @apply text-[0.9rem];
   font-weight: 650;
 }
 
 .dashboard-bottom-nav {
-  display: none;
+  @apply hidden;
 }
 
 @media (max-width: 1100px) {
@@ -196,79 +155,64 @@
   }
 
   .dashboard-topbar {
-    justify-content: flex-start;
+    @apply justify-start;
   }
 
   .dashboard-mobile-menu-button {
-    display: grid;
-    margin-right: 0;
+    @apply grid mr-0;
   }
 
   .dashboard-topbar__brand {
-    display: block;
+    @apply block;
   }
 }
 
 @media (max-width: 760px) {
   .dashboard-shell {
-    display: block;
+    @apply block;
   }
 
   .dashboard-shell .dashboard {
-    min-height: 100dvh;
-    gap: 18px;
+    @apply min-h-dvh gap-[18px];
     padding: max(14px, env(safe-area-inset-top)) 18px calc(92px + env(safe-area-inset-bottom));
   }
 
   .dashboard-mobile-menu-button {
-    display: none;
+    @apply hidden;
   }
 
   .dashboard-topbar {
-    min-height: 44px;
-    justify-content: space-between;
+    @apply min-h-[44px] justify-between;
   }
 
   .dashboard-topbar-actions {
-    gap: 7px;
+    @apply gap-[7px];
   }
 
   .dashboard-topbar__brand {
-    width: 38px;
-    height: 38px;
-    margin-left: 2px;
+    @apply w-[38px] h-[38px] ml-[2px];
   }
 
   .dashboard-topbar-button {
-    width: 42px;
-    height: 42px;
+    @apply w-[42px] h-[42px];
     flex-basis: 42px;
   }
 
   .dashboard-profile-button {
-    width: 42px;
-    min-height: 42px;
-    justify-content: center;
-    padding: 3px;
+    @apply w-[42px] min-h-[42px] justify-center p-[3px];
   }
 
   .dashboard-profile-avatar {
-    width: 34px;
-    height: 34px;
+    @apply w-[34px] h-[34px];
     flex-basis: 34px;
   }
 
   .dashboard-profile-name {
-    display: none;
+    @apply hidden;
   }
 
   .dashboard-bottom-nav {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1100;
-    display: grid;
+    @apply fixed right-0 bottom-0 left-0 z-[1100] grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     padding: 7px max(10px, env(safe-area-inset-right)) max(7px, env(safe-area-inset-bottom))
       max(10px, env(safe-area-inset-left));
@@ -278,27 +222,21 @@
   }
 
   .dashboard-bottom-nav__item {
-    display: grid;
-    min-width: 0;
-    min-height: 56px;
+    @apply grid min-w-0 min-h-[56px];
     align-content: center;
-    justify-items: center;
-    gap: 3px;
+    @apply justify-items-center gap-[3px];
     padding: 4px 2px;
     border: 0;
-    border-radius: 10px;
+    @apply rounded-[10px];
     background: transparent;
-    color: var(--color-text-muted);
+    @apply text-muted-foreground;
     font: inherit;
-    font-size: 0.63rem;
-    font-weight: 600;
-    cursor: pointer;
+    @apply text-[0.63rem] font-semibold cursor-pointer;
     -webkit-tap-highlight-color: transparent;
   }
 
   .dashboard-bottom-nav__item svg {
-    width: 20px;
-    height: 20px;
+    @apply w-[20px] h-[20px];
   }
 
   .dashboard-bottom-nav__item.is-active {
@@ -314,17 +252,15 @@
 
 @media (max-width: 380px) {
   .dashboard-shell .dashboard {
-    padding-right: 13px;
-    padding-left: 13px;
+    @apply pr-[13px] pl-[13px];
   }
 
   .dashboard-bottom-nav {
-    padding-right: 5px;
-    padding-left: 5px;
+    @apply pr-[5px] pl-[5px];
   }
 
   .dashboard-bottom-nav__item {
-    font-size: 0.59rem;
+    @apply text-[0.59rem];
   }
 }
 

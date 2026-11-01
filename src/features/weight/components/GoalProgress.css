@@ -1,89 +1,66 @@
+@reference "../../../shared/styles/tailwind.css";
+
 .goal-progress-card {
-  display: grid;
+  @apply grid;
   align-content: start;
-  gap: 24px;
-  min-width: 0;
-  min-height: 300px;
-  padding: 26px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-card);
+  @apply gap-[24px] min-h-[300px] p-[26px];
 }
 
 .goal-progress-card__header,
 .goal-progress-card__heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
+  @apply flex items-center justify-between gap-[14px];
 }
 
 .goal-progress-card__header {
-  width: 100%;
+  @apply w-full;
 }
 
 .goal-progress-card__heading {
-  min-width: 0;
+  @apply min-w-0;
   flex: 1 1 auto;
-  justify-content: flex-start;
+  @apply justify-start;
 }
 
 .goal-progress-card__icon {
-  display: grid;
-  flex: 0 0 auto;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  border-radius: var(--radius-md);
+  @apply grid flex-none w-[42px] h-[42px] place-items-center rounded-[var(--radius-md)];
   background: var(--color-primary-soft);
   color: var(--color-primary-dark);
-  font-size: 1.15rem;
+  @apply text-[1.15rem];
 }
 
 .goal-progress-card__heading h2 {
-  margin-top: 2px;
-  font-size: 1.2rem;
+  @apply mt-[2px] text-[1.2rem];
 }
 
 .goal-progress-card__edit {
-  flex: 0 0 auto;
-  margin-left: auto;
-  width: auto;
-  min-width: 44px;
-  min-height: 44px;
-  gap: 4px;
+  @apply flex-none ml-[auto] w-auto min-w-[44px] min-h-[44px] gap-[4px];
   padding: 0 6px;
-  font-size: 0.875rem;
+  @apply text-[0.875rem];
 }
 
 .goal-progress-card__edit .button__content {
-  gap: 4px;
+  @apply gap-[4px];
 }
 
 .goal-progress-card__edit svg {
-  font-size: 1rem;
+  @apply text-[1rem];
 }
 
 .goal-progress-card__body {
-  display: flex;
-  align-items: center;
+  @apply flex items-center;
   gap: clamp(18px, 3vw, 32px);
 }
 
 .goal-progress-ring {
-  position: relative;
-  display: grid;
+  @apply relative grid;
   flex: 0 0 126px;
-  width: 126px;
+  @apply w-[126px];
   aspect-ratio: 1;
-  place-items: center;
+  @apply place-items-center;
 }
 
 .goal-progress-ring svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+  @apply w-full h-full overflow-visible;
   transform: rotate(-90deg);
 }
 
@@ -104,134 +81,105 @@
 }
 
 .goal-progress-ring__label {
-  position: absolute;
-  display: grid;
-  gap: 0;
-  text-align: center;
+  @apply absolute grid gap-0 text-center;
 }
 
 .goal-progress-ring__label strong {
-  color: var(--color-text);
-  font-size: 1.55rem;
+  @apply text-foreground text-[1.55rem];
   font-variant-numeric: tabular-nums;
-  line-height: 1.15;
+  @apply leading-[1.15];
 }
 
 .goal-progress-ring__label small {
-  color: var(--color-text-muted);
-  font-size: 0.73rem;
+  @apply text-muted-foreground text-[0.73rem];
 }
 
 .goal-progress-card__details {
-  min-width: 0;
-  flex: 1;
+  @apply min-w-0 flex-1;
 }
 
 .goal-progress-card__detail-label {
-  color: var(--color-text-muted);
-  font-size: 0.69rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  @apply text-muted-foreground text-[0.69rem] font-bold tracking-[0.08em];
 }
 
 .goal-progress-card__goal-value {
-  margin-top: 2px;
-  color: var(--color-text);
-  font-size: 1.65rem;
+  @apply mt-[2px] text-foreground text-[1.65rem];
   font-variant-numeric: tabular-nums;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1.2;
+  @apply font-bold tracking-[-0.04em] leading-[1.2];
 }
 
 .goal-progress-card__subtitle {
   display: -webkit-box;
-  min-height: 2.8em;
-  margin-top: 5px;
-  overflow: hidden;
-  color: var(--color-text-muted);
-  font-size: 0.78rem;
-  line-height: 1.4;
+  @apply min-h-[2.8em] mt-[5px] overflow-hidden text-muted-foreground text-[0.78rem] leading-[1.4];
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
 
 .goal-progress-card__remaining {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 16px;
-  padding-top: 13px;
+  @apply flex justify-between gap-[10px] mt-[16px] pt-[13px];
   border-top: 1px solid var(--color-border);
-  color: var(--color-text-muted);
-  font-size: 0.8rem;
+  @apply text-muted-foreground text-[0.8rem];
 }
 
 .goal-progress-card__remaining strong {
-  color: var(--color-text);
-  font-size: 0.84rem;
+  @apply text-foreground text-[0.84rem];
   font-variant-numeric: tabular-nums;
 }
 
 .goal-progress-card__change {
-  margin-top: 7px;
+  @apply mt-[7px];
   color: var(--color-primary-dark);
-  font-size: 0.76rem;
-  font-weight: 700;
+  @apply text-[0.76rem] font-bold;
 }
 
 .goal-progress-card__change span {
-  color: var(--color-text-muted);
-  font-weight: 400;
+  @apply text-muted-foreground font-normal;
 }
 
 @media (max-width: 620px) {
   .goal-progress-card {
-    min-height: 0;
-    padding: 20px;
+    @apply min-h-0 p-[20px];
   }
 
   .goal-progress-card__header {
-    gap: 10px;
+    @apply gap-[10px];
   }
 
   .goal-progress-card__heading {
-    min-width: 0;
-    gap: 10px;
+    @apply min-w-0 gap-[10px];
   }
 
   .goal-progress-card__heading > div {
-    min-width: 0;
+    @apply min-w-0;
   }
 
   .goal-progress-card__heading .dashboard-card-label,
   .goal-progress-card__heading h2,
   .goal-progress-card__edit {
-    white-space: nowrap;
+    @apply whitespace-nowrap;
   }
 
   .goal-progress-card__edit {
-    flex-shrink: 0;
+    @apply shrink-0;
   }
 
   .goal-progress-card__body {
-    gap: 18px;
+    @apply gap-[18px];
   }
 
   .goal-progress-ring {
     flex-basis: 110px;
-    width: 110px;
+    @apply w-[110px];
   }
 }
 
 @media (max-width: 380px) {
   .goal-progress-card__body {
-    align-items: flex-start;
-    flex-direction: column;
+    @apply items-start flex-col;
   }
 
   .goal-progress-ring {
-    align-self: center;
+    @apply self-center;
   }
 }
 

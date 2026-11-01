@@ -1,3 +1,5 @@
+@import "./tailwind.css";
+
 :root {
   --font-family-base:
     "Nunito Sans", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -368,7 +370,6 @@ body:has(.confirm-dialog-backdrop) .app {
 .add-shot-modal__select-with-unit,
 .add-shot-modal__textarea-wrapper,
 .add-weight-modal__input-with-unit,
-.add-weight-modal__textarea-wrapper,
 .edit-goal-modal__input-with-unit {
   min-width: 0;
 }
@@ -385,7 +386,6 @@ body:has(.confirm-dialog-backdrop) .app {
 .add-shot-modal__select,
 .add-shot-modal__textarea,
 .add-weight-modal__input,
-.add-weight-modal__textarea,
 .edit-goal-modal__input {
   min-width: 0;
 }

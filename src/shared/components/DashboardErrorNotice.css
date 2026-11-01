@@ -1,51 +1,38 @@
+@reference "../styles/tailwind.css";
+
 /* src/components/DashboardErrorNotice.css */
 
 .dashboard-error-notice {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
+  @apply flex items-center gap-[0.9rem];
   padding: 1rem 1.1rem;
   border: 1px solid var(--message-error-border);
-  border-radius: var(--radius-md);
+  @apply rounded-[var(--radius-md)];
   background: var(--message-error-bg);
-  color: var(--color-text);
+  @apply text-foreground;
   box-shadow: var(--shadow-soft);
 }
 
 .dashboard-error-notice__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  width: 38px;
-  height: 38px;
-  border-radius: var(--radius-sm);
+  @apply inline-flex items-center justify-center flex-none w-[38px] h-[38px] rounded-[var(--radius-sm)];
   background: var(--color-surface);
   color: var(--message-error-color);
 }
 
 .dashboard-error-notice__content {
-  min-width: 0;
-  flex: 1;
+  @apply min-w-0 flex-1;
 }
 
 .dashboard-error-notice__title {
-  margin: 0;
-  color: var(--color-text);
-  font-size: 0.95rem;
-  font-weight: 700;
+  @apply m-0 text-foreground text-[0.95rem] font-bold;
 }
 
 .dashboard-error-notice__message {
   margin: 0.2rem 0 0;
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  line-height: 1.45;
+  @apply text-muted-foreground text-[0.9rem] leading-[1.45];
 }
 
 @media (max-width: 640px) {
   .dashboard-error-notice {
-    align-items: flex-start;
-    flex-direction: column;
+    @apply items-start flex-col;
   }
 }

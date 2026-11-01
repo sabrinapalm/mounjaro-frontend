@@ -9,7 +9,7 @@ type PageHeaderProps = {
 
 export const PageHeader = ({ title, description, action }: PageHeaderProps) => {
   return (
-    <header className='page-header'>
+    <header className={action ? 'page-header page-header--with-action' : 'page-header'}>
       <div className='page-header__copy'>
         <h1>{title}</h1>
 

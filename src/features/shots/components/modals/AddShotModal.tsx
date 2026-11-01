@@ -1,6 +1,9 @@
 import { type FormEvent, useState } from 'react';
 import { FiCheckCircle } from 'react-icons/fi';
 import { PiSyringeBold } from 'react-icons/pi';
+import { Label } from '../../../../shared/components/ui/label';
+import { NativeSelect } from '../../../../shared/components/ui/nativeSelect';
+import { Textarea } from '../../../../shared/components/ui/textarea';
 import './AddShotModal.css';
 import { Button } from '../../../../shared/components/Button';
 import { DateField } from '../../../../shared/components/DateField';
@@ -186,11 +189,11 @@ export const AddShotModal = ({
           </div>
 
           <div className='add-shot-modal__row'>
-            <label className='add-shot-modal__field' htmlFor='shot-dosage'>
+            <Label className='add-shot-modal__field' htmlFor='shot-dosage'>
               <span className='add-shot-modal__label'>Dose (mg)</span>
 
               <div className='add-shot-modal__select-with-unit'>
-                <select
+                <NativeSelect
                   id='shot-dosage'
                   className='add-shot-modal__select add-shot-modal__select--with-unit'
                   value={dosage}
@@ -203,16 +206,16 @@ export const AddShotModal = ({
                       {dose}
                     </option>
                   ))}
-                </select>
+                </NativeSelect>
 
                 <span className='add-shot-modal__unit'>mg</span>
               </div>
-            </label>
+            </Label>
 
-            <label className='add-shot-modal__field' htmlFor='shot-injection-site'>
+            <Label className='add-shot-modal__field' htmlFor='shot-injection-site'>
               <span className='add-shot-modal__label'>Injection site</span>
 
-              <select
+              <NativeSelect
                 id='shot-injection-site'
                 className='add-shot-modal__select'
                 value={injectionSite}
@@ -225,8 +228,8 @@ export const AddShotModal = ({
                     {site.label}
                   </option>
                 ))}
-              </select>
-            </label>
+              </NativeSelect>
+            </Label>
           </div>
 
           <fieldset className='add-shot-modal__fieldset'>
@@ -257,10 +260,10 @@ export const AddShotModal = ({
               })}
             </div>
           </fieldset>
-          <label className='add-shot-modal__field' htmlFor='shot-notes'>
+          <Label className='add-shot-modal__field' htmlFor='shot-notes'>
             <span className='add-shot-modal__label'>Notes</span>
 
-            <textarea
+            <Textarea
               id='shot-notes'
               className='add-shot-modal__textarea'
               value={notes}
@@ -272,7 +275,7 @@ export const AddShotModal = ({
             />
 
             <span className='add-shot-modal__hint'>{notes.length}/250</span>
-          </label>
+          </Label>
 
           {(localError || error) && <p className='add-shot-modal__error'>{localError || error}</p>}
 

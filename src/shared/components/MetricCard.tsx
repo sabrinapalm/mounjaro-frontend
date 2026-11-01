@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Card } from './ui/card';
 import './MetricCard.css';
 
 export type MetricCardTone =
@@ -37,15 +38,17 @@ export const MetricCard = ({
     .join(' ');
 
   return (
-    <article className={cardClassName}>
-      <div className={iconClassName}>{icon}</div>
+    <Card asChild appearance='custom'>
+      <article className={cardClassName}>
+        <div className={iconClassName}>{icon}</div>
 
-      <div className='metric-card__copy'>
-        <span className='metric-card__label'>{label}</span>
-        <span className={valueClassName}>{value}</span>
+        <div className='metric-card__copy'>
+          <span className='metric-card__label'>{label}</span>
+          <span className={valueClassName}>{value}</span>
 
-        {meta !== undefined && meta !== null && <span className='metric-card__meta'>{meta}</span>}
-      </div>
-    </article>
+          {meta !== undefined && meta !== null && <span className='metric-card__meta'>{meta}</span>}
+        </div>
+      </article>
+    </Card>
   );
 };

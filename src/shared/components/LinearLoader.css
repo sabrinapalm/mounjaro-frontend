@@ -1,34 +1,27 @@
+@reference "../styles/tailwind.css";
+
 .linear-loader {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 0.45rem;
+  @apply inline-flex flex-col gap-[0.45rem];
 }
 
 .linear-loader--full-width {
-  width: 100%;
+  @apply w-full;
 }
 
 .linear-loader__label {
-  color: var(--color-text-muted);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  @apply text-muted-foreground text-[0.85rem] font-bold tracking-[0.02em];
 }
 
 .linear-loader__track {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  min-width: 180px;
-  border-radius: var(--radius-pill);
+  @apply relative overflow-hidden w-full min-w-[180px] rounded-[var(--radius-pill)];
   background: linear-gradient(90deg, var(--color-primary-soft), var(--color-surface-soft));
   box-shadow: inset 0 0 0 1px var(--color-border);
 }
 
 .linear-loader__bar {
-  position: absolute;
+  @apply absolute;
   inset: 0 auto 0 0;
-  width: 42%;
+  @apply w-[42%];
   border-radius: inherit;
   animation: linear-loader-slide 1.15s ease-in-out infinite;
 }
@@ -54,15 +47,15 @@
 }
 
 .linear-loader--sm .linear-loader__track {
-  height: 0.35rem;
+  @apply h-[0.35rem];
 }
 
 .linear-loader--md .linear-loader__track {
-  height: 0.5rem;
+  @apply h-[0.5rem];
 }
 
 .linear-loader--lg .linear-loader__track {
-  height: 0.7rem;
+  @apply h-[0.7rem];
 }
 
 @keyframes linear-loader-slide {

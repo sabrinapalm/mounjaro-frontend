@@ -1,7 +1,6 @@
 import { PageHeader } from '../../shared/components/PageHeader';
 import type { ShotEntry, UserProfile, WeightEntry } from '../../shared/types';
 import { Milestones } from './components/Milestones';
-import './MilestonesPage.css';
 
 type MilestonesPageProps = {
   weights: WeightEntry[];
@@ -11,7 +10,7 @@ type MilestonesPageProps = {
 
 export const MilestonesPage = ({ weights, shots, profile }: MilestonesPageProps) => {
   return (
-    <section className='milestones-page'>
+    <section className='milestones-page mx-auto grid min-w-0 w-[min(100%,1120px)] gap-[20px] [@media(max-width:760px)]:gap-[16px]'>
       <PageHeader
         title='All Milestones'
         description='Track your achievements and see what progress milestones are coming next.'

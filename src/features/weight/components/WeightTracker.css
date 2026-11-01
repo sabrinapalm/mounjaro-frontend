@@ -1,38 +1,26 @@
+@reference "../../../shared/styles/tailwind.css";
+
 .weight-tracker-card {
-  display: grid;
-  gap: 18px;
-  width: 100%;
-  min-width: 0;
-  padding: 24px;
+  @apply grid gap-[18px] w-full min-w-0 p-[24px];
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  @apply rounded-[var(--radius-lg)];
   background: var(--color-surface);
 }
 
 .weight-tracker-card--full {
-  gap: 16px;
+  @apply gap-[16px];
 }
 
 .weight-tracker-card__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 18px;
-  min-width: 0;
+  @apply flex items-start justify-between gap-[18px] min-w-0;
 }
 
 .weight-tracker-card__title {
-  color: var(--color-text);
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
+  @apply text-foreground text-[1.35rem] font-bold tracking-[-0.04em];
 }
 
 .weight-tracker-card__summary {
-  margin-top: 4px;
-  color: var(--color-text-muted);
-  font-size: 0.85rem;
-  font-weight: 700;
+  @apply mt-[4px] text-muted-foreground text-[0.85rem] font-bold;
 }
 
 .weight-tracker-card__summary .positive {
@@ -40,81 +28,60 @@
 }
 
 .weight-tracker-card__summary .negative {
-  color: var(--color-danger);
+  @apply text-destructive;
 }
 
 .weight-tracker-card__error {
   padding: 12px 14px;
   border: 1px solid color-mix(in srgb, var(--color-danger) 36%, transparent);
-  border-radius: var(--radius-sm);
+  @apply rounded-[var(--radius-sm)];
   background: color-mix(in srgb, var(--color-danger) 12%, transparent);
-  color: var(--color-danger);
-  font-size: 0.9rem;
-  font-weight: 700;
+  @apply text-destructive text-[0.9rem] font-bold;
 }
 
 .weight-tracker-card__empty-state {
-  display: grid;
-  justify-items: center;
-  gap: 12px;
+  @apply grid justify-items-center gap-[12px];
   padding: 34px 20px;
   border: 1px dashed var(--color-border);
-  border-radius: var(--radius-md);
-  color: var(--color-text-muted);
-  text-align: center;
+  @apply rounded-[var(--radius-md)] text-muted-foreground text-center;
 }
 
 .weight-tracker-card__empty-icon {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-pill);
+  @apply grid place-items-center w-[48px] h-[48px] rounded-[var(--radius-pill)];
   background: color-mix(in srgb, var(--color-accent) 14%, transparent);
   color: var(--color-accent);
 }
 
 .weight-tracker-card__list {
-  display: grid;
-  gap: 0;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
+  @apply grid gap-0 min-w-0 m-0 p-0;
   list-style: none;
 }
 
 .weight-tracker-card--compact .weight-tracker-card__list {
-  gap: 12px;
+  @apply gap-[12px];
 }
 
 .weight-tracker-card__history {
-  display: grid;
-  gap: 18px;
+  @apply grid gap-[18px];
 }
 
 .weight-tracker-card__month {
-  min-width: 0;
+  @apply min-w-0;
 }
 
 .weight-tracker-card__month-title {
-  margin: 0;
+  @apply m-0;
   padding: 0 0 8px;
-  color: var(--color-text-muted);
-  font-size: 0.79rem;
-  font-weight: 700;
-  letter-spacing: 0.055em;
-  text-transform: uppercase;
+  @apply text-muted-foreground text-[0.79rem] font-bold tracking-[0.055em] uppercase;
 }
 
 .weight-tracker-card__item {
-  display: grid;
+  @apply grid;
   grid-template-columns: 42px minmax(0, 1fr) minmax(76px, auto) minmax(84px, auto) 38px;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
+  @apply items-center gap-[12px] min-w-0;
   padding: 12px 14px;
   border: 1px solid color-mix(in srgb, var(--color-border) 88%, transparent);
-  border-radius: 18px;
+  @apply rounded-[18px];
   background: color-mix(in srgb, var(--color-surface-soft) 35%, transparent);
   transition:
     transform 0.2s ease,
@@ -124,11 +91,10 @@
 }
 
 .weight-tracker-card__item--full {
-  display: block;
-  padding: 0;
+  @apply block p-0;
   border: 0;
   border-bottom: 1px solid var(--color-border);
-  border-radius: 0;
+  @apply rounded-none;
   background: transparent;
   transition: background 0.16s ease;
 }
@@ -145,20 +111,14 @@
 }
 
 .weight-tracker-card__history-row {
-  display: grid;
+  @apply grid;
   grid-template-columns: 36px minmax(0, 1fr) minmax(100px, 0.45fr) 36px;
-  align-items: center;
-  gap: 14px;
-  min-height: 64px;
+  @apply items-center gap-[14px] min-h-[64px];
   padding: 8px 10px;
 }
 
 .weight-tracker-card__primary-data {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  min-width: 0;
+  @apply flex items-center justify-between gap-[14px] min-w-0;
 }
 
 .weight-tracker-card__item:hover {
@@ -169,11 +129,7 @@
 }
 
 .weight-tracker-card__icon {
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 13px;
+  @apply grid place-items-center w-[38px] h-[38px] rounded-[13px];
   background: color-mix(in srgb, var(--color-accent) 14%, transparent);
   color: var(--color-accent);
 }
@@ -181,27 +137,18 @@
 .weight-tracker-card__date,
 .weight-tracker-card__weight,
 .weight-tracker-card__change {
-  min-width: 0;
-  font-size: 0.98rem;
-  font-weight: 700;
+  @apply min-w-0 text-[0.98rem] font-bold;
 }
 
 .weight-tracker-card__date,
 .weight-tracker-card__weight {
-  overflow: hidden;
-  color: var(--color-text);
+  @apply overflow-hidden text-foreground;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  @apply whitespace-nowrap;
 }
 
 .weight-tracker-card__change {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  overflow: hidden;
-  color: var(--color-text-muted);
-  white-space: nowrap;
+  @apply inline-flex items-center justify-end gap-[8px] overflow-hidden text-muted-foreground whitespace-nowrap;
 }
 
 .weight-tracker-card__change--positive {
@@ -213,23 +160,19 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
 }
 
 .weight-tracker-card__change--negative {
-  color: var(--color-danger);
+  @apply text-destructive;
 }
 
 .weight-tracker-card__change--muted {
-  color: var(--color-text-muted);
+  @apply text-muted-foreground;
 }
 
 .weight-tracker-card__delete-button {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
+  @apply grid place-items-center w-[36px] h-[36px];
   border: 1px solid transparent;
-  border-radius: 12px;
+  @apply rounded-[12px];
   background: transparent;
-  color: var(--color-text-muted);
-  opacity: 0;
+  @apply text-muted-foreground opacity-0;
   transition:
     opacity 0.2s ease,
     color 0.2s ease,
@@ -240,7 +183,7 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
 
 .weight-tracker-card__item:hover .weight-tracker-card__delete-button,
 .weight-tracker-card__delete-button:focus-visible {
-  opacity: 1;
+  @apply opacity-[1];
 }
 
 .weight-tracker-card__delete-button:focus-visible {
@@ -252,13 +195,11 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
   transform: scale(1.04);
   border-color: color-mix(in srgb, var(--color-danger) 34%, transparent);
   background: color-mix(in srgb, var(--color-danger) 12%, transparent);
-  color: var(--color-danger);
+  @apply text-destructive;
 }
 
 .weight-tracker-card__footer {
-  display: flex;
-  justify-content: center;
-  padding-top: 4px;
+  @apply flex justify-center pt-[4px];
 }
 
 @media (max-width: 900px) {
@@ -268,8 +209,7 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
       "icon date change delete"
       "icon weight change delete";
     gap: 6px 12px;
-    min-height: auto;
-    padding: 14px;
+    @apply min-h-auto p-[14px];
   }
 
   .weight-tracker-card__item:not(.weight-tracker-card__item--full) .weight-tracker-card__icon {
@@ -292,29 +232,28 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
   .weight-tracker-card__item:not(.weight-tracker-card__item--full)
     .weight-tracker-card__delete-button {
     grid-area: delete;
-    opacity: 1;
+    @apply opacity-[1];
   }
 
   .weight-tracker-card__history-row {
     grid-template-columns: 36px minmax(0, 1fr) minmax(90px, 0.45fr) 36px;
-    gap: 10px;
+    @apply gap-[10px];
   }
 }
 
 @media (max-width: 760px) {
   .weight-tracker-card {
-    padding: 20px;
+    @apply p-[20px];
   }
 
   .weight-tracker-card__header {
-    align-items: stretch;
-    flex-direction: column;
+    @apply items-stretch flex-col;
   }
 }
 
 @media (max-width: 460px) {
   .weight-tracker-card {
-    padding: 16px;
+    @apply p-[16px];
   }
 
   .weight-tracker-card__item:not(.weight-tracker-card__item--full) {
@@ -326,8 +265,7 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
   }
 
   .weight-tracker-card__item:not(.weight-tracker-card__item--full) .weight-tracker-card__icon {
-    width: 36px;
-    height: 36px;
+    @apply w-[36px] h-[36px];
   }
 
   .weight-tracker-card__item:not(.weight-tracker-card__item--full) .weight-tracker-card__change {
@@ -339,7 +277,7 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
     grid-template-areas:
       "icon data delete"
       "icon change delete";
-    min-height: 72px;
+    @apply min-h-[72px];
     gap: 4px 10px;
     padding: 10px 4px;
   }
@@ -350,7 +288,7 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
 
   .weight-tracker-card__primary-data {
     grid-area: data;
-    justify-content: flex-start;
+    @apply justify-start;
   }
 
   .weight-tracker-card__history-row > .weight-tracker-card__change {
@@ -363,21 +301,18 @@ html[data-theme="dark"] .weight-tracker-card__change--positive {
 }
 
 .weight-tracker-card__item--full .weight-tracker-card__date {
-  font-size: 0.9rem;
-  font-weight: 700;
+  @apply text-[0.9rem] font-bold;
 }
 
 .weight-tracker-card__item--full .weight-tracker-card__weight {
-  font-size: 0.96rem;
-  font-weight: 700;
+  @apply text-[0.96rem] font-bold;
   font-variant-numeric: tabular-nums;
 }
 
 .weight-tracker-card__item--full .weight-tracker-card__change {
-  justify-content: flex-start;
-  font-size: 0.84rem;
+  @apply justify-start text-[0.84rem];
 }
 
 .weight-tracker-card__item--full .weight-tracker-card__delete-button {
-  opacity: 1;
+  @apply opacity-[1];
 }

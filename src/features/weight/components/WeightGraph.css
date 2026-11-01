@@ -1,79 +1,53 @@
+@reference "../../../shared/styles/tailwind.css";
+
 .weight-graph-card {
-  display: grid;
+  @apply grid;
   align-content: start;
-  gap: 18px;
-  width: 100%;
-  min-width: 0;
-  min-height: 100%;
-  padding: 23px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-card);
+  @apply gap-[18px] w-full min-h-full p-[23px];
 }
 
 .weight-graph-card__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
-  min-width: 0;
+  @apply flex items-start justify-between gap-[14px] min-w-0;
 }
 
 .weight-graph-card__title {
   margin: 3px 0 0;
-  color: var(--color-text);
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: -0.025em;
+  @apply text-foreground text-[1.15rem] font-bold tracking-[-0.025em];
 }
 
 .weight-graph-card__meta {
-  margin-top: 4px;
-  color: var(--color-text-muted);
-  font-size: 0.76rem;
+  @apply mt-[4px] text-muted-foreground text-[0.76rem];
 }
 
 .weight-graph-card__period {
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 2px;
-  min-width: 0;
-  margin: 0;
-  padding: 3px;
+  @apply inline-flex flex-none gap-[2px] min-w-0 m-0 p-[3px];
   border: 1px solid var(--color-border);
-  border-radius: 10px;
+  @apply rounded-[10px];
   background: var(--color-bg);
 }
 
 .weight-graph-card__period-legend {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
+  @apply absolute w-[1px] h-[1px] overflow-hidden;
   clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
+  @apply whitespace-nowrap;
 }
 
 .weight-graph-card__range {
-  min-width: 44px;
-  min-height: 36px;
+  @apply min-w-[44px] min-h-[36px];
   padding: 0 9px;
   border: 0;
-  border-radius: 7px;
+  @apply rounded-[7px];
   background: transparent;
-  color: var(--color-text-muted);
+  @apply text-muted-foreground;
   font: inherit;
-  font-size: 0.7rem;
-  font-weight: 600;
-  cursor: pointer;
+  @apply text-[0.7rem] font-semibold cursor-pointer;
   transition:
     background 150ms ease,
     color 150ms ease;
 }
 
 .weight-graph-card__range:hover {
-  color: var(--color-text);
+  @apply text-foreground;
 }
 
 .weight-graph-card__range--active {
@@ -83,94 +57,79 @@
 }
 
 .weight-graph-card__range:focus-visible {
-  position: relative;
+  @apply relative;
   outline: 3px solid var(--color-primary);
   outline-offset: 1px;
 }
 
 .weight-graph-card__chart {
-  width: 100%;
-  min-width: 0;
-  height: 260px;
+  @apply w-full min-w-0 h-[260px];
 }
 
 .weight-graph-card__tooltip {
-  display: grid;
-  gap: 4px;
-  min-width: 130px;
+  @apply grid gap-[4px] min-w-[130px];
   padding: 11px 13px;
   border: 1px solid var(--color-border);
-  border-radius: 10px;
+  @apply rounded-[10px];
   background: var(--color-surface-elevated);
   box-shadow: var(--shadow-card);
 }
 
 .weight-graph-card__tooltip-label {
-  color: var(--color-text-muted);
-  font-size: 0.73rem;
-  font-weight: 500;
+  @apply text-muted-foreground text-[0.73rem] font-medium;
 }
 
 .weight-graph-card__tooltip-value {
-  color: var(--color-text);
-  font-size: 0.94rem;
-  font-weight: 700;
+  @apply text-foreground text-[0.94rem] font-bold;
   font-variant-numeric: tabular-nums;
 }
 
 .weight-graph-card__empty-state {
-  display: grid;
-  min-height: 260px;
-  padding: 24px;
-  place-items: center;
+  @apply grid min-h-[260px] p-[24px] place-items-center;
   border: 1px dashed var(--color-border);
-  border-radius: var(--radius-md);
+  @apply rounded-[var(--radius-md)];
   background: var(--color-bg);
-  text-align: center;
+  @apply text-center;
 }
 
 .weight-graph-card__empty-state p {
-  max-width: 320px;
-  font-size: 0.86rem;
+  @apply max-w-[320px] text-[0.86rem];
 }
 
 @media (max-width: 760px) {
   .weight-graph-card {
-    gap: 16px;
-    padding: 19px;
+    @apply gap-[16px] p-[19px];
   }
 
   .weight-graph-card__header {
-    flex-wrap: wrap;
-    align-items: center;
+    @apply flex-wrap items-center;
   }
 
   .weight-graph-card__chart {
-    height: 245px;
+    @apply h-[245px];
   }
 }
 
 @media (max-width: 430px) {
   .weight-graph-card {
-    padding: 17px;
+    @apply p-[17px];
   }
 
   .weight-graph-card__header {
-    align-items: flex-start;
-    flex-direction: column;
+    @apply items-start flex-col;
   }
 
   .weight-graph-card__period {
-    width: 100%;
+    @apply w-full;
   }
 
   .weight-graph-card__range {
-    flex: 1;
+    @apply flex-1;
     padding: 0 5px;
   }
 
   .weight-graph-card__chart {
-    height: 220px;
+    @apply h-[220px];
   }
 }
 

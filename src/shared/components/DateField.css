@@ -1,35 +1,26 @@
+@reference "../styles/tailwind.css";
+
 .date-field {
-  display: grid;
-  gap: 10px;
-  min-width: 0;
+  @apply grid gap-[10px] min-w-0;
 }
 
 .date-field__label {
-  color: var(--color-text);
-  font-size: 0.9rem;
-  font-weight: 700;
+  @apply text-foreground text-[0.9rem] font-bold;
 }
 
 .date-field__control {
-  position: relative;
-  min-width: 0;
+  @apply relative min-w-0;
 }
 
 .date-field__button {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  min-height: 58px;
+  @apply flex items-center gap-[14px] w-full min-h-[58px];
   padding: 0 16px;
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  @apply rounded-[12px];
   background: var(--color-surface-soft);
-  color: var(--color-text);
+  @apply text-foreground;
   font: inherit;
-  font-size: 0.95rem;
-  font-weight: 700;
-  text-align: left;
+  @apply text-[0.95rem] font-bold text-left;
   outline: none;
   transition:
     border-color 0.2s ease,
@@ -47,19 +38,13 @@
 }
 
 .date-field__button:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
+  @apply cursor-not-allowed opacity-[0.7];
 }
 
 .date-field__icon {
-  flex: 0 0 auto;
-  color: var(--color-text-muted);
+  @apply flex-none text-muted-foreground;
 }
 
 .date-field__native-input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
+  @apply absolute w-[1px] h-[1px] opacity-0 pointer-events-none;
 }

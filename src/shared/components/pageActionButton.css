@@ -1,0 +1,9 @@
+@reference "../styles/tailwind.css";
+
+.button.page-action-button {
+  @apply w-auto min-h-[46px] rounded-[11px] text-[0.88rem] font-bold;
+}
+
+.page-action-button .button__icon {
+  @apply text-[0.95rem];
+}

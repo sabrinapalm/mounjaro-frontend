@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { FiCalendar } from 'react-icons/fi';
+import { Label } from './ui/label';
 import './DateField.css';
 import { formatDateLabel } from '../utils/dateHelpers';
 
@@ -50,9 +51,9 @@ export const DateField = ({
 
   return (
     <div className='date-field'>
-      <label className='date-field__label' htmlFor={id}>
+      <Label className='date-field__label' htmlFor={id}>
         {label}
-      </label>
+      </Label>
 
       <div className='date-field__control'>
         <button
