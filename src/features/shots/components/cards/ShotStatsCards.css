@@ -1,11 +1,12 @@
 @reference "../../../../shared/styles/tailwind.css";
 
 .shot-overview {
-  @apply grid gap-[18px] min-w-0;
+  @apply flex flex-col gap-[20px] min-w-0;
   padding: 22px 24px;
   border: 1px solid var(--color-border);
   @apply rounded-[var(--radius-lg)];
   background: var(--color-surface);
+  container: shot-overview / inline-size;
 }
 
 .shot-overview__primary {
@@ -74,7 +75,7 @@
 
 .shot-overview__supporting {
   @apply grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   @apply gap-[14px] m-0 pt-[16px];
   border-top: 1px solid var(--color-border);
 }
@@ -111,5 +112,11 @@
 @media (max-width: 380px) {
   .shot-overview__date {
     @apply text-[1.35rem];
+  }
+}
+
+@container shot-overview (min-width: 560px) {
+  .shot-overview__supporting {
+    @apply grid-cols-4;
   }
 }

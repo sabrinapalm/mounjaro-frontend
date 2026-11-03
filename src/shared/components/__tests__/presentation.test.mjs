@@ -5,7 +5,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { loadComponent } from './renderComponent.mjs';
 
 const { PageHeader } = loadComponent(new URL('../PageHeader.tsx', import.meta.url));
-const { CollapsibleCard } = loadComponent(new URL('../collapsibleCard.tsx', import.meta.url));
 const { HistoryCard, HistoryCardHeader, HistoryGroup, HistoryEmptyState, HistoryDeleteButton } =
   loadComponent(new URL('../historyCard.tsx', import.meta.url));
 
@@ -29,23 +28,6 @@ test('page header keeps one title and supports copy, metadata and an action', ()
     renderToStaticMarkup(h(PageHeader, { title: 'Your profile', actionMeta: 'Account' })),
     /Account/
   );
-});
-
-test('expandable panels keep native collapsed disclosure semantics and their content', () => {
-  const markup = renderToStaticMarkup(
-    h(
-      CollapsibleCard,
-      {
-        title: 'Treatment statistics',
-        description: 'Explore your treatment data',
-      },
-      h('p', null, 'Feature-owned content')
-    )
-  );
-  assert.match(markup, /^<details[^>]*><summary/);
-  assert.doesNotMatch(markup, /<details[^>]*\bopen/);
-  assert.match(markup, /<strong>Treatment statistics<\/strong>/);
-  assert.match(markup, /Feature-owned content/);
 });
 
 test('history composition preserves month headings, records, summaries and actions', () => {

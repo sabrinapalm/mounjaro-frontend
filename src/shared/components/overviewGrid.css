@@ -1,0 +1,21 @@
+@reference "../styles/tailwind.css";
+
+.overview-grid {
+  @apply min-w-0;
+  container: overview / inline-size;
+}
+
+.overview-grid__content {
+  @apply grid items-stretch gap-[18px];
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+}
+
+.overview-grid__content > * {
+  @apply min-w-0;
+}
+
+@container overview (max-width: 900px) {
+  .overview-grid__content {
+    @apply grid-cols-1 items-start gap-[16px];
+  }
+}

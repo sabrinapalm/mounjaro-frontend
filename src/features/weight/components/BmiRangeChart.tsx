@@ -1,5 +1,5 @@
 import { Bar, BarChart, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts';
-import { CollapsibleCard } from '../../../shared/components/collapsibleCard';
+import { Card } from '../../../shared/components/ui/card';
 import type { WeightEntry } from '../../../shared/types';
 import { getTimestamp } from '../../../shared/utils/dateHelpers';
 import { useProfile } from '../../profile/ProfileContext';
@@ -203,26 +203,16 @@ export const BmiRangeChart = ({ weights }: BmiRangeChartProps) => {
   const hasMissingWeights = weights.length === 0;
 
   return (
-    <CollapsibleCard
-      className='bmi-health-metrics'
-      title='BMI & health metrics'
-      description={
-        currentBmi !== null && currentCategory
-          ? `Current BMI ${formatBmi(currentBmi)} · ${currentCategory.label}`
-          : 'Add your height and a weight entry to calculate BMI'
-      }
-    >
+    <Card asChild appearance='custom'>
       <section className='bmi-range-card' aria-labelledby='bmi-range-chart-title'>
         <header className='bmi-range-card__header'>
           <div>
-            <p className='bmi-range-card__eyebrow'>BMI range</p>
-
             <h2 id='bmi-range-chart-title' className='bmi-range-card__title'>
-              Current BMI
+              BMI &amp; health metrics
             </h2>
 
             <p className='bmi-range-card__description'>
-              Based on your latest weight entry, goal weight and profile height.
+              Based on your latest measurement and height.
             </p>
           </div>
 
@@ -257,14 +247,14 @@ export const BmiRangeChart = ({ weights }: BmiRangeChartProps) => {
         {!hasMissingHeight && !hasMissingWeights && currentBmi !== null && currentCategory && (
           <>
             <div className='bmi-range-card__chart' aria-hidden='true'>
-              <ResponsiveContainer width='100%' height={128}>
+              <ResponsiveContainer width='100%' height={80}>
                 <BarChart
                   data={chartData}
                   layout='vertical'
                   margin={{
-                    top: 36,
+                    top: 8,
                     right: 12,
-                    bottom: 8,
+                    bottom: 4,
                     left: 12,
                   }}
                 >
@@ -300,13 +290,6 @@ export const BmiRangeChart = ({ weights }: BmiRangeChartProps) => {
                       strokeWidth={2}
                       strokeDasharray='5 5'
                       ifOverflow='extendDomain'
-                      label={{
-                        value: `Goal: ${formatBmi(goalBmi)}`,
-                        position: 'top',
-                        fill: 'var(--bmi-goal-marker-color)',
-                        fontSize: 12,
-                        fontWeight: 700,
-                      }}
                     />
                   )}
 
@@ -315,13 +298,6 @@ export const BmiRangeChart = ({ weights }: BmiRangeChartProps) => {
                     stroke='var(--bmi-marker-color)'
                     strokeWidth={2}
                     ifOverflow='extendDomain'
-                    label={{
-                      value: `You: ${formatBmi(currentBmi)}`,
-                      position: 'top',
-                      fill: 'var(--bmi-marker-color)',
-                      fontSize: 12,
-                      fontWeight: 700,
-                    }}
                   />
                 </BarChart>
               </ResponsiveContainer>
@@ -330,13 +306,13 @@ export const BmiRangeChart = ({ weights }: BmiRangeChartProps) => {
             <div className='bmi-range-card__markers'>
               <span className='bmi-range-card__marker-item'>
                 <span className='bmi-range-card__marker-line bmi-range-card__marker-line--current' />
-                Current BMI
+                Current BMI {formatBmi(currentBmi)}
               </span>
 
               {goalBmi !== null && (
                 <span className='bmi-range-card__marker-item'>
                   <span className='bmi-range-card__marker-line bmi-range-card__marker-line--goal' />
-                  Goal BMI
+                  Goal BMI {formatBmi(goalBmi)}
                 </span>
               )}
             </div>
@@ -350,7 +326,7 @@ export const BmiRangeChart = ({ weights }: BmiRangeChartProps) => {
                   />
 
                   <span className='bmi-range-card__legend-text'>
-                    <span className='bmi-range-card__legend-label'>{range.shortLabel}</span>
+                    <span className='bmi-range-card__legend-label'>{range.label}</span>
                     <span className='bmi-range-card__legend-range'>{formatRangeLabel(range)}</span>
                   </span>
                 </li>
@@ -364,6 +340,6 @@ export const BmiRangeChart = ({ weights }: BmiRangeChartProps) => {
           </>
         )}
       </section>
-    </CollapsibleCard>
+    </Card>
   );
 };

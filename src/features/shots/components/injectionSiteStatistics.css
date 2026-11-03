@@ -1,0 +1,69 @@
+@reference "../../../shared/styles/tailwind.css";
+
+.injection-site-distribution {
+  @apply grid gap-[18px] min-w-0 p-[22px] rounded-[var(--radius-lg)] bg-card;
+  align-content: start;
+}
+
+.injection-site-distribution__header {
+  @apply flex items-start justify-between gap-[12px];
+}
+
+.injection-site-distribution__header h2 {
+  @apply text-[length:var(--font-size-card-title)] font-bold tracking-[var(--tracking-card-title)];
+}
+
+.injection-site-distribution__header p {
+  @apply mt-[4px] text-muted-foreground text-[0.8rem];
+}
+
+.injection-site-distribution__header > svg {
+  @apply flex-none mt-[3px] text-primary;
+}
+
+.injection-site-distribution__list {
+  @apply grid gap-[12px] m-0 p-0;
+  list-style: none;
+}
+
+.injection-site-distribution__item {
+  @apply grid gap-[5px] min-w-0;
+}
+
+.injection-site-distribution__label {
+  @apply flex items-center justify-between gap-[12px] text-foreground text-[0.8rem];
+}
+
+.injection-site-distribution__label strong {
+  @apply flex-none font-bold;
+  font-variant-numeric: tabular-nums;
+}
+
+.injection-site-distribution__bar {
+  @apply h-[5px] overflow-hidden rounded-full;
+  background: var(--color-surface-soft);
+}
+
+.injection-site-distribution__bar > span {
+  @apply block h-full rounded-full;
+  background: var(--color-primary);
+}
+
+.injection-site-distribution__most-used,
+.injection-site-distribution__empty {
+  @apply text-muted-foreground text-[0.76rem];
+}
+
+.injection-site-distribution__most-used strong {
+  @apply font-semibold text-foreground;
+}
+
+.injection-site-distribution__empty {
+  @apply py-[18px];
+}
+
+@media (max-width: 760px) {
+  .injection-site-distribution {
+    @apply p-[18px];
+  }
+}

@@ -1,4 +1,5 @@
 import { LuPlus } from 'react-icons/lu';
+import { OverviewGrid } from '../../shared/components/overviewGrid';
 import { PageHeader } from '../../shared/components/PageHeader';
 import { PageActionButton } from '../../shared/components/pageActionButton';
 import type { CreateWeightInput, WeightEntry } from '../../shared/types';
@@ -30,7 +31,10 @@ export const WeightPage = ({ weights, onWeightAdded, onDeleteWeight }: WeightPag
         }
       />
 
-      <WeightStatsCards weights={weights} />
+      <OverviewGrid>
+        <WeightStatsCards weights={weights} />
+        <BmiRangeChart weights={weights} />
+      </OverviewGrid>
       <WeightTracker
         weights={weights}
         title='Measurements'
@@ -40,8 +44,6 @@ export const WeightPage = ({ weights, onWeightAdded, onDeleteWeight }: WeightPag
         onWeightAdded={onWeightAdded}
         onDeleteWeight={onDeleteWeight}
       />
-
-      <BmiRangeChart weights={weights} />
 
       {addWeightModal.modal}
     </section>

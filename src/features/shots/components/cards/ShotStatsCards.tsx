@@ -78,12 +78,14 @@ export const ShotStatsCards = ({ shots }: ShotStatsCardsProps) => {
         />
         <OverviewStatistic
           label='Side effects'
-          value={hasShots ? sideEffects?.meta : 'No records yet'}
+          value={hasShots ? sideEffects?.value : 'No records yet'}
+          meta={hasShots ? sideEffects?.meta : undefined}
           icon={<LuActivity />}
         />
         <OverviewStatistic
           label='Notes'
-          value={hasShots ? notes?.meta : 'No records yet'}
+          value={hasShots ? notes?.value : 'No records yet'}
+          meta={hasShots ? notes?.meta : undefined}
           icon={<LuNotebookPen />}
         />
       </dl>

@@ -1,182 +1,81 @@
 @reference "../../../shared/styles/tailwind.css";
 
-.injection-site-stats-card {
-  @apply grid gap-[22px] min-w-0 p-[24px];
-  border: 1px solid var(--color-border);
-  @apply rounded-[var(--radius-lg)];
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--color-surface-soft) 22%, var(--color-surface) 78%),
-    var(--color-surface)
-  );
-  box-shadow: var(--shadow-sm);
+.injection-site-weight-change {
+  @apply min-w-0 px-[24px] py-[14px] rounded-[var(--radius-lg)] bg-card;
 }
 
-.injection-site-stats-card__header {
-  @apply flex items-center justify-between gap-[20px] min-w-0;
+.injection-site-weight-change > summary {
+  @apply flex items-center justify-between gap-[12px] min-h-[44px] rounded-[4px] text-foreground cursor-pointer;
+  list-style: none;
 }
 
-.injection-site-stats-card__title-group {
-  @apply min-w-0;
+.injection-site-weight-change > summary::-webkit-details-marker {
+  @apply hidden;
 }
-
-.injection-site-stats-card__title-group h2 {
-  @apply text-foreground text-[1.35rem] font-bold tracking-[-0.04em];
-}
-
-.injection-site-stats-card__title-group p {
-  @apply max-w-[640px] mt-[4px] text-muted-foreground text-[0.95rem];
-  font-weight: 650;
-  @apply leading-[1.55];
-}
-
-.injection-site-stats-card__highlight {
-  @apply grid gap-[8px] min-w-0 p-[18px];
-  border: 1px solid var(--color-border);
-  @apply rounded-[20px];
-  background: var(--color-surface);
-}
-
-.injection-site-stats-card__highlight span {
-  @apply text-muted-foreground text-[0.74rem] font-bold leading-[1] tracking-[0.08em] uppercase;
-}
-
-.injection-site-stats-card__highlight strong {
-  @apply text-foreground text-[1.05rem] font-bold leading-[1.2];
-}
-
-.injection-site-stats-card__highlight small {
-  @apply text-muted-foreground text-[0.82rem] font-bold leading-[1.35];
-}
-
-.injection-site-stats-card__chart {
-  @apply min-w-0 overflow-hidden p-[14px];
-  border: 1px solid var(--color-border);
-  @apply rounded-[26px];
-  background: color-mix(in srgb, var(--color-surface-soft) 72%, transparent);
-}
-
-.injection-site-stats-card__grid {
-  @apply grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  @apply gap-[14px] min-w-0;
-}
-
-.injection-site-stat {
-  @apply grid gap-[16px] min-w-0 p-[18px];
-  border: 1px solid var(--color-border);
-  @apply rounded-[24px];
-  background: var(--color-surface-soft);
-}
-
-.injection-site-stat__header {
-  @apply flex items-start justify-between gap-[14px] min-w-0;
-}
-
-.injection-site-stat__header > div {
-  @apply min-w-0;
-}
-
-.injection-site-stat__header h3 {
-  @apply m-0 overflow-hidden text-foreground text-[1rem] font-bold leading-[1.2];
-  text-overflow: ellipsis;
-  @apply whitespace-nowrap;
-}
-
-.injection-site-stat__header p {
-  margin: 5px 0 0;
-  @apply text-muted-foreground text-[0.84rem] font-bold leading-[1.35];
-}
-
-.injection-site-stat__header strong {
+.injection-site-weight-change > summary > svg {
   @apply flex-none;
-  color: var(--color-accent-dark);
-  @apply text-[1rem] font-bold leading-[1.2];
+}
+.injection-site-weight-change[open] > summary > svg {
+  transform: rotate(180deg);
 }
 
-.injection-site-stat dl {
-  @apply grid gap-[10px] m-0;
+.injection-site-weight-change > summary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
-.injection-site-stat dl div {
-  @apply flex items-center justify-between gap-[12px] min-w-0;
+.injection-site-weight-change__description,
+.injection-site-weight-change__highlight {
+  @apply text-muted-foreground text-[0.8rem] leading-[1.5];
 }
 
-.injection-site-stat dt {
-  @apply text-muted-foreground text-[0.84rem] font-bold;
+.injection-site-weight-change table {
+  @apply w-full mt-[16px] mb-[10px] text-[0.85rem];
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 
-.injection-site-stat dd {
-  @apply m-0 text-foreground text-[0.92rem] font-bold text-right whitespace-nowrap;
+.injection-site-weight-change th,
+.injection-site-weight-change td {
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--color-border);
+  @apply text-right align-top;
+  font-variant-numeric: tabular-nums;
 }
 
-.injection-site-stats-card__empty {
-  @apply grid gap-[6px] m-0 p-[18px];
-  border: 1px dashed var(--color-border);
-  @apply rounded-[24px];
-  background: color-mix(in srgb, var(--color-surface-soft) 70%, transparent);
+.injection-site-weight-change th:first-child {
+  @apply w-[32%] text-left font-semibold;
 }
 
-.injection-site-stats-card__empty strong {
-  @apply text-foreground text-[1rem] font-bold;
+.injection-site-weight-change thead th {
+  @apply text-muted-foreground font-semibold;
 }
 
-.injection-site-stats-card__empty p {
-  @apply m-0 text-muted-foreground text-[0.92rem] font-bold leading-[1.45];
+.injection-site-weight-change td {
+  @apply text-foreground;
 }
 
-@media (max-width: 900px) {
-  .injection-site-stats-card__grid {
-    @apply grid-cols-[1fr];
-  }
+.injection-site-weight-change__highlight strong {
+  @apply font-semibold text-foreground;
+}
+
+.injection-site-weight-change__title {
+  @apply block text-[length:var(--font-size-card-title)] font-bold tracking-[var(--tracking-card-title)];
+}
+
+.injection-site-weight-change__subtitle {
+  @apply block mt-[4px] text-muted-foreground text-[0.8rem];
 }
 
 @media (max-width: 760px) {
-  .injection-site-stats-card {
-    @apply gap-[20px] p-[20px] rounded-[26px];
+  .injection-site-weight-change {
+    @apply px-[18px];
   }
-
-  .injection-site-stats-card__header {
-    @apply flex-col gap-[16px];
+  .injection-site-weight-change table {
+    @apply text-[0.73rem];
   }
-
-  .injection-site-stats-card__title-group h2 {
-    @apply text-[1.22rem];
-  }
-
-  .injection-site-stats-card__title-group p {
-    @apply text-[0.9rem];
-  }
-
-  .injection-site-stats-card__highlight {
-    @apply w-full min-w-0;
-  }
-
-  .injection-site-stats-card__chart {
-    @apply mx-[-4px];
-    padding: 10px 6px 8px;
-    @apply rounded-[22px];
-  }
-
-  .injection-site-stat {
-    @apply p-[16px] rounded-[22px];
-  }
-}
-
-@media (max-width: 460px) {
-  .injection-site-stats-card {
-    @apply p-[18px];
-  }
-
-  .injection-site-stat__header {
-    @apply flex-col gap-[8px];
-  }
-
-  .injection-site-stat__header h3 {
-    @apply whitespace-normal;
-  }
-
-  .injection-site-stat dl div {
-    @apply items-start;
+  .injection-site-weight-change th,
+  .injection-site-weight-change td {
+    padding: 10px 3px;
   }
 }

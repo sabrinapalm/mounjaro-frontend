@@ -8,50 +8,40 @@
   --bmi-range-obesityClass2: #ef4444;
   --bmi-range-obesityClass3: #be123c;
   --bmi-marker-color: var(--color-text);
+  --bmi-goal-marker-color: var(--color-primary);
 
-  @apply flex flex-col gap-[22px] p-[24px];
-  border: 1px solid var(--color-border);
-  @apply rounded-[28px];
-  background: linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--color-surface-soft) 18%, var(--color-surface) 82%),
-      var(--color-surface)
-    )
-    var(--color-surface);
-  box-shadow: var(--card-shadow);
+  @apply flex flex-col gap-[12px] min-w-0 p-[22px] rounded-[var(--radius-lg)] bg-card;
+  container: bmi / inline-size;
 }
 
 .bmi-range-card__header {
-  @apply flex items-start justify-between gap-[24px];
-}
-
-.bmi-range-card__eyebrow {
-  margin: 0 0 8px;
-  @apply text-muted-foreground text-[0.78rem] font-bold tracking-[0.08em] uppercase;
+  @apply flex items-start justify-between gap-[16px];
 }
 
 .bmi-range-card__title {
-  @apply text-foreground text-[1.55rem] font-bold tracking-[-0.045em];
+  @apply text-foreground text-[length:var(--font-size-card-title)] font-bold tracking-[var(--tracking-card-title)];
 }
 
 .bmi-range-card__description {
-  @apply max-w-[660px] text-muted-foreground text-[0.95rem] font-bold;
+  @apply mt-[4px] text-muted-foreground text-[0.8rem];
 }
 
 .bmi-range-card__summary {
-  @apply flex min-w-[132px] flex-col items-end gap-[4px];
-  padding: 14px 16px;
-  border: 1px solid var(--color-border);
-  @apply rounded-[22px];
-  background: var(--color-surface-soft);
+  @apply flex flex-none flex-col items-end gap-[4px] max-w-[150px];
 }
 
 .bmi-range-card__bmi-value {
-  @apply text-foreground text-[2rem] font-bold leading-[1];
+  @apply text-foreground text-[2rem] font-bold tracking-[-0.04em] leading-none;
+  font-variant-numeric: tabular-nums;
 }
 
-.bmi-range-card__bmi-label {
-  @apply text-muted-foreground text-[0.82rem] font-bold text-right;
+.bmi-range-card__bmi-label,
+.bmi-range-card__goal-summary {
+  @apply text-muted-foreground text-[0.75rem] text-right;
+}
+
+.bmi-range-card__goal-summary {
+  @apply mt-[4px];
 }
 
 .bmi-range-card__chart {
@@ -59,98 +49,73 @@
 }
 
 .bmi-range-card__legend {
-  @apply grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  @apply gap-[10px] p-0 m-0;
+  @apply grid grid-cols-3 gap-[8px] p-0 m-0;
   list-style: none;
 }
 
 .bmi-range-card__legend-item {
-  @apply flex min-w-0 items-center gap-[8px] p-[10px];
-  border: 1px solid var(--color-border);
-  @apply rounded-[16px];
-  background: color-mix(in srgb, var(--color-surface-soft) 88%, transparent);
+  @apply flex min-w-0 items-start gap-[6px];
 }
 
 .bmi-range-card__legend-dot {
-  @apply w-[10px] h-[10px] flex-none rounded-[999px];
+  @apply w-[7px] h-[7px] mt-[5px] flex-none rounded-full;
 }
 
 .bmi-range-card__legend-dot--underweight {
   background: var(--bmi-range-underweight);
 }
-
 .bmi-range-card__legend-dot--healthy {
   background: var(--bmi-range-healthy);
 }
-
 .bmi-range-card__legend-dot--overweight {
   background: var(--bmi-range-overweight);
 }
-
 .bmi-range-card__legend-dot--obesityClass1 {
   background: var(--bmi-range-obesityClass1);
 }
-
 .bmi-range-card__legend-dot--obesityClass2 {
   background: var(--bmi-range-obesityClass2);
 }
-
 .bmi-range-card__legend-dot--obesityClass3 {
   background: var(--bmi-range-obesityClass3);
 }
 
 .bmi-range-card__legend-text {
-  @apply flex min-w-0 flex-col gap-[2px];
+  @apply flex min-w-0 flex-wrap items-baseline gap-x-[4px] gap-y-[2px];
 }
 
 .bmi-range-card__legend-label {
-  @apply overflow-hidden text-foreground text-[0.82rem] font-bold;
-  text-overflow: ellipsis;
-  @apply whitespace-nowrap;
+  @apply text-foreground text-[0.74rem] font-semibold leading-[1.35];
 }
 
 .bmi-range-card__legend-range {
-  @apply text-muted-foreground text-[0.75rem] font-bold;
+  @apply text-muted-foreground text-[0.72rem];
 }
 
 .bmi-range-card__note {
-  margin: -4px 0 0;
-  @apply text-muted-foreground text-[0.85rem] leading-[1.6];
+  @apply mt-[2px] text-muted-foreground text-[0.74rem] leading-[1.5];
 }
 
 .bmi-range-card__empty {
-  @apply flex min-h-[120px] items-center justify-center p-[24px];
-  border: 1px dashed var(--color-border);
-  @apply rounded-[20px];
-  background: var(--color-surface-soft);
-  @apply text-muted-foreground text-[0.95rem] font-bold text-center;
-}
-
-.bmi-range-card {
-  --bmi-goal-marker-color: var(--color-primary);
-}
-
-.bmi-range-card__goal-summary {
-  @apply block mt-[8px] text-muted-foreground text-[0.78rem] font-bold leading-[1.4];
+  @apply flex flex-1 min-h-[120px] items-center justify-center text-muted-foreground text-[0.85rem];
 }
 
 .bmi-range-card__markers {
-  @apply flex flex-wrap gap-[14px] mt-[-12px];
+  @apply flex flex-wrap gap-[12px];
 }
 
 .bmi-range-card__marker-item {
-  @apply inline-flex items-center gap-[8px] text-muted-foreground text-[0.8rem] font-bold;
+  @apply inline-flex items-center gap-[6px] text-muted-foreground text-[0.74rem];
+  font-variant-numeric: tabular-nums;
 }
 
 .bmi-range-card__marker-line {
-  @apply w-[22px] h-[2px] rounded-[999px];
+  @apply w-[18px] h-[2px] rounded-full;
 }
 
 .bmi-range-card__marker-line--current {
   background: var(--bmi-marker-color);
 }
-
 .bmi-range-card__marker-line--goal {
   background-image: linear-gradient(
     to right,
@@ -160,50 +125,27 @@
   );
 }
 
-@media (max-width: 1100px) {
+@container bmi (max-width: 430px) {
   .bmi-range-card__legend {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    @apply grid-cols-2;
+  }
+}
+
+@container bmi (max-width: 270px) {
+  .bmi-range-card__header {
+    @apply flex-col;
+  }
+  .bmi-range-card__summary {
+    @apply items-start max-w-none;
+  }
+  .bmi-range-card__bmi-label,
+  .bmi-range-card__goal-summary {
+    @apply text-left;
   }
 }
 
 @media (max-width: 760px) {
   .bmi-range-card {
-    @apply p-[20px] rounded-[24px];
-  }
-
-  .bmi-range-card__header {
-    @apply flex-col;
-  }
-
-  .bmi-range-card__summary {
-    @apply w-full items-start;
-  }
-
-  .bmi-range-card__bmi-label {
-    @apply text-left;
-  }
-
-  .bmi-range-card__legend {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 460px) {
-  .bmi-range-card__legend {
-    @apply grid-cols-[1fr];
-  }
-}
-
-.bmi-health-metrics .bmi-range-card {
-  @apply gap-[18px] p-[20px];
-  border: 0;
-  @apply rounded-[var(--radius-md)];
-  background: var(--color-surface-soft);
-  box-shadow: none;
-}
-
-@media (max-width: 760px) {
-  .bmi-health-metrics .bmi-range-card {
-    @apply p-[16px];
+    @apply p-[18px];
   }
 }

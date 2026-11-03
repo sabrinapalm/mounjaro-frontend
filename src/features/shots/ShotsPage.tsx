@@ -1,11 +1,13 @@
 import { LuPlus } from 'react-icons/lu';
+import { OverviewGrid } from '../../shared/components/overviewGrid';
 import { PageHeader } from '../../shared/components/PageHeader';
 import { PageActionButton } from '../../shared/components/pageActionButton';
 import type { CreateShotInput, ShotEntry, WeightEntry } from '../../shared/types';
 import { formatDateLabel, getTodayStartOfDay } from '../../shared/utils/dateHelpers';
 import { ShotStatsCards } from './components/cards/ShotStatsCards';
+import { InjectionSiteWeightLossStats } from './components/InjectionSiteWeightLossStats';
+import { InjectionSiteStatistics } from './components/injectionSiteStatistics';
 import { ShotTracker } from './components/ShotTracker';
-import { TreatmentStatistics } from './components/TreatmentStatistics';
 import { useAddShotModal } from './hooks/useAddShotModal';
 
 interface ShotsPageProps {
@@ -31,7 +33,12 @@ export const ShotsPage = ({ shots, weights, onShotAdded, onDeleteShot }: ShotsPa
         }
       />
 
-      <ShotStatsCards shots={shots} />
+      <OverviewGrid>
+        <ShotStatsCards shots={shots} />
+        <InjectionSiteStatistics shots={shots} />
+      </OverviewGrid>
+
+      <InjectionSiteWeightLossStats shots={shots} weights={weights} />
 
       <ShotTracker
         shots={shots}
@@ -42,8 +49,6 @@ export const ShotsPage = ({ shots, weights, onShotAdded, onDeleteShot }: ShotsPa
         onShotAdded={onShotAdded}
         onDeleteShot={onDeleteShot}
       />
-
-      <TreatmentStatistics shots={shots} weights={weights} />
 
       {addShotModal.modal}
     </section>

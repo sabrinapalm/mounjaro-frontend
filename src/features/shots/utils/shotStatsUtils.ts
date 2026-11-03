@@ -101,7 +101,7 @@ export const getLatestDoseStats = (latestShot: ShotEntry): ShotStatDisplay => {
   };
 };
 
-export const getMostUsedInjectionSiteStats = (shots: ShotEntry[]): ShotStatDisplay => {
+export const getInjectionSiteCounts = (shots: ShotEntry[]) => {
   const counts = shots.reduce<Partial<Record<InjectionSite, number>>>((acc, shot) => {
     if (!shot.injectionSite) {
       return acc;
@@ -112,7 +112,7 @@ export const getMostUsedInjectionSiteStats = (shots: ShotEntry[]): ShotStatDispl
     return acc;
   }, {});
 
-  const mostUsedSite = Object.entries(counts)
+  return Object.entries(counts)
     .flatMap(([site, count]) => {
       if (typeof count !== 'number') {
         return [];
@@ -125,7 +125,11 @@ export const getMostUsedInjectionSiteStats = (shots: ShotEntry[]): ShotStatDispl
         },
       ];
     })
-    .sort((firstSite, secondSite) => secondSite.count - firstSite.count)[0];
+    .sort((firstSite, secondSite) => secondSite.count - firstSite.count);
+};
+
+export const getMostUsedInjectionSiteStats = (shots: ShotEntry[]): ShotStatDisplay => {
+  const mostUsedSite = getInjectionSiteCounts(shots)[0];
 
   if (!mostUsedSite) {
     return {

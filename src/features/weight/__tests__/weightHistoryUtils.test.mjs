@@ -82,7 +82,7 @@ test('calculates the recorded difference using the selected unit conversion', ()
   );
 });
 
-test('BMI metrics retain a collapsed native disclosure with the calculated summary', async () => {
+test('BMI metrics remain visible with the calculated category and goal indicator', async () => {
   const { createElement: h } = await import('react');
   const { renderToStaticMarkup } = await import('react-dom/server');
   const { loadComponent } = await import(
@@ -109,8 +109,11 @@ test('BMI metrics retain a collapsed native disclosure with the calculated summa
       h(BmiRangeChart, { weights: [{ id: 'demo', dateTime: '2026-11-02T10:00:00Z', weight: 90 }] })
     )
   );
-  assert.match(markup, /^<details[^>]*><summary/);
-  assert.doesNotMatch(markup, /<details[^>]*\bopen/);
+  assert.match(markup, /^<section[^>]*bmi-range-card/);
+  assert.doesNotMatch(markup, /<details|<summary/);
   assert.match(markup, /BMI &amp; health metrics/);
-  assert.match(markup, /Current BMI 31.1 · Obesity class 1/);
+  assert.match(markup, /Current BMI 31.1/);
+  assert.match(markup, /Obesity class 1/);
+  assert.match(markup, /Goal BMI 26.0/);
+  assert.equal((markup.match(/class="bmi-range-card__legend-item"/g) ?? []).length, 6);
 });
