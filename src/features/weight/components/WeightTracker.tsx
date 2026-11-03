@@ -1,8 +1,14 @@
 import { useMemo, useState } from 'react';
-import { AiOutlineDelete } from 'react-icons/ai';
 import { FiActivity } from 'react-icons/fi';
 import { LuPlus } from 'react-icons/lu';
 import { Button } from '../../../shared/components/Button';
+import {
+  HistoryCard,
+  HistoryCardHeader,
+  HistoryDeleteButton,
+  HistoryEmptyState,
+  HistoryGroup,
+} from '../../../shared/components/historyCard';
 import { ConfirmDialog } from '../../../shared/components/modals/ConfirmDialog';
 import { ViewAllButton } from '../../../shared/components/ViewAllButton';
 import { useUnitSettings } from '../../../shared/hooks/useUnitSettings';
@@ -21,7 +27,7 @@ import './WeightTracker.css';
 type WeightTrackerVariant = 'compact' | 'full';
 
 const COMPACT_LIMIT = 3;
-const INITIAL_HISTORY_LIMIT = 5;
+const INITIAL_HISTORY_LIMIT = 3;
 const HISTORY_PAGE_SIZE = 10;
 
 interface WeightTrackerProps {
@@ -40,8 +46,8 @@ export const WeightTracker = ({
   onWeightAdded,
   onDeleteWeight,
   onViewAll,
-  title = 'Recent Weights',
-  summaryLabel = 'Total weight loss',
+  title = 'Recent measurements',
+  summaryLabel = 'Weight change',
   variant = 'compact',
   showAddButton = true,
 }: WeightTrackerProps) => {
@@ -136,153 +142,150 @@ export const WeightTracker = ({
   };
 
   return (
-    <section className={`weight-tracker-card weight-tracker-card--${variant}`}>
-      <header className='weight-tracker-card__header'>
-        <div>
-          <h2 className='weight-tracker-card__title'>{title}</h2>
-
-          {variant === 'full' ? (
-            <p className='weight-tracker-card__summary'>
+    <HistoryCard
+      className={`history-card--${variant} weight-tracker-card weight-tracker-card--${variant}`}
+    >
+      <HistoryCardHeader
+        title={title}
+        summary={
+          variant === 'full' ? (
+            <>
               {sortedWeights.length} {sortedWeights.length === 1 ? 'measurement' : 'measurements'}
-            </p>
+            </>
           ) : weightLoss !== null && weightLossLabel ? (
-            <p className='weight-tracker-card__summary'>
+            <>
               {summaryLabel}:{' '}
               <span className={weightLoss > 0 ? 'positive' : 'negative'}>{weightLossLabel}</span>
-            </p>
-          ) : null}
-        </div>
+            </>
+          ) : null
+        }
+        action={
+          showAddButton ? (
+            <Button
+              icon={<LuPlus />}
+              variant='outline'
+              color='secondary'
+              onClick={addWeightModal.openModal}
+            >
+              Add weight
+            </Button>
+          ) : null
+        }
+      />
 
-        {showAddButton ? (
-          <Button
-            icon={<LuPlus />}
-            variant='outline'
-            color='secondary'
-            onClick={addWeightModal.openModal}
-          >
-            Add Weight
-          </Button>
-        ) : null}
-      </header>
-
-      {error ? <p className='weight-tracker-card__error'>{error}</p> : null}
+      {error ? (
+        <p className='history-card__error' role='alert'>
+          {error}
+        </p>
+      ) : null}
 
       {visibleWeights.length === 0 ? (
-        <div className='weight-tracker-card__empty-state'>
-          <div className='weight-tracker-card__empty-icon'>
-            <FiActivity size={24} />
-          </div>
-
-          <p>No weights recorded yet</p>
-        </div>
+        <HistoryEmptyState icon={<FiActivity size={24} />} tone='accent'>
+          No measurements recorded yet
+        </HistoryEmptyState>
       ) : variant === 'full' ? (
         <div className='weight-tracker-card__history'>
           {visibleWeightGroups.map((group) => (
-            <section className='weight-tracker-card__month' key={group.key}>
-              <h3 className='weight-tracker-card__month-title'>{group.label}</h3>
-              <ul className='weight-tracker-card__list'>
-                {group.weights.map((entry) => {
-                  const entryIndex = sortedWeightIndexById.get(entry.id);
-                  const previousEntry =
-                    entryIndex !== undefined ? sortedWeights[entryIndex + 1] : undefined;
-                  const changeInKg = previousEntry ? entry.weight - previousEntry.weight : null;
-                  const change = previousEntry
-                    ? getWeightChangeInDisplayUnits(
-                        entry.weight,
-                        previousEntry.weight,
-                        convertWeightFromKg
-                      )
-                    : null;
-                  const isWeightGain = changeInKg !== null && changeInKg > 0;
-                  const isWeightLoss = changeInKg !== null && changeInKg < 0;
-                  const dateValue = getDateValueFromDateTime(entry.dateTime);
-                  const hasSameDayEntry = (weightEntryCountByDate.get(dateValue) ?? 0) > 1;
-                  const displayDate = formatDateLabel(entry.dateTime);
-                  const displayDateTime = hasSameDayEntry
-                    ? `${displayDate} · ${new Date(entry.dateTime).toLocaleTimeString('en-US', {
-                        hour: 'numeric',
-                        minute: '2-digit',
-                      })}`
-                    : displayDate;
+            <HistoryGroup key={group.key} label={group.label}>
+              {group.weights.map((entry) => {
+                const entryIndex = sortedWeightIndexById.get(entry.id);
+                const previousEntry =
+                  entryIndex !== undefined ? sortedWeights[entryIndex + 1] : undefined;
+                const changeInKg = previousEntry ? entry.weight - previousEntry.weight : null;
+                const change = previousEntry
+                  ? getWeightChangeInDisplayUnits(
+                      entry.weight,
+                      previousEntry.weight,
+                      convertWeightFromKg
+                    )
+                  : null;
+                const isWeightGain = changeInKg !== null && changeInKg > 0;
+                const isWeightLoss = changeInKg !== null && changeInKg < 0;
+                const dateValue = getDateValueFromDateTime(entry.dateTime);
+                const hasSameDayEntry = (weightEntryCountByDate.get(dateValue) ?? 0) > 1;
+                const displayDate = formatDateLabel(entry.dateTime);
+                const displayDateTime = hasSameDayEntry
+                  ? `${displayDate} · ${new Date(entry.dateTime).toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                    })}`
+                  : displayDate;
 
-                  return (
-                    <li
-                      key={entry.id}
-                      className={[
-                        'weight-tracker-card__item',
-                        variant === 'full' ? 'weight-tracker-card__item--full' : '',
-                      ].join(' ')}
-                    >
-                      {variant === 'full' ? (
-                        <div className='weight-tracker-card__history-row'>
-                          <span className='weight-tracker-card__icon'>
-                            <FiActivity size={18} />
+                return (
+                  <li
+                    key={entry.id}
+                    className={[
+                      'history-card__row weight-tracker-card__item',
+                      variant === 'full' ? 'weight-tracker-card__item--full' : '',
+                    ].join(' ')}
+                  >
+                    {variant === 'full' ? (
+                      <div className='history-card__history-row weight-tracker-card__history-row'>
+                        <span className='weight-tracker-card__icon'>
+                          <FiActivity size={18} />
+                        </span>
+                        <div className='weight-tracker-card__primary-data'>
+                          <span className='history-card__date weight-tracker-card__date'>
+                            {displayDateTime}
                           </span>
-                          <div className='weight-tracker-card__primary-data'>
-                            <span className='weight-tracker-card__date'>{displayDateTime}</span>
-                            <span className='weight-tracker-card__weight'>
-                              {displayWeightFromKg(entry.weight)} {weightUnit}
-                            </span>
-                          </div>
-                          {change !== null ? (
-                            <span
-                              className={[
-                                'weight-tracker-card__change',
-                                isWeightGain ? 'weight-tracker-card__change--negative' : '',
-                                isWeightLoss ? 'weight-tracker-card__change--positive' : '',
-                              ]
-                                .filter(Boolean)
-                                .join(' ')}
-                            >
-                              {isWeightGain ? '+' : ''}
-                              {change.toFixed(1)} {weightUnit}
-                              <span aria-hidden='true'>{isWeightLoss ? '↓' : '↑'}</span>
-                            </span>
-                          ) : (
-                            <span className='weight-tracker-card__change weight-tracker-card__change--muted'>
-                              —
-                            </span>
-                          )}
-                          <button
-                            type='button'
-                            className='weight-tracker-card__delete-button'
-                            aria-label={`Delete weight from ${displayDateTime}`}
-                            onClick={() => handleOpenDeleteDialog(entry)}
-                          >
-                            <AiOutlineDelete size={19} />
-                          </button>
-                        </div>
-                      ) : (
-                        <>
-                          <div className='weight-tracker-card__icon'>
-                            <FiActivity size={20} />
-                          </div>
-                          <span className='weight-tracker-card__date'>{displayDate}</span>
-                          <span className='weight-tracker-card__weight'>
+                          <span className='history-card__value weight-tracker-card__weight'>
                             {displayWeightFromKg(entry.weight)} {weightUnit}
                           </span>
-                          <span className='weight-tracker-card__change'>
-                            {change !== null ? `${change.toFixed(1)} ${weightUnit}` : '—'}
-                          </span>
-                          <button
-                            type='button'
-                            className='weight-tracker-card__delete-button'
-                            aria-label={`Delete weight from ${displayDate}`}
-                            onClick={() => handleOpenDeleteDialog(entry)}
+                        </div>
+                        {change !== null ? (
+                          <span
+                            className={[
+                              'weight-tracker-card__change',
+                              isWeightGain ? 'weight-tracker-card__change--negative' : '',
+                              isWeightLoss ? 'weight-tracker-card__change--positive' : '',
+                            ]
+                              .filter(Boolean)
+                              .join(' ')}
                           >
-                            <AiOutlineDelete size={20} />
-                          </button>
-                        </>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
+                            {isWeightGain ? '+' : ''}
+                            {change.toFixed(1)} {weightUnit}
+                            <span aria-hidden='true'>{isWeightLoss ? '↓' : '↑'}</span>
+                          </span>
+                        ) : (
+                          <span className='weight-tracker-card__change weight-tracker-card__change--muted'>
+                            —
+                          </span>
+                        )}
+                        <HistoryDeleteButton
+                          className='weight-tracker-card__delete-button'
+                          label={`Delete weight from ${displayDateTime}`}
+                          onClick={() => handleOpenDeleteDialog(entry)}
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        <div className='weight-tracker-card__icon'>
+                          <FiActivity size={20} />
+                        </div>
+                        <span className='history-card__date weight-tracker-card__date'>
+                          {displayDate}
+                        </span>
+                        <span className='history-card__value weight-tracker-card__weight'>
+                          {displayWeightFromKg(entry.weight)} {weightUnit}
+                        </span>
+                        <span className='weight-tracker-card__change'>
+                          {change !== null ? `${change.toFixed(1)} ${weightUnit}` : '—'}
+                        </span>
+                        <HistoryDeleteButton
+                          className='weight-tracker-card__delete-button'
+                          label={`Delete weight from ${displayDate}`}
+                          onClick={() => handleOpenDeleteDialog(entry)}
+                        />
+                      </>
+                    )}
+                  </li>
+                );
+              })}
+            </HistoryGroup>
           ))}
         </div>
       ) : (
-        <ul className='weight-tracker-card__list'>
+        <ul className='history-card__list weight-tracker-card__list'>
           {visibleWeights.map((entry) => {
             const entryIndex = sortedWeightIndexById.get(entry.id);
             const previousEntry =
@@ -300,12 +303,12 @@ export const WeightTracker = ({
             const displayDate = formatDateLabel(entry.dateTime);
 
             return (
-              <li className='weight-tracker-card__item' key={entry.id}>
+              <li className='history-card__row weight-tracker-card__item' key={entry.id}>
                 <div className='weight-tracker-card__icon'>
                   <FiActivity size={20} />
                 </div>
-                <span className='weight-tracker-card__date'>{displayDate}</span>
-                <span className='weight-tracker-card__weight'>
+                <span className='history-card__date weight-tracker-card__date'>{displayDate}</span>
+                <span className='history-card__value weight-tracker-card__weight'>
                   {displayWeightFromKg(entry.weight)} {weightUnit}
                 </span>
                 {change !== null ? (
@@ -327,14 +330,11 @@ export const WeightTracker = ({
                     —
                   </span>
                 )}
-                <button
-                  type='button'
+                <HistoryDeleteButton
                   className='weight-tracker-card__delete-button'
-                  aria-label={`Delete weight from ${displayDate}`}
+                  label={`Delete weight from ${displayDate}`}
                   onClick={() => handleOpenDeleteDialog(entry)}
-                >
-                  <AiOutlineDelete size={20} />
-                </button>
+                />
               </li>
             );
           })}
@@ -342,12 +342,12 @@ export const WeightTracker = ({
       )}
 
       {shouldShowViewAll ? (
-        <footer className='weight-tracker-card__footer'>
+        <footer className='history-card__footer'>
           <ViewAllButton title='View all' onClick={onViewAll} />
         </footer>
       ) : null}
       {shouldShowMore ? (
-        <footer className='weight-tracker-card__footer'>
+        <footer className='history-card__footer'>
           <Button
             variant='text'
             onClick={() =>
@@ -378,6 +378,6 @@ export const WeightTracker = ({
         onConfirm={handleConfirmDelete}
         onCancel={handleCloseDeleteDialog}
       />
-    </section>
+    </HistoryCard>
   );
 };

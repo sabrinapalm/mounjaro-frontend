@@ -1,3 +1,4 @@
+import '../../../../shared/components/modals/entryDialog.css';
 import { type FormEvent, useState } from 'react';
 import { FiCheckCircle } from 'react-icons/fi';
 import { PiSyringeBold } from 'react-icons/pi';
@@ -147,7 +148,7 @@ export const AddShotModal = ({
       >
         <button
           type='button'
-          className='add-shot-modal__close'
+          className='entry-dialog__close add-shot-modal__close'
           aria-label='Close add shot modal'
           onClick={handleClose}
           disabled={isSubmitting}
@@ -155,22 +156,22 @@ export const AddShotModal = ({
           ×
         </button>
 
-        <header className='add-shot-modal__header'>
+        <header className='entry-dialog__header add-shot-modal__header'>
           <div className='add-shot-modal__icon'>
             <PiSyringeBold size={32} />
           </div>
 
-          <h2 id='add-shot-modal-title' className='add-shot-modal__title'>
-            Add Shot
+          <h2 id='add-shot-modal-title' className='entry-dialog__title add-shot-modal__title'>
+            Add shot
           </h2>
 
-          <p className='add-shot-modal__description'>
+          <p className='entry-dialog__description add-shot-modal__description'>
             Log a new injection to keep your progress on track.
           </p>
         </header>
 
-        <form className='add-shot-modal__form' onSubmit={handleSubmit}>
-          <div className='add-shot-modal__row'>
+        <form className='entry-dialog__form add-shot-modal__form' onSubmit={handleSubmit}>
+          <div className='entry-dialog__row add-shot-modal__row'>
             <DateField
               id='shot-date'
               label='Date'
@@ -188,9 +189,9 @@ export const AddShotModal = ({
             />
           </div>
 
-          <div className='add-shot-modal__row'>
-            <Label className='add-shot-modal__field' htmlFor='shot-dosage'>
-              <span className='add-shot-modal__label'>Dose (mg)</span>
+          <div className='entry-dialog__row add-shot-modal__row'>
+            <Label className='entry-dialog__field add-shot-modal__field' htmlFor='shot-dosage'>
+              <span className='entry-dialog__label add-shot-modal__label'>Dose (mg)</span>
 
               <div className='add-shot-modal__select-with-unit'>
                 <NativeSelect
@@ -212,8 +213,11 @@ export const AddShotModal = ({
               </div>
             </Label>
 
-            <Label className='add-shot-modal__field' htmlFor='shot-injection-site'>
-              <span className='add-shot-modal__label'>Injection site</span>
+            <Label
+              className='entry-dialog__field add-shot-modal__field'
+              htmlFor='shot-injection-site'
+            >
+              <span className='entry-dialog__label add-shot-modal__label'>Injection site</span>
 
               <NativeSelect
                 id='shot-injection-site'
@@ -233,7 +237,9 @@ export const AddShotModal = ({
           </div>
 
           <fieldset className='add-shot-modal__fieldset'>
-            <legend className='add-shot-modal__label'>How was last week?</legend>
+            <legend className='entry-dialog__label add-shot-modal__label'>
+              How was last week?
+            </legend>
 
             <p className='add-shot-modal__helper-text'>
               Select any side effects you noticed since your previous shot.
@@ -260,8 +266,8 @@ export const AddShotModal = ({
               })}
             </div>
           </fieldset>
-          <Label className='add-shot-modal__field' htmlFor='shot-notes'>
-            <span className='add-shot-modal__label'>Notes</span>
+          <Label className='entry-dialog__field add-shot-modal__field' htmlFor='shot-notes'>
+            <span className='entry-dialog__label add-shot-modal__label'>Notes</span>
 
             <Textarea
               id='shot-notes'
@@ -277,9 +283,11 @@ export const AddShotModal = ({
             <span className='add-shot-modal__hint'>{notes.length}/250</span>
           </Label>
 
-          {(localError || error) && <p className='add-shot-modal__error'>{localError || error}</p>}
+          {(localError || error) && (
+            <p className='entry-dialog__error add-shot-modal__error'>{localError || error}</p>
+          )}
 
-          <footer className='add-shot-modal__footer'>
+          <footer className='entry-dialog__footer add-shot-modal__footer'>
             <Button
               variant='solid'
               color='primary'
@@ -288,7 +296,7 @@ export const AddShotModal = ({
               disabled={isSubmitting}
               size='lg'
             >
-              {isSubmitting ? 'Adding...' : 'Add Shot'}
+              {isSubmitting ? 'Adding...' : 'Add shot'}
             </Button>
             <Button onClick={handleClose} disabled={isSubmitting} variant='text' color='muted'>
               Cancel

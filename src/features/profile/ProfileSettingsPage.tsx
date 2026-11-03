@@ -141,9 +141,9 @@ export const ProfileSettingsPage = ({ profile, onProfileUpdated }: ProfileSettin
   };
 
   return (
-    <section className='profile-settings-page'>
+    <section className='dashboard-page profile-settings-page'>
       <PageHeader
-        title='Profile Settings'
+        title='Your profile'
         description='Manage your personal details, account information and progress targets.'
       />
       <form className='profile-settings-page__grid' onSubmit={handleSubmit}>

@@ -1,3 +1,4 @@
+import '../../../../shared/components/modals/entryDialog.css';
 import { type FormEvent, useState } from 'react';
 import { FiActivity } from 'react-icons/fi';
 import { Input } from '../../../../shared/components/ui/input';
@@ -104,7 +105,7 @@ export const AddWeightModal = ({
       >
         <button
           type='button'
-          className='add-weight-modal__close'
+          className='entry-dialog__close add-weight-modal__close'
           aria-label='Close add weight modal'
           onClick={handleClose}
           disabled={isSubmitting}
@@ -112,22 +113,22 @@ export const AddWeightModal = ({
           ×
         </button>
 
-        <header className='add-weight-modal__header'>
+        <header className='entry-dialog__header add-weight-modal__header'>
           <div className='add-weight-modal__icon'>
             <FiActivity size={30} />
           </div>
 
-          <h2 id='add-weight-modal-title' className='add-weight-modal__title'>
-            Add Weight
+          <h2 id='add-weight-modal-title' className='entry-dialog__title add-weight-modal__title'>
+            Add weight
           </h2>
 
-          <p className='add-weight-modal__description'>
+          <p className='entry-dialog__description add-weight-modal__description'>
             Log your current weight to track your progress.
           </p>
         </header>
 
-        <form className='add-weight-modal__form' onSubmit={handleSubmit}>
-          <div className='add-weight-modal__row'>
+        <form className='entry-dialog__form add-weight-modal__form' onSubmit={handleSubmit}>
+          <div className='entry-dialog__row add-weight-modal__row'>
             <DateField
               id='weight-date'
               label='Date'
@@ -145,8 +146,8 @@ export const AddWeightModal = ({
             />
           </div>
 
-          <Label className='add-weight-modal__field' htmlFor='weight-input'>
-            <span className='add-weight-modal__label'>Weight</span>
+          <Label className='entry-dialog__field add-weight-modal__field' htmlFor='weight-input'>
+            <span className='entry-dialog__label add-weight-modal__label'>Weight</span>
 
             <div className='add-weight-modal__input-with-unit'>
               <Input
@@ -167,10 +168,10 @@ export const AddWeightModal = ({
           </Label>
 
           {(localError || error) && (
-            <p className='add-weight-modal__error'>{localError || error}</p>
+            <p className='entry-dialog__error add-weight-modal__error'>{localError || error}</p>
           )}
 
-          <footer className='add-weight-modal__footer'>
+          <footer className='entry-dialog__footer add-weight-modal__footer'>
             <Button
               size='lg'
               icon={<FiActivity size={20} />}
@@ -178,7 +179,7 @@ export const AddWeightModal = ({
               color='secondary'
               type='submit'
             >
-              {isSubmitting ? 'Adding...' : 'Add Weight'}
+              {isSubmitting ? 'Adding...' : 'Add weight'}
             </Button>
 
             <Button onClick={handleClose} disabled={isSubmitting} variant='text' color='muted'>

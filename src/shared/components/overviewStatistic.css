@@ -1,0 +1,29 @@
+@reference "../styles/tailwind.css";
+
+.overview-statistic {
+  @apply grid gap-[3px] min-w-0 pl-[12px];
+  align-content: start;
+  border-left: 2px solid color-mix(in srgb, var(--color-primary) 38%, var(--color-border));
+}
+
+.overview-statistic__label {
+  @apply flex items-center gap-[6px] text-muted-foreground text-[0.76rem] font-bold;
+}
+
+.overview-statistic__icon {
+  @apply flex flex-none items-center text-primary;
+}
+
+.overview-statistic__icon svg {
+  @apply w-[16px] h-[16px];
+}
+
+.overview-statistic__value {
+  @apply m-0 overflow-hidden text-foreground text-[0.9rem] font-bold;
+  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
+}
+
+.overview-statistic__meta {
+  @apply m-0 text-muted-foreground text-[0.75rem] leading-[1.4];
+}

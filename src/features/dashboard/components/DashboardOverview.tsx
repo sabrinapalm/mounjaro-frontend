@@ -1,4 +1,5 @@
 import { LuArrowDownRight, LuArrowRight, LuScale, LuSyringe, LuTrophy } from 'react-icons/lu';
+import { PageHeader } from '../../../shared/components/PageHeader';
 import { PageActionButton } from '../../../shared/components/pageActionButton';
 import { Card } from '../../../shared/components/ui/card';
 import { useUnitSettings } from '../../../shared/hooks/useUnitSettings';
@@ -58,27 +59,21 @@ export const DashboardOverview = ({
         )}`;
 
   return (
-    <div className='dashboard-overview'>
-      <header className='dashboard-welcome'>
-        <div>
-          <p className='dashboard-eyebrow'>YOUR WELLNESS, AT YOUR PACE</p>
-          <h1>
-            {getGreeting()}, {profile.displayName || 'there'}
-          </h1>
-          <p className='dashboard-welcome__copy'>
-            A clear view of your weight and treatment, all in one place.
-          </p>
-        </div>
-        <div className='dashboard-welcome__actions'>
-          <span className='dashboard-today'>Today · {summary.todayLabel}</span>
+    <div className='dashboard-page dashboard-overview'>
+      <PageHeader
+        eyebrow='YOUR PROGRESS, IN ONE PLACE'
+        title={`${getGreeting()}, ${profile.displayName || 'there'}`}
+        description='A clear view of your weight and treatment, all in one place.'
+        actionMeta={`Today · ${summary.todayLabel}`}
+        action={
           <PageActionButton
             icon={<LuArrowDownRight aria-hidden='true' />}
             onClick={addWeightModal.openModal}
           >
             Log weight
           </PageActionButton>
-        </div>
-      </header>
+        }
+      />
 
       <div className='dashboard-hero-grid'>
         <Card asChild>

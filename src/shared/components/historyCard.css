@@ -1,0 +1,170 @@
+@reference "../styles/tailwind.css";
+
+.history-card {
+  @apply grid gap-[18px] w-full min-w-0 p-[24px] rounded-[var(--radius-lg)] bg-card;
+}
+
+.history-card__header {
+  @apply flex items-start justify-between gap-[18px] min-w-0;
+}
+
+.history-card__title {
+  @apply text-foreground text-[length:var(--font-size-card-title)] font-bold tracking-[var(--tracking-card-title)];
+}
+
+.history-card__summary {
+  @apply mt-[4px] text-muted-foreground text-[0.85rem] font-bold;
+}
+
+.history-card__empty-state {
+  @apply grid justify-items-center gap-[12px];
+  padding: 34px 20px;
+  border: 1px dashed var(--color-border);
+  @apply rounded-[var(--radius-md)] text-muted-foreground text-center;
+}
+
+.history-card__empty-icon {
+  @apply grid place-items-center w-[48px] h-[48px] rounded-[var(--radius-pill)];
+  background: color-mix(in srgb, var(--history-icon-color) 14%, transparent);
+  color: var(--history-icon-color);
+}
+
+.history-card__empty-icon--primary {
+  --history-icon-color: var(--color-primary);
+}
+
+.history-card__empty-icon--accent {
+  --history-icon-color: var(--color-accent);
+}
+
+@media (max-width: 760px) {
+  .history-card {
+    @apply p-[20px];
+  }
+
+  .history-card__header {
+    @apply items-stretch flex-col;
+  }
+}
+
+@media (max-width: 460px) {
+  .history-card {
+    @apply p-[16px];
+  }
+}
+
+.history-card__list {
+  @apply grid gap-0 min-w-0 m-0 p-0;
+  list-style: none;
+}
+
+.history-card__month {
+  @apply min-w-0;
+}
+
+.history-card__month-title {
+  @apply m-0 pb-[8px] text-muted-foreground text-[0.79rem] font-bold tracking-[0.055em] uppercase;
+}
+
+.history-card--full .history-card__row {
+  @apply block p-0 rounded-none;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  background: transparent;
+  transition: background 0.16s ease;
+}
+
+.history-card--full .history-card__row:last-child {
+  border-bottom: 0;
+}
+
+.history-card--full .history-card__row:hover {
+  transform: none;
+  border-color: var(--color-border);
+  background: color-mix(in srgb, var(--color-primary-soft) 22%, transparent);
+  box-shadow: none;
+}
+
+.history-card__history-row {
+  @apply grid items-center gap-[14px] min-h-[64px];
+  grid-template-columns: 36px minmax(0, 1fr) minmax(100px, 0.45fr) 36px;
+  padding: 8px 10px;
+}
+
+.history-card--full .history-card__date {
+  @apply text-[0.9rem] font-bold;
+}
+
+.history-card--full .history-card__value {
+  @apply text-[0.96rem] font-bold;
+  font-variant-numeric: tabular-nums;
+}
+
+.history-card__delete-button {
+  @apply grid place-items-center w-[36px] h-[36px] rounded-[12px] text-muted-foreground opacity-0;
+  border: 1px solid transparent;
+  background: transparent;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.history-card__row:hover .history-card__delete-button,
+.history-card__delete-button:focus-visible,
+.history-card--full .history-card__delete-button {
+  @apply opacity-100;
+}
+
+.history-card__delete-button:focus-visible {
+  outline: 2px solid var(--color-danger);
+  outline-offset: 2px;
+}
+
+.history-card__delete-button:hover {
+  transform: scale(1.04);
+  border-color: var(--message-error-border);
+  background: var(--message-error-bg);
+  @apply text-destructive;
+}
+
+@media (max-width: 900px) {
+  .history-card__delete-button {
+    @apply opacity-100;
+  }
+
+  .history-card__history-row {
+    grid-template-columns: 36px minmax(0, 1fr) minmax(90px, 0.45fr) 36px;
+    @apply gap-[10px];
+  }
+}
+
+@media (max-width: 460px) {
+  .history-card__history-row {
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
+    grid-template-areas: "icon data delete" "icon secondary delete";
+    @apply min-h-[72px];
+    gap: 4px 10px;
+    padding: 10px 4px;
+  }
+}
+
+.history-card__error {
+  padding: 12px 14px;
+  border: 1px solid var(--message-error-border);
+  @apply rounded-[var(--radius-sm)] text-[0.9rem] font-bold;
+  background: var(--message-error-bg);
+  color: var(--message-error-color);
+}
+
+.history-card__footer {
+  @apply flex justify-center pt-[4px];
+}
+
+@media (max-width: 460px) {
+  .history-card__history-row > .history-card__delete-button {
+    grid-area: delete;
+  }
+}

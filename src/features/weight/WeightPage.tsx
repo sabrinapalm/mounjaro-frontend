@@ -2,11 +2,11 @@ import { LuPlus } from 'react-icons/lu';
 import { PageHeader } from '../../shared/components/PageHeader';
 import { PageActionButton } from '../../shared/components/pageActionButton';
 import type { CreateWeightInput, WeightEntry } from '../../shared/types';
+import { formatDateLabel, getTodayStartOfDay } from '../../shared/utils/dateHelpers';
+import { BmiRangeChart } from './components/BmiRangeChart';
 import { WeightStatsCards } from './components/cards/WeightStatsCards';
 import { WeightTracker } from './components/WeightTracker';
 import { useAddWeightModal } from './hooks/useAddWeightModal';
-import './WeightPage.css';
-import { BmiRangeChart } from './components/BmiRangeChart';
 
 interface WeightPageProps {
   weights: WeightEntry[];
@@ -18,13 +18,14 @@ export const WeightPage = ({ weights, onWeightAdded, onDeleteWeight }: WeightPag
   const addWeightModal = useAddWeightModal({ onWeightAdded });
 
   return (
-    <section className='weight-page'>
+    <section className='dashboard-page weight-page'>
       <PageHeader
         title='Your weight'
         description='Track your progress over time.'
+        actionMeta={`Today · ${formatDateLabel(getTodayStartOfDay())}`}
         action={
           <PageActionButton icon={<LuPlus />} onClick={addWeightModal.openModal}>
-            Add Weight
+            Add weight
           </PageActionButton>
         }
       />
@@ -32,8 +33,8 @@ export const WeightPage = ({ weights, onWeightAdded, onDeleteWeight }: WeightPag
       <WeightStatsCards weights={weights} />
       <WeightTracker
         weights={weights}
-        title='Weight history'
-        summaryLabel='Total weight loss'
+        title='Measurements'
+        summaryLabel='Weight change'
         variant='full'
         showAddButton={false}
         onWeightAdded={onWeightAdded}

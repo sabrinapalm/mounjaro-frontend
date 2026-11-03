@@ -1,13 +1,5 @@
 @reference "../../../shared/styles/tailwind.css";
 
-.dashboard-overview {
-  @apply grid gap-[22px];
-  width: min(100%, 1440px);
-  margin: 0 auto;
-}
-
-.dashboard-welcome,
-.dashboard-welcome__actions,
 .dashboard-weight-card__top,
 .dashboard-weight-card__value-row,
 .dashboard-weight-card__footer,
@@ -15,31 +7,8 @@
   @apply flex items-center justify-between gap-[16px];
 }
 
-.dashboard-welcome {
-  @apply items-end;
-  padding: 4px 2px 2px;
-}
-
-.dashboard-eyebrow,
 .dashboard-card-label {
   @apply text-muted-foreground text-[0.68rem] font-bold tracking-[0.11em];
-}
-
-.dashboard-welcome h1 {
-  @apply mt-[4px];
-  font-size: clamp(1.7rem, 3vw, 2.25rem);
-}
-
-.dashboard-welcome__copy {
-  @apply mt-[5px] text-[0.9rem];
-}
-
-.dashboard-welcome__actions {
-  @apply flex-none;
-}
-
-.dashboard-today {
-  @apply text-muted-foreground text-[0.83rem] whitespace-nowrap;
 }
 
 .dashboard-hero-grid {
@@ -252,22 +221,6 @@
 }
 
 @media (max-width: 760px) {
-  .dashboard-overview {
-    @apply gap-[16px];
-  }
-
-  .dashboard-welcome {
-    @apply items-start flex-col gap-[14px];
-  }
-
-  .dashboard-welcome > div:first-child {
-    @apply w-full text-left;
-  }
-
-  .dashboard-welcome__actions {
-    @apply w-full justify-between;
-  }
-
   .dashboard-hero-grid {
     @apply grid-cols-[1fr] gap-[14px];
   }
@@ -286,11 +239,6 @@
 }
 
 @media (max-width: 480px) {
-  .dashboard-welcome__copy {
-    max-width: 34ch;
-    @apply text-[0.82rem];
-  }
-
   .dashboard-weight-card,
   .dashboard-week-card,
   .dashboard-shortcuts {

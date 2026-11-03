@@ -4,6 +4,7 @@ import type { ShotEntry, WeightEntry } from '../../../shared/types';
 import { type Milestone, useMilestones } from '../hooks/useMilestones';
 import './Milestones.css';
 import { Button } from '../../../shared/components/Button';
+import { AchievementCollection } from './achievementCollection';
 
 type MilestonesVariant = 'compact' | 'full';
 
@@ -53,13 +54,18 @@ export const Milestones = ({
     goalWeight,
   });
 
-  const isCompact = variant === 'compact';
+  if (variant === 'full') {
+    return (
+      <AchievementCollection
+        milestones={visibleMilestones}
+        weightMilestones={weightLossMilestones}
+        nextAchievement={nextWeightLossMilestone}
+      />
+    );
+  }
 
-  const displayedMilestones = isCompact
-    ? visibleMilestones.slice(0, COMPACT_LIMIT)
-    : visibleMilestones.filter((milestone) => !milestone.id.startsWith('weight-loss-'));
-
-  const shouldShowViewAll = isCompact && visibleMilestones.length > COMPACT_LIMIT && onViewAll;
+  const displayedMilestones = visibleMilestones.slice(0, COMPACT_LIMIT);
+  const shouldShowViewAll = visibleMilestones.length > COMPACT_LIMIT && onViewAll;
 
   return (
     <section className={`milestones-card milestones-card--${variant}`}>
@@ -71,95 +77,6 @@ export const Milestones = ({
           </Button>
         ) : null}
       </header>
-
-      {!isCompact ? (
-        <>
-          <section className='milestones-card__next'>
-            <div className='milestones-card__next-copy'>
-              <p className='milestones-card__eyebrow'>Next weight achievement</p>
-              {nextWeightLossMilestone ? (
-                <>
-                  <h3 className='milestones-card__next-title'>{nextWeightLossMilestone.title}</h3>
-                  <p className='milestones-card__next-remaining'>
-                    {nextWeightLossMilestone.remaining}
-                  </p>
-                  <div
-                    className='milestones-card__next-progress'
-                    role='progressbar'
-                    aria-label={`Progress to ${nextWeightLossMilestone.title}`}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    aria-valuenow={nextWeightLossMilestone.progress}
-                  >
-                    <span style={{ width: `${nextWeightLossMilestone.progress}%` }} />
-                  </div>
-                </>
-              ) : (
-                <p className='milestones-card__empty'>
-                  Add a starting weight and your first weight entry to see your next 5 kg
-                  achievement.
-                </p>
-              )}
-            </div>
-          </section>
-
-          <section className='milestones-card__achievements'>
-            <h3 className='milestones-card__section-title'>Weight-loss achievements</h3>
-            {weightLossMilestones.length > 0 ? (
-              <ul className='milestones-card__grid'>
-                {weightLossMilestones.map((milestone) => {
-                  const isCompleted = milestone.status === 'completed';
-                  const isUpcoming = milestone.weightLossStatus === 'upcoming';
-                  const StateIcon = isCompleted ? FiCheck : isUpcoming ? FiTrendingDown : FiLock;
-
-                  return (
-                    <li
-                      key={milestone.id}
-                      className={[
-                        'milestones-card__achievement',
-                        `milestones-card__achievement--${isCompleted ? 'completed' : isUpcoming ? 'upcoming' : 'locked'}`,
-                      ].join(' ')}
-                    >
-                      <div className='milestones-card__achievement-icon'>
-                        <StateIcon size={19} />
-                      </div>
-                      <h4 className='milestones-card__achievement-title'>{milestone.title}</h4>
-                      <p className='milestones-card__achievement-status'>
-                        {isCompleted ? 'Achieved' : isUpcoming ? 'Up next' : 'Locked'}
-                      </p>
-                      {isCompleted && milestone.achievementDate ? (
-                        <p className='milestones-card__achievement-date'>{milestone.description}</p>
-                      ) : null}
-                      {isUpcoming ? (
-                        <>
-                          <p className='milestones-card__achievement-remaining'>
-                            {milestone.description}
-                          </p>
-                          <div
-                            className='milestones-card__achievement-progress'
-                            role='progressbar'
-                            aria-label={`Progress to ${milestone.title}`}
-                            aria-valuemin={0}
-                            aria-valuemax={100}
-                            aria-valuenow={milestone.progress ?? 0}
-                          >
-                            <span style={{ width: `${milestone.progress ?? 0}%` }} />
-                          </div>
-                        </>
-                      ) : null}
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : (
-              <p className='milestones-card__empty'>
-                Weight-loss achievements will appear after you add a starting weight and a
-                measurement.
-              </p>
-            )}
-          </section>
-        </>
-      ) : null}
 
       <ul className='milestones-card__list'>
         {displayedMilestones.map((milestone) => (

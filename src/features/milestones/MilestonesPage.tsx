@@ -10,9 +10,9 @@ type MilestonesPageProps = {
 
 export const MilestonesPage = ({ weights, shots, profile }: MilestonesPageProps) => {
   return (
-    <section className='milestones-page mx-auto grid min-w-0 w-[min(100%,1120px)] gap-[20px] [@media(max-width:760px)]:gap-[16px]'>
+    <section className='dashboard-page milestones-page'>
       <PageHeader
-        title='All Milestones'
+        title='Your milestones'
         description='Track your achievements and see what progress milestones are coming next.'
       />
       <Milestones

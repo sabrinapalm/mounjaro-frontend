@@ -248,7 +248,7 @@ export const ProfileForm = ({
             </Label>
 
             <p className='profile-form__hint'>
-              You can update these values later from Profile Settings.
+              You can update these values later from your profile.
             </p>
 
             {error ? <p className='profile-form__error'>{error}</p> : null}

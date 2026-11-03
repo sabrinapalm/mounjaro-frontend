@@ -8,3 +8,7 @@
   background: var(--color-surface-soft);
   outline: none;
 }
+
+.tracksy-form-control[type="number"] {
+  font-variant-numeric: tabular-nums;
+}

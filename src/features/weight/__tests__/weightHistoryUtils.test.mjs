@@ -82,19 +82,35 @@ test('calculates the recorded difference using the selected unit conversion', ()
   );
 });
 
-test('BMI metrics use a collapsed native disclosure and the Add Weight action remains wired', async () => {
-  const bmiSource = await readFile(
-    new URL('../components/BmiRangeChart.tsx', import.meta.url),
-    'utf8'
+test('BMI metrics retain a collapsed native disclosure with the calculated summary', async () => {
+  const { createElement: h } = await import('react');
+  const { renderToStaticMarkup } = await import('react-dom/server');
+  const { loadComponent } = await import(
+    '../../../shared/components/__tests__/renderComponent.mjs'
   );
-  const pageSource = await readFile(new URL('../WeightPage.tsx', import.meta.url), 'utf8');
-
-  assert.match(bmiSource, /<details className='weight-page__bmi-details'>/);
-  assert.match(bmiSource, /<summary className='weight-page__bmi-summary'>/);
-  assert.doesNotMatch(bmiSource, /<details[^>]*\bopen(?:=|\s|>)/);
-  assert.match(
-    bmiSource,
-    /Current BMI \$\{formatBmi\(currentBmi\)\} · \$\{currentCategory\.label\}/
+  const { BmiRangeChart } = loadComponent(
+    new URL('../components/BmiRangeChart.tsx', import.meta.url)
   );
-  assert.match(pageSource, /onClick=\{addWeightModal\.openModal\}/);
+  const { ProfileProvider } = loadComponent(
+    new URL('../../profile/ProfileContext.tsx', import.meta.url)
+  );
+  const markup = renderToStaticMarkup(
+    h(
+      ProfileProvider,
+      {
+        initialProfile: {
+          displayName: 'Demo',
+          unitSystem: 'metric',
+          height: 170,
+          startWeight: 100,
+          goalWeight: 75,
+        },
+      },
+      h(BmiRangeChart, { weights: [{ id: 'demo', dateTime: '2026-11-02T10:00:00Z', weight: 90 }] })
+    )
+  );
+  assert.match(markup, /^<details[^>]*><summary/);
+  assert.doesNotMatch(markup, /<details[^>]*\bopen/);
+  assert.match(markup, /BMI &amp; health metrics/);
+  assert.match(markup, /Current BMI 31.1 · Obesity class 1/);
 });

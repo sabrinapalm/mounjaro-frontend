@@ -1,4 +1,13 @@
-import { LuChevronDown, LuScale, LuTrendingDown, LuTrendingUp } from 'react-icons/lu';
+import {
+  LuCalendarClock,
+  LuCalendarDays,
+  LuCalendarRange,
+  LuListOrdered,
+  LuScale,
+  LuTrendingDown,
+  LuTrendingUp,
+} from 'react-icons/lu';
+import { OverviewStatistic } from '../../../../shared/components/overviewStatistic';
 import type { WeightEntry } from '../../../../shared/types';
 import { useWeightStatsCards } from '../../hooks/useWeightStatsCards';
 import './WeightStatsCards.css';
@@ -39,34 +48,34 @@ export const WeightStatsCards = ({ weights }: WeightStatsCardsProps) => {
             </div>
           </div>
 
-          <details className='weight-overview__details'>
-            <summary>
-              <span>Additional statistics</span>
-              <LuChevronDown size={18} aria-hidden='true' />
-            </summary>
+          <div className='weight-overview__statistics'>
             <dl className='weight-overview__metrics'>
-              <div>
-                <dt>Average per week</dt>
-                <dd>{stats.averagePerWeek.value}</dd>
-                <small>{stats.averagePerWeek.meta}</small>
-              </div>
-              <div>
-                <dt>Average per month</dt>
-                <dd>{stats.averagePerMonth.value}</dd>
-                <small>{stats.averagePerMonth.meta}</small>
-              </div>
-              <div>
-                <dt>Journey week</dt>
-                <dd>{stats.journeyWeek.value}</dd>
-                <small>{stats.journeyWeek.meta}</small>
-              </div>
-              <div>
-                <dt>Weight entries</dt>
-                <dd>{stats.weightEntries.value}</dd>
-                <small>{stats.weightEntries.meta}</small>
-              </div>
+              <OverviewStatistic
+                label='Average per week'
+                value={stats.averagePerWeek.value}
+                meta={stats.averagePerWeek.meta}
+                icon={<LuCalendarDays />}
+              />
+              <OverviewStatistic
+                label='Average per month'
+                value={stats.averagePerMonth.value}
+                meta={stats.averagePerMonth.meta}
+                icon={<LuCalendarRange />}
+              />
+              <OverviewStatistic
+                label='Journey week'
+                value={stats.journeyWeek.value}
+                meta={stats.journeyWeek.meta}
+                icon={<LuCalendarClock />}
+              />
+              <OverviewStatistic
+                label='Weight entries'
+                value={stats.weightEntries.value}
+                meta={stats.weightEntries.meta}
+                icon={<LuListOrdered />}
+              />
             </dl>
-          </details>
+          </div>
         </>
       ) : (
         <div className='weight-overview__empty'>

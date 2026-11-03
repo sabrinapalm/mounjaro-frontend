@@ -130,7 +130,7 @@ const EditGoalWeightModalContent = ({
           </div>
 
           <h2 id='edit-goal-modal-title' className='edit-goal-modal__title'>
-            Edit Goal Weight
+            Edit goal weight
           </h2>
 
           <p className='edit-goal-modal__description'>

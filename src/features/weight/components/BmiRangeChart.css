@@ -193,3 +193,17 @@
     @apply grid-cols-[1fr];
   }
 }
+
+.bmi-health-metrics .bmi-range-card {
+  @apply gap-[18px] p-[20px];
+  border: 0;
+  @apply rounded-[var(--radius-md)];
+  background: var(--color-surface-soft);
+  box-shadow: none;
+}
+
+@media (max-width: 760px) {
+  .bmi-health-metrics .bmi-range-card {
+    @apply p-[16px];
+  }
+}

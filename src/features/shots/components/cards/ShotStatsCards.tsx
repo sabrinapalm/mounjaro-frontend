@@ -1,5 +1,6 @@
-import { LuCalendarClock, LuMapPin, LuSyringe } from 'react-icons/lu';
+import { LuActivity, LuCalendarClock, LuMapPin, LuNotebookPen, LuSyringe } from 'react-icons/lu';
 import { useIntl } from 'react-intl';
+import { OverviewStatistic } from '../../../../shared/components/overviewStatistic';
 import { messages } from '../../../../shared/i18n/messages';
 import type { ShotEntry } from '../../../../shared/types';
 import { formatDateLabel } from '../../../../shared/utils/dateHelpers';
@@ -61,32 +62,30 @@ export const ShotStatsCards = ({ shots }: ShotStatsCardsProps) => {
       </div>
 
       <dl className='shot-overview__supporting'>
-        <div className='shot-overview__supporting-item'>
-          <dt>
-            <LuSyringe size={16} aria-hidden='true' />
-            Injections logged
-          </dt>
-          <dd>{totalShots?.value ?? 0}</dd>
-        </div>
-        <div className='shot-overview__supporting-item'>
-          <dt>
-            <LuMapPin size={16} aria-hidden='true' />
-            Most recent site
-          </dt>
-          <dd>
-            {latestShot?.injectionSite
+        <OverviewStatistic
+          label='Injections logged'
+          value={totalShots?.value ?? 0}
+          icon={<LuSyringe />}
+        />
+        <OverviewStatistic
+          label='Most recent site'
+          value={
+            latestShot?.injectionSite
               ? formatMessage(messages[latestShot.injectionSite])
-              : formatInjectionSite(null)}
-          </dd>
-        </div>
-        <div className='shot-overview__supporting-item'>
-          <dt>Side effects</dt>
-          <dd>{hasShots ? sideEffects?.meta : 'No records yet'}</dd>
-        </div>
-        <div className='shot-overview__supporting-item'>
-          <dt>Notes</dt>
-          <dd>{hasShots ? notes?.meta : 'No records yet'}</dd>
-        </div>
+              : formatInjectionSite(null)
+          }
+          icon={<LuMapPin />}
+        />
+        <OverviewStatistic
+          label='Side effects'
+          value={hasShots ? sideEffects?.meta : 'No records yet'}
+          icon={<LuActivity />}
+        />
+        <OverviewStatistic
+          label='Notes'
+          value={hasShots ? notes?.meta : 'No records yet'}
+          icon={<LuNotebookPen />}
+        />
       </dl>
     </section>
   );

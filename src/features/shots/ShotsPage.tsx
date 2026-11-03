@@ -2,6 +2,7 @@ import { LuPlus } from 'react-icons/lu';
 import { PageHeader } from '../../shared/components/PageHeader';
 import { PageActionButton } from '../../shared/components/pageActionButton';
 import type { CreateShotInput, ShotEntry, WeightEntry } from '../../shared/types';
+import { formatDateLabel, getTodayStartOfDay } from '../../shared/utils/dateHelpers';
 import { ShotStatsCards } from './components/cards/ShotStatsCards';
 import { ShotTracker } from './components/ShotTracker';
 import { TreatmentStatistics } from './components/TreatmentStatistics';
@@ -18,10 +19,11 @@ export const ShotsPage = ({ shots, weights, onShotAdded, onDeleteShot }: ShotsPa
   const addShotModal = useAddShotModal({ onShotAdded });
 
   return (
-    <section className='shots-page mx-auto grid min-w-0 w-[min(100%,1120px)] gap-[20px] [@media(max-width:760px)]:gap-[16px]'>
+    <section className='dashboard-page shots-page'>
       <PageHeader
         title='Your injections'
         description='Track your treatment and injection history.'
+        actionMeta={`Today · ${formatDateLabel(getTodayStartOfDay())}`}
         action={
           <PageActionButton icon={<LuPlus />} onClick={addShotModal.openModal}>
             Add shot

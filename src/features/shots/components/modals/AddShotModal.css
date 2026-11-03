@@ -21,65 +21,11 @@
   box-shadow: var(--shadow-lg);
 }
 
-.add-shot-modal__close {
-  @apply absolute top-[18px] right-[20px] grid place-items-center w-[38px] h-[38px];
-  border: 0;
-  @apply rounded-[var(--radius-pill)];
-  background: transparent;
-  @apply text-muted-foreground text-[2rem] leading-[1];
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.add-shot-modal__close:hover:not(:disabled) {
-  background: var(--color-surface-soft);
-  @apply text-foreground;
-  transform: scale(1.04);
-}
-
-.add-shot-modal__close:disabled {
-  @apply cursor-not-allowed opacity-[0.5];
-}
-
-.add-shot-modal__header {
-  @apply grid justify-items-center gap-[14px];
-  padding: 6px 32px 10px;
-  @apply text-center;
-}
-
 .add-shot-modal__icon {
   @apply grid place-items-center w-[74px] h-[74px] rounded-[var(--radius-pill)];
   background: color-mix(in srgb, var(--color-primary) 18%, transparent);
   @apply text-primary;
   box-shadow: 0 0 36px color-mix(in srgb, var(--color-primary) 18%, transparent);
-}
-
-.add-shot-modal__title {
-  @apply text-[1.55rem] font-bold tracking-[-0.04em];
-}
-
-.add-shot-modal__description {
-  @apply text-muted-foreground text-[0.95rem] font-bold;
-}
-
-.add-shot-modal__form {
-  @apply grid gap-[28px] mt-[28px];
-}
-
-.add-shot-modal__row {
-  @apply grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  @apply gap-[20px];
-}
-
-.add-shot-modal__field {
-  @apply grid gap-[10px];
-}
-
-.add-shot-modal__label {
-  @apply text-foreground text-[0.9rem] font-bold;
 }
 
 .add-shot-modal__input,
@@ -167,18 +113,6 @@
 
 .add-shot-modal__character-count {
   @apply absolute right-[16px] bottom-[14px] text-muted-foreground text-[0.8rem] font-bold;
-}
-
-.add-shot-modal__error {
-  padding: 12px 14px;
-  border: 1px solid color-mix(in srgb, var(--color-danger) 36%, transparent);
-  @apply rounded-[var(--radius-sm)];
-  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
-  @apply text-destructive text-[0.9rem] font-bold;
-}
-
-.add-shot-modal__footer {
-  @apply grid gap-[16px];
 }
 
 .add-shot-modal__cancel {

@@ -1,17 +1,11 @@
 @reference "../../shared/styles/tailwind.css";
 
-.profile-settings-page {
-  @apply grid gap-[20px] min-w-0;
-  width: min(100%, 1120px);
-  @apply mx-[auto];
-}
-
 .profile-settings-page__grid {
   @apply grid gap-[18px] w-full;
 }
 
 .profile-settings-card {
-  @apply overflow-hidden rounded-[28px];
+  @apply overflow-hidden rounded-[var(--radius-lg)];
   background:
     linear-gradient(
       135deg,
@@ -39,12 +33,12 @@
 }
 
 .profile-settings-card__header h2 {
-  @apply m-0 text-foreground text-[1.05rem] font-bold;
+  @apply m-0 text-foreground text-[length:var(--font-size-card-title)] font-bold tracking-[var(--tracking-card-title)];
 }
 
 .profile-settings-card__header p {
   margin: 4px 0 0;
-  @apply text-muted-foreground text-[0.92rem] font-bold;
+  @apply text-muted-foreground text-[0.85rem] font-normal;
 }
 
 .profile-settings-card__content {
@@ -101,7 +95,7 @@
 .profile-settings-message {
   @apply rounded-[18px];
   padding: 14px 16px;
-  @apply text-[0.92rem] font-bold;
+  @apply text-[0.85rem] font-normal;
 }
 
 .profile-settings-message--success {
@@ -121,10 +115,6 @@
 }
 
 @media (max-width: 760px) {
-  .profile-settings-page {
-    @apply gap-[16px];
-  }
-
   .profile-settings-card__header {
     @apply p-[20px];
   }

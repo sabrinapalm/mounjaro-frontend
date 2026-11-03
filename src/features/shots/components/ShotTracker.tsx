@@ -1,9 +1,15 @@
 import { useMemo, useState } from 'react';
-import { AiOutlineDelete } from 'react-icons/ai';
 import { LuPlus } from 'react-icons/lu';
 import { PiSyringeBold } from 'react-icons/pi';
 import { useIntl } from 'react-intl';
 import { Button } from '../../../shared/components/Button';
+import {
+  HistoryCard,
+  HistoryCardHeader,
+  HistoryDeleteButton,
+  HistoryEmptyState,
+  HistoryGroup,
+} from '../../../shared/components/historyCard';
 import { ConfirmDialog } from '../../../shared/components/modals/ConfirmDialog';
 import { ViewAllButton } from '../../../shared/components/ViewAllButton';
 import { messages } from '../../../shared/i18n/messages';
@@ -21,7 +27,7 @@ import './ShotTracker.css';
 type ShotTrackerVariant = 'compact' | 'full';
 
 const COMPACT_LIMIT = 3;
-const INITIAL_HISTORY_LIMIT = 10;
+const INITIAL_HISTORY_LIMIT = 3;
 const HISTORY_PAGE_SIZE = 10;
 
 interface ShotTrackerProps {
@@ -40,7 +46,7 @@ export const ShotTracker = ({
   onShotAdded,
   onDeleteShot,
   onViewAll,
-  title = 'Recent Shots',
+  title = 'Recent shots',
   summaryLabel = 'Total shots',
   showAddButton = true,
   variant = 'compact',
@@ -113,31 +119,30 @@ export const ShotTracker = ({
       <li
         key={shot.id}
         className={[
-          'shot-tracker-card__item',
+          'history-card__row shot-tracker-card__item',
           variant === 'full' ? 'shot-tracker-card__item--full' : '',
         ].join(' ')}
       >
         {variant === 'full' ? (
           <>
-            <div className='shot-tracker-card__history-row'>
+            <div className='history-card__history-row shot-tracker-card__history-row'>
               <span className='shot-tracker-card__icon'>
                 <PiSyringeBold size={19} />
               </span>
               <div className='shot-tracker-card__primary-data'>
-                <span className='shot-tracker-card__date'>{shotDateLabel}</span>
-                <span className='shot-tracker-card__dosage'>{shot.dosage.toFixed(1)} mg</span>
+                <span className='history-card__date shot-tracker-card__date'>{shotDateLabel}</span>
+                <span className='history-card__value shot-tracker-card__dosage'>
+                  {shot.dosage.toFixed(1)} mg
+                </span>
               </div>
               <span className='shot-tracker-card__site'>
                 {shot.injectionSite ? formatMessage(messages[shot.injectionSite]) : '-'}
               </span>
-              <button
-                type='button'
+              <HistoryDeleteButton
                 className='shot-tracker-card__delete-button'
-                aria-label={`Delete shot from ${shotDateLabel}`}
+                label={`Delete shot from ${shotDateLabel}`}
                 onClick={() => handleOpenDeleteDialog(shot)}
-              >
-                <AiOutlineDelete size={19} />
-              </button>
+              />
             </div>
             {hasDetails ? (
               <details className='shot-tracker-card__details'>
@@ -169,22 +174,21 @@ export const ShotTracker = ({
               <PiSyringeBold size={22} />
             </div>
 
-            <span className='shot-tracker-card__date'>{shotDateLabel}</span>
+            <span className='history-card__date shot-tracker-card__date'>{shotDateLabel}</span>
 
-            <span className='shot-tracker-card__dosage'>{shot.dosage.toFixed(1)} mg</span>
+            <span className='history-card__value shot-tracker-card__dosage'>
+              {shot.dosage.toFixed(1)} mg
+            </span>
 
             <span className='shot-tracker-card__site'>
               {shot.injectionSite ? formatMessage(messages[shot.injectionSite]) : '-'}
             </span>
 
-            <button
-              type='button'
+            <HistoryDeleteButton
               className='shot-tracker-card__delete-button'
-              aria-label={`Delete shot from ${shotDateLabel}`}
+              label={`Delete shot from ${shotDateLabel}`}
               onClick={() => handleOpenDeleteDialog(shot)}
-            >
-              <AiOutlineDelete size={20} />
-            </button>
+            />
           </>
         )}
       </li>
@@ -192,55 +196,59 @@ export const ShotTracker = ({
   };
 
   return (
-    <section className={`shot-tracker-card shot-tracker-card--${variant}`}>
-      <header className='shot-tracker-card__header'>
-        <div>
-          <h2 className='shot-tracker-card__title'>{title}</h2>
-
-          <p className='shot-tracker-card__summary'>
+    <HistoryCard
+      className={`history-card--${variant} shot-tracker-card shot-tracker-card--${variant}`}
+    >
+      <HistoryCardHeader
+        title={title}
+        summary={
+          <>
+            {' '}
             {summaryLabel}: <span>{totalShots}</span>
-          </p>
-        </div>
+          </>
+        }
+        action={
+          showAddButton ? (
+            <Button icon={<LuPlus size={22} />} onClick={addShotModal.openModal}>
+              Add shot
+            </Button>
+          ) : null
+        }
+      />
 
-        {showAddButton ? (
-          <Button icon={<LuPlus size={22} />} onClick={addShotModal.openModal}>
-            Add shot
-          </Button>
-        ) : null}
-      </header>
-
-      {error ? <p className='shot-tracker-card__error'>{error}</p> : null}
+      {error ? (
+        <p className='history-card__error' role='alert'>
+          {error}
+        </p>
+      ) : null}
 
       {visibleShots.length === 0 ? (
-        <div className='shot-tracker-card__empty-state'>
-          <div className='shot-tracker-card__empty-icon'>
-            <PiSyringeBold size={24} />
-          </div>
-
-          <p>No shots recorded yet</p>
-        </div>
+        <HistoryEmptyState icon={<PiSyringeBold size={24} />}>
+          No shots recorded yet
+        </HistoryEmptyState>
       ) : (
         <>
           {variant === 'full' ? (
             <div className='shot-tracker-card__history'>
               {visibleShotGroups.map((group) => (
-                <section className='shot-tracker-card__month' key={group.key}>
-                  <h3 className='shot-tracker-card__month-title'>{group.label}</h3>
-                  <ul className='shot-tracker-card__list'>{group.shots.map(renderShot)}</ul>
-                </section>
+                <HistoryGroup key={group.key} label={group.label}>
+                  {group.shots.map(renderShot)}
+                </HistoryGroup>
               ))}
             </div>
           ) : (
-            <ul className='shot-tracker-card__list'>{visibleShots.map(renderShot)}</ul>
+            <ul className='history-card__list shot-tracker-card__list'>
+              {visibleShots.map(renderShot)}
+            </ul>
           )}
 
           {shouldShowViewAll ? (
-            <footer className='shot-tracker-card__footer'>
+            <footer className='history-card__footer'>
               <ViewAllButton title='View all' onClick={onViewAll} />
             </footer>
           ) : null}
           {shouldShowMore ? (
-            <footer className='shot-tracker-card__footer'>
+            <footer className='history-card__footer'>
               <Button
                 variant='text'
                 onClick={() =>
@@ -275,6 +283,6 @@ export const ShotTracker = ({
         onConfirm={handleConfirmDelete}
         onCancel={handleCloseDeleteDialog}
       />
-    </section>
+    </HistoryCard>
   );
 };

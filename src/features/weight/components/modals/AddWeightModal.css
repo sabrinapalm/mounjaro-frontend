@@ -21,65 +21,11 @@
   box-shadow: var(--shadow-lg);
   -webkit-overflow-scrolling: touch;
 }
-.add-weight-modal__close {
-  @apply absolute top-[18px] right-[20px] grid place-items-center w-[38px] h-[38px];
-  border: 0;
-  @apply rounded-[var(--radius-pill)];
-  background: transparent;
-  @apply text-muted-foreground text-[2rem] leading-[1];
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.add-weight-modal__close:hover:not(:disabled) {
-  background: var(--color-surface-soft);
-  @apply text-foreground;
-  transform: scale(1.04);
-}
-
-.add-weight-modal__close:disabled {
-  @apply cursor-not-allowed opacity-[0.5];
-}
-
-.add-weight-modal__header {
-  @apply grid justify-items-center gap-[14px];
-  padding: 6px 32px 10px;
-  @apply text-center;
-}
-
 .add-weight-modal__icon {
   @apply grid place-items-center w-[74px] h-[74px] rounded-[var(--radius-pill)];
   background: color-mix(in srgb, var(--color-accent) 18%, transparent);
   color: var(--color-accent);
   box-shadow: 0 0 36px color-mix(in srgb, var(--color-accent) 18%, transparent);
-}
-
-.add-weight-modal__title {
-  @apply text-[1.55rem] font-bold tracking-[-0.04em];
-}
-
-.add-weight-modal__description {
-  @apply text-muted-foreground text-[0.95rem] font-bold;
-}
-
-.add-weight-modal__form {
-  @apply grid gap-[28px] mt-[28px];
-}
-
-.add-weight-modal__row {
-  @apply grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  @apply gap-[20px];
-}
-
-.add-weight-modal__field {
-  @apply grid gap-[10px];
-}
-
-.add-weight-modal__label {
-  @apply text-foreground text-[0.9rem] font-bold;
 }
 
 .add-weight-modal__input {
@@ -120,18 +66,6 @@
 
 .add-weight-modal__input:disabled {
   @apply cursor-not-allowed opacity-[0.7];
-}
-
-.add-weight-modal__error {
-  padding: 12px 14px;
-  border: 1px solid color-mix(in srgb, var(--color-danger) 36%, transparent);
-  @apply rounded-[var(--radius-sm)];
-  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
-  @apply text-destructive text-[0.9rem] font-bold;
-}
-
-.add-weight-modal__footer {
-  @apply grid gap-[16px];
 }
 
 @media (max-width: 640px) {

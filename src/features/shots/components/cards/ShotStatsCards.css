@@ -79,23 +79,6 @@
   border-top: 1px solid var(--color-border);
 }
 
-.shot-overview__supporting-item {
-  @apply grid gap-[3px] min-w-0;
-}
-
-.shot-overview__supporting-item dt {
-  @apply flex items-center gap-[6px] text-muted-foreground text-[0.76rem] font-bold;
-}
-
-.shot-overview__supporting-item dt svg {
-  @apply flex-none text-primary;
-}
-
-.shot-overview__supporting-item dd {
-  @apply m-0 overflow-hidden text-foreground text-[0.88rem] font-bold;
-  text-overflow: ellipsis;
-}
-
 @media (max-width: 900px) {
   .shot-overview__primary {
     grid-template-columns: minmax(0, 1fr) minmax(140px, 0.6fr);
@@ -128,9 +111,5 @@
 @media (max-width: 380px) {
   .shot-overview__date {
     @apply text-[1.35rem];
-  }
-
-  .shot-overview__supporting-item dd {
-    @apply text-[0.82rem];
   }
 }

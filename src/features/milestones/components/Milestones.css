@@ -16,7 +16,7 @@
 }
 
 .milestones-card__title {
-  @apply text-foreground text-[1.35rem] font-bold tracking-[-0.04em];
+  @apply text-foreground text-[length:var(--font-size-card-title)] font-bold tracking-[var(--tracking-card-title)];
 }
 
 .milestones-card__list {
@@ -128,132 +128,6 @@
   @apply text-muted-foreground;
 }
 
-.milestones-card__next {
-  padding: 20px 22px;
-  border: 1px solid color-mix(in srgb, var(--color-primary) 24%, var(--color-border));
-  @apply rounded-[var(--radius-lg)];
-  background: color-mix(in srgb, var(--color-primary-soft) 56%, var(--color-surface));
-}
-
-.milestones-card__next-copy {
-  @apply max-w-[560px];
-}
-
-.milestones-card__eyebrow,
-.milestones-card__section-title {
-  @apply m-0 text-muted-foreground text-[0.82rem] font-bold tracking-[0.04em] uppercase;
-}
-
-.milestones-card__next-title {
-  margin: 4px 0 0;
-  @apply text-foreground text-[1.35rem] font-bold tracking-[-0.03em];
-}
-
-.milestones-card__next-remaining {
-  margin: 1px 0 12px;
-  @apply text-muted-foreground text-[0.92rem] font-bold;
-}
-
-.milestones-card__next-progress,
-.milestones-card__achievement-progress {
-  @apply relative overflow-hidden h-[8px] rounded-[var(--radius-pill)];
-  background: color-mix(in srgb, var(--color-border) 72%, var(--color-surface));
-}
-
-.milestones-card__next-progress span,
-.milestones-card__achievement-progress span {
-  @apply absolute;
-  inset: 0 auto 0 0;
-  border-radius: inherit;
-  background: var(--color-primary);
-}
-
-.milestones-card__achievements {
-  @apply grid gap-[14px];
-}
-
-.milestones-card__section-title {
-  @apply text-foreground text-[0.9rem];
-}
-
-.milestones-card__grid {
-  @apply grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  @apply gap-[12px] m-0 p-0;
-  list-style: none;
-}
-
-.milestones-card__achievement {
-  @apply grid;
-  align-content: start;
-  @apply justify-items-start gap-[8px] min-w-0 min-h-[158px] p-[16px];
-  border: 1px solid var(--color-border);
-  @apply rounded-[var(--radius-md)];
-  background: var(--color-surface-soft);
-}
-
-.milestones-card__achievement--completed {
-  border-color: color-mix(in srgb, var(--color-primary) 28%, var(--color-border));
-  background: color-mix(in srgb, var(--color-primary-soft) 72%, var(--color-surface));
-}
-
-.milestones-card__achievement--upcoming {
-  background: var(--color-surface);
-}
-
-.milestones-card__achievement--locked {
-  @apply opacity-[0.72];
-}
-
-.milestones-card__achievement-icon {
-  @apply grid place-items-center w-[34px] h-[34px] rounded-[var(--radius-pill)];
-  background: color-mix(in srgb, var(--color-text-muted) 10%, transparent);
-  @apply text-muted-foreground;
-}
-
-.milestones-card__achievement--completed .milestones-card__achievement-icon {
-  background: color-mix(in srgb, var(--color-primary) 16%, transparent);
-  color: var(--color-primary-dark);
-}
-
-.milestones-card__achievement--upcoming .milestones-card__achievement-icon {
-  background: var(--color-primary-soft);
-  color: var(--color-primary-dark);
-}
-
-.milestones-card__achievement-title,
-.milestones-card__achievement-status,
-.milestones-card__achievement-date,
-.milestones-card__achievement-remaining,
-.milestones-card__empty {
-  @apply m-0;
-}
-
-.milestones-card__achievement-title {
-  @apply text-foreground text-[0.98rem] font-bold leading-[1.25];
-}
-
-.milestones-card__achievement-status {
-  @apply text-muted-foreground text-[0.82rem] font-bold;
-}
-
-.milestones-card__achievement--completed .milestones-card__achievement-status {
-  color: var(--color-primary-dark);
-}
-
-.milestones-card__achievement-date,
-.milestones-card__achievement-remaining {
-  @apply text-muted-foreground text-[0.8rem] font-semibold;
-}
-
-.milestones-card__achievement-progress {
-  @apply w-full h-[6px] mt-[2px];
-}
-
-.milestones-card__empty {
-  @apply text-muted-foreground text-[0.9rem];
-}
-
 @media (max-width: 760px) {
   .milestones-card {
     @apply p-[20px];
@@ -291,17 +165,5 @@
 
   .milestones-card__progress-track {
     @apply w-full;
-  }
-
-  .milestones-card__next {
-    @apply p-[16px];
-  }
-
-  .milestones-card__grid {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  }
-
-  .milestones-card__achievement {
-    @apply min-h-[150px] p-[14px];
   }
 }

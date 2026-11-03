@@ -69,32 +69,8 @@ html[data-theme="dark"] .weight-overview__change strong {
   @apply text-muted-foreground text-[0.8rem];
 }
 
-.weight-overview__details {
+.weight-overview__statistics {
   border-top: 1px solid var(--color-border);
-}
-
-.weight-overview__details summary {
-  @apply flex items-center justify-between gap-[12px];
-  padding: 13px 0 2px;
-  @apply text-muted-foreground text-[0.82rem] font-bold cursor-pointer;
-  list-style: none;
-}
-
-.weight-overview__details summary::-webkit-details-marker {
-  @apply hidden;
-}
-
-.weight-overview__details summary:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 3px;
-}
-
-.weight-overview__details summary svg {
-  transition: transform 0.18s ease;
-}
-
-.weight-overview__details[open] summary svg {
-  transform: rotate(180deg);
 }
 
 .weight-overview__metrics {
@@ -103,26 +79,6 @@ html[data-theme="dark"] .weight-overview__change strong {
   @apply gap-[14px];
   margin: 12px 0 0;
   padding: 0 0 2px;
-}
-
-.weight-overview__metrics > div {
-  @apply grid;
-  align-content: start;
-  @apply gap-[3px] min-w-0 pl-[12px];
-  border-left: 2px solid color-mix(in srgb, var(--color-primary) 38%, var(--color-border));
-}
-
-.weight-overview__metrics dt {
-  @apply text-muted-foreground text-[0.76rem] font-bold;
-}
-
-.weight-overview__metrics dd {
-  @apply m-0 overflow-hidden text-foreground text-[0.9rem] font-bold;
-  text-overflow: ellipsis;
-}
-
-.weight-overview__metrics small {
-  @apply text-muted-foreground text-[0.75rem] leading-[1.4];
 }
 
 .weight-overview__empty {
