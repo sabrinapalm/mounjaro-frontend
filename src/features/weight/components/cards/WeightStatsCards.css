@@ -10,7 +10,8 @@
 }
 
 .weight-overview__primary {
-  @apply flex items-center justify-between gap-[24px] min-w-0;
+  @apply grid items-center gap-[24px] min-w-0;
+  grid-template-columns: minmax(0, 1fr) 8rem;
 }
 
 .weight-overview__current {
@@ -107,9 +108,9 @@ html[data-theme="dark"] .weight-overview__change strong {
   }
 }
 
-@media (max-width: 340px) {
+@media (max-width: 760px) {
   .weight-overview__primary {
-    @apply items-start flex-col gap-[14px];
+    @apply items-start grid-cols-1 gap-[14px];
   }
 
   .weight-overview__change {
